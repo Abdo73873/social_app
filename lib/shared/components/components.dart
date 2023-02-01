@@ -1,0 +1,150 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_types_as_parameter_names, non_constant_identifier_names
+
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+Widget defaultButton({
+  double width = double.infinity,
+  double radius = 10.0,
+  required BuildContext context,
+  Color? background,
+  bool isUppercase = true,
+  required String text,
+  required Function() onPressed,
+}) =>
+    Container(
+      width: width,
+      decoration: BoxDecoration(
+        color: background ?? Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: MaterialButton(
+        onPressed: onPressed,
+        child: Text(
+          isUppercase ? text.toUpperCase() : text,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+
+Widget defaultFromField({
+  required BuildContext context,
+  required TextEditingController controller,
+  required TextInputType keyboardType,
+  Function(String)? onSubmit,
+  Function(String)? onChange,
+  required String? Function(String?) validator,
+  required String labelText,
+  IconData? prefix,
+  IconData? suffix,
+  Function()? suffixOnPressed,
+  bool isPassword = false,
+}) =>
+    TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      onFieldSubmitted: onSubmit,
+      onChanged: onChange,
+      validator: validator,
+      obscureText: isPassword,
+      decoration: InputDecoration(
+        floatingLabelStyle: TextStyle(
+          color: Theme.of(context).primaryColor,
+        ),
+        labelText: labelText,
+        labelStyle: Theme.of(context).textTheme.labelMedium,
+        border: OutlineInputBorder(),
+        prefixIcon: prefix != null
+            ? Icon(
+                prefix,
+                color: Colors.deepOrange[300],
+              )
+            : null,
+        suffixIcon: suffix != null
+            ? IconButton(
+                icon: Icon(
+                  suffix,
+                  color: Colors.deepOrange[300],
+                ),
+                onPressed: suffixOnPressed,
+                color: Theme.of(context).iconTheme.color,
+              )
+            : null,
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+          color: Colors.deepOrangeAccent,
+        )),
+      ),
+      style: Theme.of(context).textTheme.button,
+      textDirection: TextDirection.ltr,
+    );
+
+Widget defaultText({
+  required String text,
+  required Function()? onPressed,
+}) =>
+    TextButton(
+      onPressed: onPressed,
+      child: Text(
+        text,
+      ),
+    );
+
+
+void navigateTo(context, Widget) => Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Widget),
+    );
+
+void navigateAndFinish(context, Widget) => Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(
+      builder: (context) => Widget,
+    ),
+    (route) => false);
+
+void showToast({
+  required String message,
+  required ToastState state,
+}) =>
+    Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 5,
+      backgroundColor: chooseToastColor(state),
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+
+enum ToastState { success, error, warning }
+
+Color chooseToastColor(ToastState state) {
+  Color color;
+  switch (state) {
+    case ToastState.success:
+      color = Colors.green;
+      break;
+    case ToastState.error:
+      color = Colors.red;
+      break;
+    case ToastState.warning:
+      color = Colors.amber;
+      break;
+  }
+
+  return color;
+}
+
+Widget separated()=>Padding(
+  padding: const EdgeInsets.symmetric(
+    horizontal: 20.0,
+  ),
+  child: Container(
+    height: 1,
+    width: double.infinity,
+    color: Colors.grey[300],
+  ),
+);
