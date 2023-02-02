@@ -56,4 +56,8 @@ ThemeData lightTheme = ThemeData(
   iconTheme: IconThemeData(
     color: Colors.blueGrey,
   ),
+  accentColor: defaultColor,
+  colorScheme: ThemeData().colorScheme.copyWith(
+    secondary: defaultColor,
+  ),
 );

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/modules/login/cubit/login_cubit.dart';
 import 'package:social_app/modules/login/cubit/login_states.dart';
-import 'package:social_app/modules/register/register.dart';
+import 'package:social_app/modules/register/register_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -18,7 +18,11 @@ class LoginScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => LoginCubit(),
       child: BlocConsumer<LoginCubit, LoginStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if(state is ErrorLoginState){
+            showToast(message: state.error, state: ToastState.error);
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -54,18 +58,18 @@ class LoginScreen extends StatelessWidget {
                           height: 40.0,
                         ),
                         defaultFromField(
-                            context: context,
-                            controller: emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter your email address';
-                              }
-                              return null;
-                            },
-                            labelText: 'Email Address',
-                            prefix: Icons.email_outlined,
-                            action:TextInputAction.next,
+                          context: context,
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your email address';
+                            }
+                            return null;
+                          },
+                          labelText: 'Email Address',
+                          prefix: Icons.email_outlined,
+                          action: TextInputAction.next,
 
                         ),
                         SizedBox(
@@ -95,9 +99,14 @@ class LoginScreen extends StatelessWidget {
                             LoginCubit.get(context).changeVisibility();
                           },
                           onSubmit: (value) {
-                            if (formKey.currentState!.validate()) {}
+                            if (formKey.currentState!.validate()) {
+                              LoginCubit.get(context).loginUser(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+                            }
                           },
-                            action: TextInputAction.done,
+                          action: TextInputAction.done,
                         ),
                         SizedBox(
                           height: 40.0,
@@ -110,12 +119,14 @@ class LoginScreen extends StatelessWidget {
                                 text: 'Login',
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-
+                                    LoginCubit.get(context).loginUser(
+                                        email: emailController.text,
+                                        password: passwordController.text,
+                                    );
                                   }
                                 },
                               ),
-                          fallback: (context) =>
-                              Center(child: CircularProgressIndicator()),
+                          fallback: (context) => Center(child: CircularProgressIndicator()),
                         ),
                         SizedBox(
                           height: 20.0,
@@ -132,7 +143,7 @@ class LoginScreen extends StatelessWidget {
                             defaultText(
                               text: 'REGISTER',
                               onPressed: () {
-                                navigateAndReplace(context,RegisterScreen());
+                                navigateAndReplace(context, RegisterScreen());
                               },
                             ),
                           ],

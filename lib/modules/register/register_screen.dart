@@ -20,7 +20,11 @@ class RegisterScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if(state is ErrorRegisterState){
+            showToast(message: state.error, state: ToastState.error);
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
@@ -121,7 +125,14 @@ class RegisterScreen extends StatelessWidget {
                               RegisterCubit.get(context).changeVisibility();
                             },
                             onSubmit: (value) {
-                              if (formKey.currentState!.validate()) {}
+                              if (formKey.currentState!.validate()) {
+                                RegisterCubit.get(context).userRegister(
+                                  name: nameController.text,
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                  phone: phoneController.text,
+                                );
+                              }
                             }),
                         SizedBox(
                           height: 40.0,
@@ -132,13 +143,22 @@ class RegisterScreen extends StatelessWidget {
                             context: context,
                             text: 'Register',
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {}
+                              if (formKey.currentState!.validate()) {
+                                RegisterCubit.get(context).userRegister(
+                                  name: nameController.text,
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                  phone: phoneController.text,
+                                );
+                              }
                             },
                           ),
                           fallback: (context) =>
                               Center(child: CircularProgressIndicator()),
                         ),
-                        SizedBox(height: 20.0,),
+                        SizedBox(
+                          height: 20.0,
+                        ),
                         Row(
                           children: [
                             Text(
@@ -148,7 +168,7 @@ class RegisterScreen extends StatelessWidget {
                             defaultText(
                               text: 'LOGIN',
                               onPressed: () {
-                                navigateAndReplace(context,LoginScreen());
+                                navigateAndReplace(context, LoginScreen());
                               },
                             ),
                           ],

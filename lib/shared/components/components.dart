@@ -6,7 +6,7 @@ import 'package:social_app/shared/styles/colors.dart';
 
 Widget defaultButton({
   double width = double.infinity,
-  double radius = 10.0,
+  double radius = 30.0,
   required BuildContext context,
   Color? background,
   bool isUppercase = true,
@@ -61,22 +61,11 @@ Widget defaultFromField({
           borderRadius: BorderRadius.circular(20.0),
           gapPadding: 20.0,
         ),
-        prefixIcon: prefix != null
-            ? Icon(
-                prefix,
-                color: Colors.deepOrange[300],
-              )
-            : null,
+        prefixIcon: prefix != null ? Icon(prefix,) : null,
         suffixIcon: suffix != null
             ? IconButton(
-                icon: Icon(
-                  suffix,
-                  color: Colors.deepOrange[300],
-                ),
-                onPressed: suffixOnPressed,
-                color: Theme.of(context).iconTheme.color,
-              )
-            : null,
+                icon: Icon(suffix,),
+                onPressed: suffixOnPressed,) : null,
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide(
