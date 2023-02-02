@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:social_app/shared/styles/colors.dart';
 
 Widget defaultButton({
   double width = double.infinity,
@@ -41,6 +42,7 @@ Widget defaultFromField({
   IconData? suffix,
   Function()? suffixOnPressed,
   bool isPassword = false,
+  TextInputAction? action,
 }) =>
     TextFormField(
       controller: controller,
@@ -55,7 +57,10 @@ Widget defaultFromField({
         ),
         labelText: labelText,
         labelStyle: Theme.of(context).textTheme.labelMedium,
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0),
+          gapPadding: 20.0,
+        ),
         prefixIcon: prefix != null
             ? Icon(
                 prefix,
@@ -73,12 +78,14 @@ Widget defaultFromField({
               )
             : null,
         enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide(
-          color: Colors.deepOrangeAccent,
-        )),
+              color: secondaryColor,
+            )),
       ),
-      style: Theme.of(context).textTheme.button,
+      style: Theme.of(context).textTheme.bodyMedium,
       textDirection: TextDirection.ltr,
+      textInputAction: action,
     );
 
 Widget defaultText({
@@ -92,18 +99,16 @@ Widget defaultText({
       ),
     );
 
-
 void navigateTo(context, Widget) => Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => Widget),
     );
 
 void navigateAndFinish(context, Widget) => Navigator.pushAndRemoveUntil(
-    context,
-    MaterialPageRoute(
-      builder: (context) => Widget,
-    ),
-    (route) => false);
+    context, MaterialPageRoute(builder: (context) => Widget,), (route) => false);
+
+void navigateAndReplace(context, Widget) => Navigator.pushReplacement(
+    context, MaterialPageRoute(builder: (context) => Widget));
 
 void showToast({
   required String message,
@@ -138,13 +143,13 @@ Color chooseToastColor(ToastState state) {
   return color;
 }
 
-Widget separated()=>Padding(
-  padding: const EdgeInsets.symmetric(
-    horizontal: 20.0,
-  ),
-  child: Container(
-    height: 1,
-    width: double.infinity,
-    color: Colors.grey[300],
-  ),
-);
+Widget separated() => Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20.0,
+      ),
+      child: Container(
+        height: 1,
+        width: double.infinity,
+        color: Colors.grey[300],
+      ),
+    );
