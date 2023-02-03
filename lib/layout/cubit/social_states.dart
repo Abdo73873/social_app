@@ -13,8 +13,8 @@ class HomeErrorGetUserState extends HomeStates {
   HomeErrorGetUserState(this.error);
 }
 
-
 class HomeChangeBottomState extends HomeStates {}
+
 
 class HomeChangeLanguageState extends HomeStates {}
 

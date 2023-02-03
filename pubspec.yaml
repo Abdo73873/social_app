@@ -45,6 +45,7 @@ dependencies:
   smooth_page_indicator: ^1.0.0+2
   fluttertoast: ^8.1.2
   carousel_slider: ^4.2.1
+  google_nav_bar: ^5.0.6
   #fireBase
   firebase_core: ^2.4.1
   firebase_auth: ^4.2.5
@@ -76,15 +77,18 @@ flutter:
   assets:
     - assets/images/
     #   - images/a_dot_ham.jpeg
-#  fonts:
-#    - family: Bassant
-#      fonts:
-#        - asset: assets/fonts/
-#          weight: 700
-#    - family: Dreams
-#      fonts:
-#        - asset: assets/fonts/
-#          weight: 700
+  fonts:
+    - family: Bassant
+      fonts:
+        - asset: assets/fonts/bassant.ttf
+          weight: 700
+    - family: Dreams
+      fonts:
+        - asset: assets/fonts/Dreams.ttf
+          weight: 700
+    - family: IconBroken
+      fonts:
+      - asset: assets/fonts/icons.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

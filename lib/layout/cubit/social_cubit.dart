@@ -10,7 +10,20 @@ class HomeCubit extends Cubit<HomeStates>{
   HomeCubit():super(HomeInitializeState());
   static HomeCubit get(context)=>BlocProvider.of(context);
 
- late  UserModel model;
+  int currentIndex = 0;
+  List<Widget> screens = [
+    ProductsScreen(),
+    CategoriesScreen(),
+    FavoritesScreen(),
+    ProfileScreen(),
+  ];
+  void changeBottomScreen(index) {
+    currentIndex = index;
+    emit(HomeChangeBottomState());
+  }
+
+
+  late  UserModel model;
  void getUserData(){
    emit(HomeLoadingGetUserState());
    FirebaseFirestore.instance.collection('users').doc(uIdUser).get().then((value) {
@@ -20,6 +33,9 @@ class HomeCubit extends Cubit<HomeStates>{
      emit(HomeErrorGetUserState(error.toString()));
    });
  }
+
+
+
 
 }
 
@@ -31,17 +47,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ShopCubit extends Cubit<ShopStates> {
   ShopCubit() : super(ShopInitializeState());
   static ShopCubit get(context) => BlocProvider.of(context);
-  int currentIndex = 0;
-  List<Widget> screens = [
-    ProductsScreen(),
-    CategoriesScreen(),
-    FavoritesScreen(),
-    ProfileScreen(),
-  ];
-  void changeBottomScreen(index) {
-    currentIndex = index;
-    emit(ShopChangeBottomState());
-  }
+
 
   void changeLanguage(){
     if(language=='ar'){

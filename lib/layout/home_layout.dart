@@ -8,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:social_app/shared/styles/colors.dart';
 
 class HomeLayout extends StatelessWidget {
 
@@ -49,6 +51,32 @@ class HomeLayout extends StatelessWidget {
               ),
             ],
           ),
+          bottomNavigationBar:SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 6.0),
+              child: GNav(
+                rippleColor: secondaryColor,
+                hoverColor: defaultColor,
+                gap: 6,
+                activeColor: defaultColor,
+                padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+                duration: Duration(milliseconds: 400),
+                tabBackgroundColor: secondaryColor.withOpacity(.1),
+                color: secondaryColor[900],
+                selectedIndex:currentIndex ,
+                onTabChange: (index){
+                  HomeCubit.get(context).changeBottomIndex=index;
+                },
+                tabs: [
+                  GButton(icon: Icons.home, text: 'home',),
+                  GButton(icon: Icons.favorite, text: 'Likes',),
+                  GButton(icon: Icons.search, text: 'search',),
+                  GButton(icon: Icons.person, text: 'Profile',),
+
+                ],
+              ),
+            ),
+          ) ,
         );
       },
     );
