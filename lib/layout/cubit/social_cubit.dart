@@ -1,3 +1,29 @@
+import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/models/usersModel.dart';
+import 'package:social_app/shared/components/constants.dart';
+
+class HomeCubit extends Cubit<HomeStates>{
+  HomeCubit():super(HomeInitializeState());
+  static HomeCubit get(context)=>BlocProvider.of(context);
+
+ late  UserModel model;
+ void getUserData(){
+   emit(HomeLoadingGetUserState());
+   FirebaseFirestore.instance.collection('users').doc(uIdUser).get().then((value) {
+     model=UserModel.fromJson(value.data()!);
+     emit(HomeSuccessGetUserState());
+   }).catchError((error){
+     emit(HomeErrorGetUserState(error.toString()));
+   });
+ }
+
+}
+
+
 /*
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

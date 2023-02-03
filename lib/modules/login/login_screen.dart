@@ -3,10 +3,13 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/login/cubit/login_cubit.dart';
 import 'package:social_app/modules/login/cubit/login_states.dart';
 import 'package:social_app/modules/register/register_screen.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/shared/network/local/cache_helper.dart';
 
 class LoginScreen extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
@@ -19,7 +22,12 @@ class LoginScreen extends StatelessWidget {
       create: (context) => LoginCubit(),
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
-          if(state is ErrorLoginState){
+          if (state is SuccessesLoginState) {
+            CacheHelper.saveData(key: "uId", value:uIdUser).then((value) {
+              navigateAndFinish(context, HomeLayout());
+            });
+          }
+          if (state is ErrorLoginState) {
             showToast(message: state.error, state: ToastState.error);
           }
         },
@@ -39,20 +47,14 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         Text(
                           'LOGIN',
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .headlineMedium,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         SizedBox(
                           height: 20.0,
                         ),
                         Text(
                           'Login now to communicate with friends',
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodyLarge,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         SizedBox(
                           height: 40.0,
@@ -70,7 +72,6 @@ class LoginScreen extends StatelessWidget {
                           labelText: 'Email Address',
                           prefix: Icons.email_outlined,
                           action: TextInputAction.next,
-
                         ),
                         SizedBox(
                           height: 20.0,
@@ -87,12 +88,8 @@ class LoginScreen extends StatelessWidget {
                           },
                           labelText: 'Password',
                           prefix: Icons.email_outlined,
-                          isPassword: LoginCubit
-                              .get(context)
-                              .isPassword,
-                          suffix: LoginCubit
-                              .get(context)
-                              .isPassword
+                          isPassword: LoginCubit.get(context).isPassword,
+                          suffix: LoginCubit.get(context).isPassword
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
                           suffixOnPressed: () {
@@ -113,20 +110,20 @@ class LoginScreen extends StatelessWidget {
                         ),
                         ConditionalBuilder(
                           condition: state is! LoadingLoginState,
-                          builder: (context) =>
-                              defaultButton(
-                                context: context,
-                                text: 'Login',
-                                onPressed: () {
-                                  if (formKey.currentState!.validate()) {
-                                    LoginCubit.get(context).loginUser(
-                                        email: emailController.text,
-                                        password: passwordController.text,
-                                    );
-                                  }
-                                },
-                              ),
-                          fallback: (context) => Center(child: CircularProgressIndicator()),
+                          builder: (context) => defaultButton(
+                            context: context,
+                            text: 'Login',
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                LoginCubit.get(context).loginUser(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                );
+                              }
+                            },
+                          ),
+                          fallback: (context) =>
+                              Center(child: CircularProgressIndicator()),
                         ),
                         SizedBox(
                           height: 20.0,
@@ -135,10 +132,7 @@ class LoginScreen extends StatelessWidget {
                           children: [
                             Text(
                               'Don\'t have account?',
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .labelMedium,
+                              style: Theme.of(context).textTheme.labelMedium,
                             ),
                             defaultText(
                               text: 'REGISTER',

@@ -1,18 +1,28 @@
 
 
-abstract class ShopStates {}
+abstract class HomeStates {}
 
-class ShopInitializeState extends ShopStates {}
+class HomeInitializeState extends HomeStates {}
 
-class ShopChangeBottomState extends ShopStates {}
+class HomeLoadingGetUserState extends HomeStates {}
 
-class ShopChangeLanguageState extends ShopStates {}
+class HomeSuccessGetUserState extends HomeStates {}
 
-class ShopLoadingHomeState extends ShopStates {}
-
-class ShopSuccessHomeState extends ShopStates {}
-
-class ShopErrorHomeState extends ShopStates {
+class HomeErrorGetUserState extends HomeStates {
   final String error;
-  ShopErrorHomeState(this.error);
+  HomeErrorGetUserState(this.error);
+}
+
+
+class HomeChangeBottomState extends HomeStates {}
+
+class HomeChangeLanguageState extends HomeStates {}
+
+class HomeLoadingHomeState extends HomeStates {}
+
+class HomeSuccessHomeState extends HomeStates {}
+
+class HomeErrorHomeState extends HomeStates {
+  final String error;
+  HomeErrorHomeState(this.error);
 }

@@ -36,8 +36,11 @@ class HomeLayout extends StatelessWidget {
                       defaultText(
                         text: "Send",
                         onPressed: (){
-                          FirebaseAuth.instance.currentUser?.sendEmailVerification();
-                          showToast(message: "check your mail", state: ToastState.success);
+                          FirebaseAuth.instance.currentUser?.sendEmailVerification().then((value){
+                            showToast(message: "check your mail", state: ToastState.success);
+                          }).catchError((error){
+                            showToast(message: error.toString(), state: ToastState.error);
+                          });
                         },
                       ),
                     ],

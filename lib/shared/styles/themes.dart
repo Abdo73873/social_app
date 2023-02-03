@@ -54,10 +54,11 @@ ThemeData lightTheme = ThemeData(
     ),
   ),
   iconTheme: IconThemeData(
-    color: Colors.blueGrey,
+    color: secondaryColor,
   ),
-  accentColor: defaultColor,
   colorScheme: ThemeData().colorScheme.copyWith(
-    secondary: defaultColor,
+    primary: defaultColor,
+    secondary: secondaryColor,
+
   ),
 );

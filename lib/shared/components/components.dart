@@ -63,14 +63,13 @@ Widget defaultFromField({
         ),
         prefixIcon: prefix != null ? Icon(prefix,) : null,
         suffixIcon: suffix != null
-            ? IconButton(
-                icon: Icon(suffix,),
-                onPressed: suffixOnPressed,) : null,
+            ? IconButton(icon: Icon(suffix,), onPressed: suffixOnPressed,) : null,
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide(
               color: secondaryColor,
-            )),
+            )
+        ),
       ),
       style: Theme.of(context).textTheme.bodyMedium,
       textDirection: TextDirection.ltr,

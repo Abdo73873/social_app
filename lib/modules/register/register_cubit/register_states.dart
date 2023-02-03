@@ -8,5 +8,11 @@ class ErrorRegisterState extends RegisterStates{
   ErrorRegisterState(this.error);
 
 }
+class SuccessesCreateUserState extends RegisterStates{}
+class ErrorCreateUserState extends RegisterStates{
+  final String error;
+  ErrorCreateUserState(this.error);
+
+}
 class ChangeVisibilityState extends RegisterStates{}
 class ChangeLanguageState extends RegisterStates{}

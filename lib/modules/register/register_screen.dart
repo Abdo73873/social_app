@@ -3,10 +3,13 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/modules/register/register_cubit/register_cubit.dart';
 import 'package:social_app/modules/register/register_cubit/register_states.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/shared/network/local/cache_helper.dart';
 
 class RegisterScreen extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
@@ -21,6 +24,11 @@ class RegisterScreen extends StatelessWidget {
       create: (context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterStates>(
         listener: (context, state) {
+          if(state is SuccessesCreateUserState){
+              CacheHelper.saveData(key: "uId", value:uIdUser).then((value) {
+                navigateAndFinish(context, HomeLayout());
+              });
+          }
           if(state is ErrorRegisterState){
             showToast(message: state.error, state: ToastState.error);
           }
