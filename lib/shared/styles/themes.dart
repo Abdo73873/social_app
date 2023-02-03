@@ -52,6 +52,23 @@ ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w900,
       fontFamily: 'Bassant',
     ),
+    titleMedium: TextStyle(
+      fontSize: 16.0,
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+    ),
+    titleSmall: TextStyle(
+      fontSize: 14.0,
+      color: secondaryColor,
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 16.0,
+      color: Colors.black,
+    ),
+    bodySmall: TextStyle(
+      fontSize: 14.0,
+      color: Colors.grey,
+    ),
   ),
   iconTheme: IconThemeData(
     color: secondaryColor,

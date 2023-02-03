@@ -14,6 +14,7 @@ class HomeErrorGetUserState extends HomeStates {
 }
 
 class HomeChangeBottomState extends HomeStates {}
+class HomeNewPostState extends HomeStates {}
 
 
 class HomeChangeLanguageState extends HomeStates {}
