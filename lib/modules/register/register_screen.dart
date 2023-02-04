@@ -10,6 +10,7 @@ import 'package:social_app/modules/register/register_cubit/register_states.dart'
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
+import 'package:social_app/shared/styles/colors.dart';
 
 class RegisterScreen extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
@@ -34,6 +35,7 @@ class RegisterScreen extends StatelessWidget {
           }
         },
         builder: (context, state) {
+          bool isMale=RegisterCubit.get(context).isMale;
           return Scaffold(
             appBar: AppBar(
               actions: [],
@@ -112,6 +114,77 @@ class RegisterScreen extends StatelessWidget {
                         SizedBox(
                           height: 20.0,
                         ),
+                        Row(
+                          children: [
+                            SizedBox(width: 10.0,),
+                            Icon(Icons.accessibility,),
+                            SizedBox(width: 10.0,),
+                            Text("Gender :",
+                          style: Theme.of(context).textTheme.bodyMedium,),
+                          SizedBox(width: 30.0,),
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border:Border.all(
+                                  color: defaultColor,
+                                ),
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              child: DropdownButton(
+                                  value: isMale,
+                                  borderRadius: BorderRadius.circular(30.0),
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                                  items:[
+                                DropdownMenuItem(
+                                  value: true,
+                                  child:Row(
+                                    children: [
+                                      Icon(Icons.male,
+                                          color: isMale?defaultColor:secondaryColor,
+                                      ),
+                                      SizedBox(width: 10.0,),
+                                      Text('male',
+                                        style: TextStyle(
+                                          color: isMale?defaultColor:secondaryColor,
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),),
+                                    ],
+                                  ) ,
+                                  onTap: (){
+                                    RegisterCubit.get(context).changeGender(true);
+                                  },
+                                ),
+                                DropdownMenuItem(
+                                  value: false,
+                                  child:Row(
+                                    children: [
+                                      Icon(Icons.female,
+                                        color: isMale?secondaryColor:defaultColor,
+                                      ),
+                                      SizedBox(width: 10.0,),
+                                      Text('Female',
+                                        style: TextStyle(
+                                          color: isMale?secondaryColor:defaultColor,
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),),
+                                    ],
+                                  ) ,
+                                  onTap: (){
+                                    RegisterCubit.get(context).changeGender(false);
+                                  },
+
+                                ),
+                              ], onChanged: (value){}),
+                            ),
+                          ),
+                        ],),
+                        SizedBox(
+                          height: 20.0,
+                        ),
                         defaultFromField(
                             context: context,
                             controller: passwordController,
@@ -139,6 +212,7 @@ class RegisterScreen extends StatelessWidget {
                                   email: emailController.text,
                                   password: passwordController.text,
                                   phone: phoneController.text,
+                                  isMale: isMale,
                                 );
                               }
                             }),
@@ -157,12 +231,12 @@ class RegisterScreen extends StatelessWidget {
                                   email: emailController.text,
                                   password: passwordController.text,
                                   phone: phoneController.text,
+                                  isMale: isMale,
                                 );
                               }
                             },
                           ),
-                          fallback: (context) =>
-                              Center(child: CircularProgressIndicator()),
+                          fallback: (context) => Center(child: CircularProgressIndicator()),
                         ),
                         SizedBox(
                           height: 20.0,

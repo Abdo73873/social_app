@@ -11,17 +11,27 @@ class RegisterCubit extends Cubit<RegisterStates> {
   static RegisterCubit get(context) => BlocProvider.of(context);
 
   bool isPassword = true;
-
   void changeVisibility() {
     isPassword = !isPassword;
     emit(ChangeVisibilityState());
   }
+  bool isMale=true;
+  void changeGender(bool gender) {
+    isMale = gender;
+    emit(ChangeGenderState());
+  }
+
 
   void userRegister({
     required String name,
     required String email,
     required String password,
     required String phone,
+    required bool isMale,
+    String? bio,
+     String? image,
+     String? cover,
+    GeneralDetailsModel? generalDetailsModel,
   }) {
     emit(LoadingRegisterState());
     FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -32,25 +42,41 @@ class RegisterCubit extends Cubit<RegisterStates> {
           name: name,
           email: email,
           uId: value.user!.uid,
-          phone: phone
+          phone: phone,
+          male: isMale,
+          bio: bio,
+        image: image,
+        cover: cover,
+        generalDetailsModel:generalDetailsModel,
       );
     }).catchError((error) {
       emit(ErrorRegisterState(error.toString()));
     });
   }
 
+
   void createUser({
     required String name,
     required String email,
     required String uId,
     required String phone,
+    required bool male,
+    String? bio,
+    String? image,
+    String? cover,
+   GeneralDetailsModel? generalDetailsModel,
   }) {
     UserModel model = UserModel(
       name: name,
       email: email,
       uId: uId,
       phone: phone,
+      male: male,
+      bio: bio,
+      image: image,
+      cover: cover,
       isEmailVerified: false,
+    generalDetails: generalDetailsModel,
     );
     FirebaseFirestore.instance.collection("users").doc(uId).set(model.toMaP())
         .then((value){

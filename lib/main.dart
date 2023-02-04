@@ -7,6 +7,7 @@ import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
 import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/login/login_screen.dart';
+import 'package:social_app/modules/register/register_screen.dart';
 import 'package:social_app/shared/bloc_observer.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             themeMode: ThemeMode.light,
-            home:  startWidget,
+            home: startWidget,
           );
         },
       ),

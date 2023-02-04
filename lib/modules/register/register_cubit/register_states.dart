@@ -15,4 +15,5 @@ class ErrorCreateUserState extends RegisterStates{
 
 }
 class ChangeVisibilityState extends RegisterStates{}
+class ChangeGenderState extends RegisterStates{}
 class ChangeLanguageState extends RegisterStates{}

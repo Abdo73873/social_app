@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
-import 'package:social_app/models/generalDetails_model.dart';
+import 'package:social_app/models/usersModel.dart';
 
 
 Widget generalDetails(context,GeneralDetailsModel model) {
@@ -11,28 +11,28 @@ Widget generalDetails(context,GeneralDetailsModel model) {
   TextEditingController? liveController = TextEditingController();
   TextEditingController? statusController = TextEditingController();
 
-  schoolController.text=model.school!;
-  workController.text=model.work!;
- countryController.text=model.country!;
-  liveController.text=model.live!;
+  schoolController.text='study at ${model.school!}';
+  workController.text='work at ${model.work!}';
+ countryController.text='from ${model.country!}';
+  liveController.text='live in ${model.live!}';
   statusController.text=model.status!;
   bool open=false;
   bool edit=false;
 return Column(
   children: [
-    if( schoolController.text.isNotEmpty)
+    if( model.school!.isNotEmpty)
     Row(
       children: [
-        if(schoolController.text.isNotEmpty)
         Icon(Icons.workspace_premium),
         SizedBox(width: 5.0,),
         SizedBox(
           width: MediaQuery.of(context).size.width*.8,
           child: TextFormField(
             controller: schoolController,
+            minLines: 1,
+            maxLines: 3,
             onTap: () {
               open=true;
-
             },
             onSaved: (value){
               model.country=countryController.text;
@@ -43,16 +43,18 @@ return Column(
         ),
       ],
     ),
-    if(model.work!=null)
+    if( model.work!.isNotEmpty)
       Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if(workController.text.isNotEmpty)
             Icon(Icons.work_outlined),
           SizedBox(width: 5.0,),
           SizedBox(
             width: MediaQuery.of(context).size.width*.8,
             child: TextFormField(
-              controller: schoolController,
+              minLines: 1,
+              maxLines: 3,
+              controller: workController,
               onTap: () {
                 open=true;
 
@@ -65,16 +67,18 @@ return Column(
           ),
         ],
       ),
-    if(model.country!=null)
+    if( model.country!.isNotEmpty)
       Row(
         children: [
-          if(schoolController.text.isNotEmpty)
-            Icon(Icons.work_outlined),
+          if(countryController.text.isNotEmpty)
+            Icon(Icons.place),
           SizedBox(width: 5.0,),
           SizedBox(
             width: MediaQuery.of(context).size.width*.8,
             child: TextFormField(
-              controller: schoolController,
+              controller: countryController,
+              minLines: 1,
+              maxLines: 2,
               onTap: () {
                 open=true;
 
@@ -87,16 +91,18 @@ return Column(
           ),
         ],
       ),
-    if(model.live!=null)
+    if( model.live!.isNotEmpty)
       Row(
         children: [
-          if(schoolController.text.isNotEmpty)
-            Icon(Icons.work_outlined),
+          if(liveController.text.isNotEmpty)
+            Icon(Icons.place),
           SizedBox(width: 5.0,),
           SizedBox(
             width: MediaQuery.of(context).size.width*.8,
             child: TextFormField(
-              controller: schoolController,
+              minLines: 1,
+              maxLines: 2,
+              controller: liveController,
               onTap: () {
                 open=true;
 
@@ -109,16 +115,16 @@ return Column(
           ),
         ],
       ),
-    if(model.status!=null)
+    if( model.status!.isNotEmpty)
       Row(
         children: [
-          if(schoolController.text.isNotEmpty)
-            Icon(Icons.work_outlined),
+          if(statusController.text.isNotEmpty)
+            Icon(Icons.favorite),
           SizedBox(width: 5.0,),
           SizedBox(
             width: MediaQuery.of(context).size.width*.8,
             child: TextFormField(
-              controller: schoolController,
+              controller: statusController,
               onTap: () {
                 open=true;
 
@@ -131,7 +137,8 @@ return Column(
           ),
         ],
       ),
-    OutlinedButton(
+    if(model.school!.isNotEmpty||model.work!.isNotEmpty||model.country!.isNotEmpty||model.live!.isNotEmpty||model.status!.isNotEmpty)
+      OutlinedButton(
       onPressed: (){
         edit=!edit;
       },
