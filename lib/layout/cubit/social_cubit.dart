@@ -6,8 +6,7 @@ import 'package:social_app/layout/cubit/social_states.dart';
 import 'package:social_app/models/usersModel.dart';
 import 'package:social_app/modules/chats/chats_screen.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
-import 'package:social_app/modules/new_post/new_post_screen.dart';
-import 'package:social_app/modules/settings/settings_screen.dart';
+import 'package:social_app/modules/profile/profile_screen.dart';
 import 'package:social_app/modules/users/users_screen.dart';
 import 'package:social_app/shared/components/constants.dart';
 
@@ -20,7 +19,7 @@ class HomeCubit extends Cubit<HomeStates>{
     FeedsScreen(),
     ChatsScreen(),
     UsersScreen(),
-    SettingsScreen(),
+    ProfileScreen(),
   ];
   List<String> titles=[
     'Home',
@@ -61,11 +60,11 @@ class HomeCubit extends Cubit<HomeStates>{
   }
 
 
-  late  UserModel model;
+  late  UserModel userModel;
  void getUserData(){
    emit(HomeLoadingGetUserState());
    FirebaseFirestore.instance.collection('users').doc(uIdUser).get().then((value) {
-     model=UserModel.fromJson(value.data()!);
+     userModel=UserModel.fromJson(value.data()!);
      emit(HomeSuccessGetUserState());
    }).catchError((error){
      emit(HomeErrorGetUserState(error.toString()));

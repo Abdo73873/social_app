@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:social_app/shared/styles/colors.dart';
 
-Widget defaultButton({
+Widget defaultTextMatrialButton({
   double width = double.infinity,
   double radius = 30.0,
   required BuildContext context,
@@ -62,15 +62,24 @@ Widget defaultFromField({
           borderRadius: BorderRadius.circular(20.0),
           gapPadding: 20.0,
         ),
-        prefixIcon: prefix != null ? Icon(prefix,) : null,
+        prefixIcon: prefix != null
+            ? Icon(
+                prefix,
+              )
+            : null,
         suffixIcon: suffix != null
-            ? IconButton(icon: Icon(suffix,), onPressed: suffixOnPressed,) : null,
+            ? IconButton(
+                icon: Icon(
+                  suffix,
+                ),
+                onPressed: suffixOnPressed,
+              )
+            : null,
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide(
               color: secondaryColor,
-            )
-        ),
+            )),
       ),
       style: Theme.of(context).textTheme.bodyMedium,
       textDirection: TextDirection.ltr,
@@ -84,8 +93,24 @@ Widget defaultText({
     TextButton(
       onPressed: onPressed,
       child: Text(
-        text,
+        text.toUpperCase(),
       ),
+    );
+
+
+PreferredSizeWidget defaultAppBar({
+  required BuildContext context,
+   String? title,
+  required List<Widget> actions,
+}) => AppBar(
+      leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios),
+      ),
+  title: Text(title??''),
+  actions: actions,
     );
 
 void navigateTo(context, Widget) => Navigator.push(
@@ -94,7 +119,11 @@ void navigateTo(context, Widget) => Navigator.push(
     );
 
 void navigateAndFinish(context, Widget) => Navigator.pushAndRemoveUntil(
-    context, MaterialPageRoute(builder: (context) => Widget,), (route) => false);
+    context,
+    MaterialPageRoute(
+      builder: (context) => Widget,
+    ),
+    (route) => false);
 
 void navigateAndReplace(context, Widget) => Navigator.pushReplacement(
     context, MaterialPageRoute(builder: (context) => Widget));

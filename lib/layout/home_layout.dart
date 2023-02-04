@@ -60,7 +60,7 @@ class HomeLayout extends StatelessWidget {
                   GButton(icon: IconBroken.Chat, text: 'Chat',),
                   GButton(icon: Icons.add_box_outlined, text: 'Post',),
                   GButton(icon: IconBroken.Location, text: 'Users',),
-                  GButton(icon: IconBroken.Setting, text: 'Settings',),
+                  GButton(icon: IconBroken.Profile, text: 'Profile',),
 
                 ],
               ),

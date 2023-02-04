@@ -221,7 +221,7 @@ class RegisterScreen extends StatelessWidget {
                         ),
                         ConditionalBuilder(
                           condition: state is! LoadingRegisterState,
-                          builder: (context) => defaultButton(
+                          builder: (context) => defaultTextMatrialButton(
                             context: context,
                             text: 'Register',
                             onPressed: () {

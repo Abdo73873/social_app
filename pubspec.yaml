@@ -46,6 +46,7 @@ dependencies:
   fluttertoast: ^8.1.2
   carousel_slider: ^4.2.1
   google_nav_bar: ^5.0.6
+  image_picker: ^0.8.6+1
   #fireBase
   firebase_core: ^2.4.1
   firebase_auth: ^4.2.5

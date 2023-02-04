@@ -4,20 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
-import 'package:social_app/models/generalDetails_model.dart';
 import 'package:social_app/models/usersModel.dart';
-import 'package:social_app/modules/settings/general_details.dart';
+import 'package:social_app/modules/profile/edit_profile.dart';
+import 'package:social_app/modules/profile/general_details.dart';
 import 'package:social_app/shared/components/components.dart';
 
-class SettingsScreen extends StatelessWidget {
-  GeneralDetailsModel? details;
-
+class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        UserModel model=HomeCubit.get(context).model;
+        UserModel model=HomeCubit.get(context).userModel;
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
@@ -150,8 +148,11 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: defaultButton(
-                      context: context, text: 'Edit Profile', onPressed: () {}),
+                  child: defaultTextMatrialButton(
+                      context: context, text: 'Edit Profile',
+                      onPressed: () {
+                        navigateTo(context, EditProfileScreen());
+                  }),
                 ),
                 SizedBox(
                   height: 10.0,

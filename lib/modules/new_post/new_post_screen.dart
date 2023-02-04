@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/shared/components/components.dart';
 
 class NewPostScreen extends StatelessWidget {
 

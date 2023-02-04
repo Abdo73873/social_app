@@ -110,7 +110,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         ConditionalBuilder(
                           condition: state is! LoadingLoginState,
-                          builder: (context) => defaultButton(
+                          builder: (context) => defaultTextMatrialButton(
                             context: context,
                             text: 'Login',
                             onPressed: () {
