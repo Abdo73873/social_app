@@ -33,11 +33,28 @@ ThemeData lightTheme = ThemeData(
     backgroundColor: Colors.white,
   ),
   textTheme: TextTheme(
+    titleMedium: TextStyle(
+      fontSize: 18.0,
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+    ),
+    titleSmall: TextStyle(
+      fontSize: 14.0,
+      color: secondaryColor,
+    ),
     bodyLarge: TextStyle(
         fontSize: 18.0,
         fontWeight: FontWeight.w600,
         color: secondaryColor[600],
         fontFamily: 'Bassant',
+    ),
+    bodyMedium: TextStyle(
+      fontSize: 16.0,
+      color: Colors.black,
+    ),
+    bodySmall: TextStyle(
+      fontSize: 14.0,
+      color: Colors.grey,
     ),
     labelMedium: TextStyle(
       color: Colors.grey,
@@ -52,23 +69,13 @@ ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w900,
       fontFamily: 'Bassant',
     ),
-    titleMedium: TextStyle(
-      fontSize: 16.0,
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-    ),
-    titleSmall: TextStyle(
-      fontSize: 14.0,
-      color: secondaryColor,
-    ),
-    bodyMedium: TextStyle(
-      fontSize: 16.0,
-      color: Colors.black,
-    ),
-    bodySmall: TextStyle(
-      fontSize: 14.0,
-      color: Colors.grey,
-    ),
+   displayMedium: TextStyle(
+     color: Colors.black,
+     fontWeight: FontWeight.bold,
+     fontSize: 16.0,
+     fontFamily: 'Bassant',
+   ),
+
   ),
   iconTheme: IconThemeData(
     color: secondaryColor,

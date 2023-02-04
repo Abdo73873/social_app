@@ -15,8 +15,9 @@ Widget defaultButton({
 }) =>
     Container(
       width: width,
+      height: 40.0,
       decoration: BoxDecoration(
-        color: background ?? Theme.of(context).primaryColor,
+        color: defaultColor,
         borderRadius: BorderRadius.circular(radius),
       ),
       child: MaterialButton(
