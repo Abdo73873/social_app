@@ -131,11 +131,11 @@ return Column(
           ),
         ],
       ),
-    IconButton(
+    OutlinedButton(
       onPressed: (){
         edit=!edit;
       },
-      icon: Row(
+      child: Row(
         children: [
         Icon(edit?Icons.done:Icons.edit,),
         Text(

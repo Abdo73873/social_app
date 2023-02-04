@@ -63,35 +63,47 @@ class SettingsScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Column(
-                      children: [
-                        Text('100',style: Theme.of(context).textTheme.bodyMedium,),
-                        Text('post',style: Theme.of(context).textTheme.bodySmall,),
-                      ],
+                    child: InkWell(
+                      onTap: (){},
+                      child: Column(
+                        children: [
+                          Text('100',style: Theme.of(context).textTheme.bodyMedium,),
+                          Text('post',style: Theme.of(context).textTheme.bodySmall,),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(
-                    child: Column(
-                      children: [
-                        Text('100',style: Theme.of(context).textTheme.bodyMedium,),
-                        Text('follower',style: Theme.of(context).textTheme.bodySmall,),
-                      ],
+                    child: InkWell(
+                      onTap: (){},
+                      child: Column(
+                        children: [
+                          Text('100',style: Theme.of(context).textTheme.bodyMedium,),
+                          Text('follower',style: Theme.of(context).textTheme.bodySmall,),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(
-                    child: Column(
-                      children: [
-                        Text('100',style: Theme.of(context).textTheme.bodyMedium,),
-                        Text('following',style: Theme.of(context).textTheme.bodySmall,),
-                      ],
+                    child: InkWell(
+                      onTap: (){},
+                      child: Column(
+                        children: [
+                          Text('100',style: Theme.of(context).textTheme.bodyMedium,),
+                          Text('following',style: Theme.of(context).textTheme.bodySmall,),
+                        ],
+                      ),
                     ),
                   ),
                   Expanded(
-                    child: Column(
-                      children: [
-                        Text('100',style: Theme.of(context).textTheme.bodyMedium,),
-                        Text('friends',style: Theme.of(context).textTheme.bodySmall,),
-                      ],
+                    child: InkWell(
+                      onTap: (){},
+                      child: Column(
+                        children: [
+                          Text('100',style: Theme.of(context).textTheme.bodyMedium,),
+                          Text('friends',style: Theme.of(context).textTheme.bodySmall,),
+                        ],
+                      ),
                     ),
                   ),
 
