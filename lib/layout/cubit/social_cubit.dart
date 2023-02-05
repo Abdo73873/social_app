@@ -25,7 +25,7 @@ class HomeCubit extends Cubit<HomeStates>{
     'Home',
     'Chats',
     'Users',
-    'Settings',
+    'Profile',
   ];
 
   int perIndex=0;

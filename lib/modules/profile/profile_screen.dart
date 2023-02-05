@@ -8,6 +8,7 @@ import 'package:social_app/models/usersModel.dart';
 import 'package:social_app/modules/profile/edit_profile.dart';
 import 'package:social_app/modules/profile/general_details.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -15,7 +16,7 @@ class ProfileScreen extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        UserModel model=HomeCubit.get(context).userModel;
+        UserModel model = HomeCubit.get(context).userModel;
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
@@ -23,22 +24,25 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               children: [
                 SizedBox(
-                  height: 190.0,
+                  height: 200.0,
                   child: Stack(
                     alignment: AlignmentDirectional.bottomCenter,
                     children: [
                       Align(
                         alignment: AlignmentDirectional.topStart,
-                        child: Container(
-                          width: double.infinity,
-                          height: 140.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(5.0),
-                              topRight: Radius.circular(5.0),
-                            ),
-                            image: DecorationImage(
-                              image: NetworkImage(model.cover??'https://img.freepik.com/free-photo/photo-delighted-african-american-woman-points-away-with-both-index-fingers-promots-awesome-place-your-advertising-content_273609-27157.jpg'),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5.0),
+                            topRight: Radius.circular(5.0),
+                          ),
+                          child: CachedNetworkImage(
+                            width: double.infinity,
+                            height: 150,
+                            fit: BoxFit.cover,
+                            imageUrl: model.cover ?? '',
+                            errorWidget: (context, url, error) => Image.asset('assets/images/cover.jpg',
+                              width: double.infinity,
+                              height: 150,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -49,8 +53,23 @@ class ProfileScreen extends StatelessWidget {
                         backgroundColor:
                             Theme.of(context).scaffoldBackgroundColor,
                         child: CircleAvatar(
-                          backgroundImage: NetworkImage(model.image??'https://img.freepik.com/free-photo/young-woman-with-afro-haircut-wearing-orange-sweater_273609-22398.jpg?w=900&t=st=1675442690~exp=1675443290~hmac=c7aea7072ec4dbf5d2fe566934754c6a57ca4fa9aa3578c7a33aaf7df8419633'),
                           radius: 60.0,
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                              imageUrl: model.image ?? '',
+                              errorWidget: (context, url, error) => Image.asset(
+                                  model.male
+                                      ? 'assets/images/male.jpg'
+                                      : 'assets/images/female.jpg',
+                                width: double.infinity,
+                                height: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -66,11 +85,11 @@ class ProfileScreen extends StatelessWidget {
                 SizedBox(
                   height: 5.0,
                 ),
-                if(model.bio!=null)
-                Text(
-                  model.bio!,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
+                if (model.bio != null)
+                  Text(
+                    model.bio!,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: Row(
@@ -149,19 +168,20 @@ class ProfileScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: defaultTextMatrialButton(
-                      context: context, text: 'Edit Profile',
+                      context: context,
+                      text: 'Edit Profile',
                       onPressed: () {
                         navigateTo(context, EditProfileScreen());
-                  }),
+                      }),
                 ),
                 SizedBox(
                   height: 10.0,
                 ),
-              if(model.generalDetails!=null)
-              SizedBox(
-                width: double.infinity,
-                child: generalDetails(context,model.generalDetails!),
-              ),
+                if (model.generalDetails != null)
+                  SizedBox(
+                    width: double.infinity,
+                    child: generalDetails(context, model.generalDetails!),
+                  ),
                 Text('hellooooooo'),
               ],
             ),
