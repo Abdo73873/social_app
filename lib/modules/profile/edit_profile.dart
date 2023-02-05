@@ -22,7 +22,7 @@ class EditProfileScreen extends StatelessWidget {
   final picker=ImagePicker();
 TextEditingController nameController=TextEditingController();
 TextEditingController bioController=TextEditingController();
-
+  var formKey=GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, ProfileStates>(
@@ -150,8 +150,11 @@ TextEditingController bioController=TextEditingController();
                               cubit.changeOpenEdit(0);
                             },
                             splashColor: secondaryColor,
-                            child: Icon(cubit.readOnly[0]?Icons.edit:Icons.done,
-                              size: 20.0,),
+                            highlightColor: secondaryColor,
+                            child: Icon(
+                              cubit.readOnly[0]?Icons.edit:Icons.done,
+                              size: 20.0,
+                            ),
                           ),
                           Text(
                             '${userModel.name}    ',
@@ -161,34 +164,50 @@ TextEditingController bioController=TextEditingController();
                         ],
                       ),
                     if(!cubit.readOnly[0])
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(width: 30.0,),
-                        SizedBox(
-                          width:MediaQuery.of(context).size.width*.6 ,
-                          child: TextFormField(
-                            controller: nameController,
-                            minLines: 1,
-                            maxLines: 3,
-                            decoration: InputDecoration(
-                                labelText: 'Name'
+                    Form(
+                      key: formKey,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(width: 30.0,),
+                          SizedBox(
+                            width:MediaQuery.of(context).size.width*.6 ,
+                            child: TextFormField(
+                              controller: nameController,
+                              minLines: 1,
+                              maxLines: 3,
+                              decoration: InputDecoration(
+                                  labelText: 'Name'
+                              ),
+                              readOnly:cubit.readOnly[0],
+                              textInputAction:TextInputAction.done ,
+                              validator: (value){
+                                if (value!.isEmpty){
+                                  return 'Name must not be empty';
+                                }
+                                return null;
+                              },
+                              onEditingComplete: (){
+                                if(formKey.currentState!.validate()){
+                                  userModel.name=nameController.text;
+                                  nameController.text=userModel.name;
+                                  cubit.changeOpenEdit(0);
+                                }                              },
                             ),
-                            readOnly:cubit.readOnly[0],
-                            textInputAction:TextInputAction.done ,
-                            onEditingComplete: (){
-                              cubit.changeOpenEdit(0);
-                            },
                           ),
-                        ),
-                        IconButton(
-                            onPressed: (){
-                              cubit.changeOpenEdit(0);
-                            },
-                            icon: Icon(cubit.readOnly[0]?Icons.edit:Icons.done),
-                          ),
+                          IconButton(
+                              onPressed: (){
+                                if(formKey.currentState!.validate()){
+                                  userModel.name=nameController.text;
+                                  nameController.text=userModel.name;
+                                  cubit.changeOpenEdit(0);
+                                }
+                              },
+                              icon: Icon(cubit.readOnly[0]?Icons.edit:Icons.done),
+                            ),
 
-                      ],
+                        ],
+                      ),
                     ),
                     if(cubit.readOnly[1])
                       Column(
@@ -204,7 +223,7 @@ TextEditingController bioController=TextEditingController();
                               size: 20.0,),
                           ),
                           Text(
-                            '${userModel.bio}    ',
+                            bioController.text.isNotEmpty?'${userModel.bio}    ':'bio ...   ',
                             style: Theme.of(context).textTheme.bodyMedium,
                             maxLines: 5,
                           ),
@@ -226,12 +245,16 @@ TextEditingController bioController=TextEditingController();
                             readOnly:cubit.readOnly[1],
                             textInputAction:TextInputAction.done ,
                             onEditingComplete: (){
+                              userModel.bio=bioController.text;
+                              bioController.text=userModel.bio!;
                               cubit.changeOpenEdit(1);
                             },
                           ),
                         ),
                         IconButton(
                           onPressed: (){
+                            userModel.bio=bioController.text;
+                            bioController.text=userModel.bio!;
                             cubit.changeOpenEdit(1);
                           },
                           icon: Icon(cubit.readOnly[1]?Icons.edit:Icons.done),

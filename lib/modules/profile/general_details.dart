@@ -45,6 +45,8 @@ Widget generalDetails({
             readOnly:readOnly[2],
             textInputAction:TextInputAction.done ,
             onEditingComplete: (){
+              model.school=schoolController.text;
+              schoolController.text=model.school!;
               cubit.changeOpenEdit(2);
             },
             enabled: openToAdd,
@@ -53,6 +55,8 @@ Widget generalDetails({
         if(openToAdd)
         IconButton(
             onPressed: (){
+              model.school=schoolController.text;
+              schoolController.text=model.school!;
           cubit.changeOpenEdit(2);
         },
             icon: Icon(readOnly[2]?Icons.edit:Icons.done),
@@ -77,6 +81,8 @@ Widget generalDetails({
               readOnly:readOnly[3],
               textInputAction:TextInputAction.done ,
               onEditingComplete: (){
+                model.work=workController.text;
+                workController.text=model.work!;
                 cubit.changeOpenEdit(3);
               },
               enabled: openToAdd,
@@ -85,6 +91,8 @@ Widget generalDetails({
           if(openToAdd)
             IconButton(
               onPressed: (){
+                model.work=workController.text;
+                workController.text=model.work!;
                 cubit.changeOpenEdit(3);
               },
               icon: Icon(readOnly[3]?Icons.edit:Icons.done),
@@ -109,6 +117,8 @@ Widget generalDetails({
               readOnly:readOnly[4],
               textInputAction:TextInputAction.done ,
               onEditingComplete: (){
+                model.country=countryController.text;
+                countryController.text=model.country!;
                 cubit.changeOpenEdit(4);
               },
               enabled: openToAdd,
@@ -117,6 +127,8 @@ Widget generalDetails({
           if(openToAdd)
             IconButton(
               onPressed: (){
+                model.country=countryController.text;
+                countryController.text=model.country!;
                 cubit.changeOpenEdit(4);
               },
               icon: Icon(readOnly[4]?Icons.edit:Icons.done),
@@ -141,6 +153,8 @@ Widget generalDetails({
               readOnly:readOnly[5],
               textInputAction:TextInputAction.done ,
               onEditingComplete: (){
+                model.live=liveController.text;
+                liveController.text=model.live!;
                 cubit.changeOpenEdit(5);
               },
               enabled: openToAdd,
@@ -149,6 +163,8 @@ Widget generalDetails({
           if(openToAdd)
             IconButton(
               onPressed: (){
+                model.live=liveController.text;
+                liveController.text=model.live!;
                 cubit.changeOpenEdit(5);
               },
               icon: Icon(readOnly[5]?Icons.edit:Icons.done),
@@ -170,6 +186,8 @@ Widget generalDetails({
               readOnly:readOnly[6],
               textInputAction:TextInputAction.done ,
               onEditingComplete: (){
+                model.status=statusController.text;
+                statusController.text=model.status!;
                 cubit.changeOpenEdit(6);
               },
               enabled: openToAdd,
@@ -178,6 +196,8 @@ Widget generalDetails({
           if(openToAdd)
             IconButton(
               onPressed: (){
+                model.status=statusController.text;
+                statusController.text=model.status!;
                 cubit.changeOpenEdit(6);
               },
               icon: Icon(readOnly[6]?Icons.edit:Icons.done),
@@ -189,7 +209,7 @@ Widget generalDetails({
     if(model.school!.isEmpty||model.work!.isEmpty||model.country!.isEmpty||model.live!.isEmpty||model.status!.isEmpty)
       OutlinedButton(
         onPressed: (){
-        ProfileCubit.get(context).changeToAdd();
+        cubit.changeToAdd();
         },
         child: Row(
           children: [
@@ -206,7 +226,7 @@ Widget generalDetails({
     if(model.school!.isNotEmpty&&model.work!.isNotEmpty&&model.country!.isNotEmpty&&model.live!.isNotEmpty&&model.status!.isNotEmpty)
       OutlinedButton(
       onPressed: (){
-        ProfileCubit.get(context).changeToAdd();
+        cubit.changeToAdd();
       },
       child: Row(
         children: [
