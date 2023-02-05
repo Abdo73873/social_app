@@ -6,3 +6,5 @@ void printFullText(String text){
 }
 
 String? uIdUser='';
+bool openToAdd=false;
+

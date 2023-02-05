@@ -13,12 +13,14 @@ class ProfileErrorGetUserState extends ProfileStates {
   ProfileErrorGetUserState(this.error);
 }
 
+class ProfileOpenEditState extends ProfileStates {}
 
-class ProfileLoadingProfileState extends ProfileStates {}
 
-class ProfileSuccessProfileState extends ProfileStates {}
+class ProfileLoadingState extends ProfileStates {}
 
-class ProfileErrorProfileState extends ProfileStates {
+class ProfileSuccessState extends ProfileStates {}
+
+class ProfileErrorState extends ProfileStates {
   final String error;
-  ProfileErrorProfileState(this.error);
+  ProfileErrorState(this.error);
 }

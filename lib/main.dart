@@ -7,6 +7,7 @@ import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
 import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/login/login_screen.dart';
+import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
 import 'package:social_app/modules/register/register_screen.dart';
 import 'package:social_app/shared/bloc_observer.dart';
 import 'package:social_app/shared/components/constants.dart';
@@ -37,8 +38,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context)=>HomeCubit()..getUserData(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+        create: (context)=>HomeCubit()..getUserData(),
+        ),
+        BlocProvider(
+        create: (context)=>ProfileCubit(),
+        ),
+      ],
       child: BlocConsumer<HomeCubit,HomeStates>(
         listener: (context,states){},
         builder: (context,states){

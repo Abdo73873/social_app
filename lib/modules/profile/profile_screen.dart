@@ -3,20 +3,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/layout/cubit/social_states.dart';
 import 'package:social_app/models/usersModel.dart';
+import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
+import 'package:social_app/modules/profile/cubit/profile_states.dart';
 import 'package:social_app/modules/profile/edit_profile.dart';
 import 'package:social_app/modules/profile/general_details.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ProfileScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeCubit, HomeStates>(
-      listener: (context, state) {},
+
+    return BlocConsumer<ProfileCubit, ProfileStates>(
+      listener: (context, state) {
+        if(ProfileCubit.get(context).isClosed){}
+      },
       builder: (context, state) {
-        UserModel model = HomeCubit.get(context).userModel;
+
+        UserModel userModel = HomeCubit.get(context).userModel;
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: SingleChildScrollView(
@@ -39,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
                             width: double.infinity,
                             height: 150,
                             fit: BoxFit.cover,
-                            imageUrl: model.cover ?? '',
+                            imageUrl: userModel.cover ?? '',
                             errorWidget: (context, url, error) => Image.asset('assets/images/cover.jpg',
                               width: double.infinity,
                               height: 150,
@@ -59,9 +65,9 @@ class ProfileScreen extends StatelessWidget {
                               width: double.infinity,
                               height: double.infinity,
                               fit: BoxFit.cover,
-                              imageUrl: model.image ?? '',
+                              imageUrl: userModel.image ?? '',
                               errorWidget: (context, url, error) => Image.asset(
-                                  model.male
+                                  userModel.male
                                       ? 'assets/images/male.jpg'
                                       : 'assets/images/female.jpg',
                                 width: double.infinity,
@@ -79,15 +85,15 @@ class ProfileScreen extends StatelessWidget {
                   height: 5.0,
                 ),
                 Text(
-                  model.name,
+                  userModel.name,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 SizedBox(
                   height: 5.0,
                 ),
-                if (model.bio != null)
+                if (userModel.bio != null)
                   Text(
-                    model.bio!,
+                    userModel.bio!,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 Padding(
@@ -171,18 +177,21 @@ class ProfileScreen extends StatelessWidget {
                       context: context,
                       text: 'Edit Profile',
                       onPressed: () {
+                        ProfileCubit.get(context).changeToAdd(context: context,isEditScreen: true);
                         navigateTo(context, EditProfileScreen());
+
                       }),
                 ),
                 SizedBox(
                   height: 10.0,
                 ),
-                if (model.generalDetails != null)
                   SizedBox(
                     width: double.infinity,
-                    child: generalDetails(context, model.generalDetails!),
+                    child: generalDetails(
+                      context: context,
+                      model:  userModel.generalDetails!,
+                    ),
                   ),
-                Text('hellooooooo'),
               ],
             ),
           ),
