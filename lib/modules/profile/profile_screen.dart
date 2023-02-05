@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
                             width: double.infinity,
                             height: 150,
                             fit: BoxFit.cover,
-                            imageUrl: userModel.image ?? '',
+                            imageUrl: userModel.cover ?? '',
                             errorWidget: (context, url, error) => Image.asset('assets/images/cover.jpg',
                               width: double.infinity,
                               height: 150,
@@ -110,7 +110,7 @@ class ProfileScreen extends StatelessWidget {
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                               Text(
-                                'post',
+                                'posts',
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
@@ -123,11 +123,11 @@ class ProfileScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                '100',
+                                '10K',
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                               Text(
-                                'follower',
+                                'followers',
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
@@ -140,28 +140,11 @@ class ProfileScreen extends StatelessWidget {
                           child: Column(
                             children: [
                               Text(
-                                '100',
+                                '500',
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                               Text(
                                 'following',
-                                style: Theme.of(context).textTheme.bodySmall,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {},
-                          child: Column(
-                            children: [
-                              Text(
-                                '100',
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                              Text(
-                                'friends',
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
@@ -177,7 +160,6 @@ class ProfileScreen extends StatelessWidget {
                       context: context,
                       text: 'Edit Profile',
                       onPressed: () {
-                        ProfileCubit.get(context).changeToAdd(context: context,isEditScreen: true);
                         navigateTo(context, EditProfileScreen());
 
                       }),

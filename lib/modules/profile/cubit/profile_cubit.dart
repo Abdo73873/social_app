@@ -17,18 +17,8 @@ class ProfileCubit extends Cubit<ProfileStates> {
     emit(ProfileOpenEditState());
   }
 
-  void changeToAdd({
-    required BuildContext context,
-    bool? isEditScreen
-}){
-    if(isEditScreen!=null){
-      if(isEditScreen){
-        openToAdd=true;
-      }else if(!isEditScreen) {openToAdd=false;}
-
-    } else {
+  void changeToAdd(){
       openToAdd=! openToAdd;
-    }
     emit(ProfileOpenEditState());
   }
 

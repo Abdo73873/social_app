@@ -22,8 +22,9 @@ Widget generalDetails({
   countryController.text=model.country!;
   liveController.text=model.live!;
   statusController.text=model.status!;
-  List<bool> readOnly=ProfileCubit.get(context).readOnly;
+
   var cubit=ProfileCubit.get(context);
+  List<bool> readOnly=cubit.readOnly;
   double widthField=openToAdd?MediaQuery.of(context).size.width*.7:MediaQuery.of(context).size.width*.8;
   return Column(
   children: [
@@ -188,7 +189,7 @@ Widget generalDetails({
     if(model.school!.isEmpty||model.work!.isEmpty||model.country!.isEmpty||model.live!.isEmpty||model.status!.isEmpty)
       OutlinedButton(
         onPressed: (){
-        ProfileCubit.get(context).changeToAdd(context: context);
+        ProfileCubit.get(context).changeToAdd();
         },
         child: Row(
           children: [
@@ -205,7 +206,7 @@ Widget generalDetails({
     if(model.school!.isNotEmpty&&model.work!.isNotEmpty&&model.country!.isNotEmpty&&model.live!.isNotEmpty&&model.status!.isNotEmpty)
       OutlinedButton(
       onPressed: (){
-        ProfileCubit.get(context).changeToAdd(context: context);
+        ProfileCubit.get(context).changeToAdd();
       },
       child: Row(
         children: [

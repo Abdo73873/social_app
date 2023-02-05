@@ -36,16 +36,12 @@ TextEditingController bioController=TextEditingController();
             appBar: AppBar(
               leading:IconButton(
                 onPressed: (){
-                  ProfileCubit.get(context).changeToAdd(context: context, isEditScreen: false);
                   Navigator.of(context).pop();
                 },
                 icon: Icon(Icons.arrow_back_ios),
               ) ,
               actions: [
                 defaultText(onPressed: () {
-                  ProfileCubit.get(context).changeToAdd(
-                      context: context,
-                      isEditScreen: false);
                   Navigator.pop(context);
 
                 }, text: 'Update'),
@@ -58,7 +54,6 @@ TextEditingController bioController=TextEditingController();
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                       height: 200.0,
@@ -145,6 +140,27 @@ TextEditingController bioController=TextEditingController();
                         ],
                       ),
                     ),
+                    if(cubit.readOnly[0])
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              cubit.changeOpenEdit(0);
+                            },
+                            splashColor: secondaryColor,
+                            child: Icon(cubit.readOnly[0]?Icons.edit:Icons.done,
+                              size: 20.0,),
+                          ),
+                          Text(
+                            '${userModel.name}    ',
+                            style: Theme.of(context).textTheme.titleMedium,
+                            maxLines: 2,
+                          ),
+                        ],
+                      ),
+                    if(!cubit.readOnly[0])
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -156,7 +172,7 @@ TextEditingController bioController=TextEditingController();
                             minLines: 1,
                             maxLines: 3,
                             decoration: InputDecoration(
-                                labelText: 'name'
+                                labelText: 'Name'
                             ),
                             readOnly:cubit.readOnly[0],
                             textInputAction:TextInputAction.done ,
@@ -174,7 +190,28 @@ TextEditingController bioController=TextEditingController();
 
                       ],
                     ),
-                    Row(
+                    if(cubit.readOnly[1])
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: (){
+                              cubit.changeOpenEdit(1);
+                            },
+                            splashColor: secondaryColor,
+                            child: Icon(cubit.readOnly[1]?Icons.edit:Icons.done,
+                              size: 20.0,),
+                          ),
+                          Text(
+                            '${userModel.bio}    ',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            maxLines: 5,
+                          ),
+                        ],
+                      ),
+                    if(!cubit.readOnly[1])
+                      Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(width: 30.0,),
@@ -182,7 +219,7 @@ TextEditingController bioController=TextEditingController();
                           child: TextFormField(
                             controller: bioController,
                             minLines: 1,
-                            maxLines: 10,
+                            maxLines: 5,
                             decoration: InputDecoration(
                                 labelText: 'Bio'
                             ),
