@@ -9,7 +9,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
   static ProfileCubit get(context) => BlocProvider.of(context);
 
   List<bool> readOnly=[
-    true,true, true,true,true,
+    true,true,true,true, true,true,true,
   ];
 
   void changeOpenEdit(int index){

@@ -19,8 +19,8 @@ Widget generalDetails({
   TextEditingController? statusController = TextEditingController();
   schoolController.text=model.school!;
   workController.text=model.work!;
-  countryController.text='from ${model.country!}';
-  liveController.text='live in ${model.live!}';
+  countryController.text=model.country!;
+  liveController.text=model.live!;
   statusController.text=model.status!;
   List<bool> readOnly=ProfileCubit.get(context).readOnly;
   var cubit=ProfileCubit.get(context);
@@ -41,10 +41,10 @@ Widget generalDetails({
             decoration: InputDecoration(
               labelText: 'study at'
             ),
-            readOnly:readOnly[0],
+            readOnly:readOnly[2],
             textInputAction:TextInputAction.done ,
             onEditingComplete: (){
-              cubit.changeOpenEdit(0);
+              cubit.changeOpenEdit(2);
             },
             enabled: openToAdd,
           ),
@@ -52,9 +52,9 @@ Widget generalDetails({
         if(openToAdd)
         IconButton(
             onPressed: (){
-          cubit.changeOpenEdit(0);
+          cubit.changeOpenEdit(2);
         },
-            icon: Icon(readOnly[0]?Icons.edit:Icons.done),
+            icon: Icon(readOnly[2]?Icons.edit:Icons.done),
         ),
 
       ],
@@ -73,10 +73,10 @@ Widget generalDetails({
               decoration: InputDecoration(
                   labelText: 'work at'
               ),
-              readOnly:readOnly[1],
+              readOnly:readOnly[3],
               textInputAction:TextInputAction.done ,
               onEditingComplete: (){
-                cubit.changeOpenEdit(1);
+                cubit.changeOpenEdit(3);
               },
               enabled: openToAdd,
             ),
@@ -84,9 +84,9 @@ Widget generalDetails({
           if(openToAdd)
             IconButton(
               onPressed: (){
-                cubit.changeOpenEdit(1);
+                cubit.changeOpenEdit(3);
               },
-              icon: Icon(readOnly[1]?Icons.edit:Icons.done),
+              icon: Icon(readOnly[3]?Icons.edit:Icons.done),
             ),
 
         ],
@@ -94,68 +94,94 @@ Widget generalDetails({
     if( model.country!.isNotEmpty||openToAdd)
       Row(
         children: [
-          if(countryController.text.isNotEmpty)
-            Icon(Icons.place),
+          Icon(Icons.place),
           SizedBox(width: 5.0,),
           SizedBox(
-            width: widthField,
+            width:widthField ,
             child: TextFormField(
               controller: countryController,
               minLines: 1,
               maxLines: 2,
-              onTap: () {
-                cubit.changeOpenEdit(2);
+              decoration: InputDecoration(
+                  labelText: 'from'
+              ),
+              readOnly:readOnly[4],
+              textInputAction:TextInputAction.done ,
+              onEditingComplete: (){
+                cubit.changeOpenEdit(4);
               },
-              onSaved: (value){
-                cubit.changeOpenEdit(2);
-              },
-              enabled: readOnly[2]||openToAdd,
+              enabled: openToAdd,
             ),
           ),
+          if(openToAdd)
+            IconButton(
+              onPressed: (){
+                cubit.changeOpenEdit(4);
+              },
+              icon: Icon(readOnly[4]?Icons.edit:Icons.done),
+            ),
+
         ],
       ),
     if( model.live!.isNotEmpty||openToAdd)
       Row(
         children: [
-          if(liveController.text.isNotEmpty)
-            Icon(Icons.place),
+          Icon(Icons.place),
           SizedBox(width: 5.0,),
           SizedBox(
-            width: MediaQuery.of(context).size.width*.8,
+            width:widthField ,
             child: TextFormField(
+              controller: liveController,
               minLines: 1,
               maxLines: 2,
-              controller: liveController,
-              onTap: () {
-                cubit.changeOpenEdit(3);
+              decoration: InputDecoration(
+                  labelText: 'live in'
+              ),
+              readOnly:readOnly[5],
+              textInputAction:TextInputAction.done ,
+              onEditingComplete: (){
+                cubit.changeOpenEdit(5);
               },
-              onSaved: (value){
-                cubit.changeOpenEdit(3);
-              },
-              enabled: readOnly[3],
+              enabled: openToAdd,
             ),
           ),
+          if(openToAdd)
+            IconButton(
+              onPressed: (){
+                cubit.changeOpenEdit(5);
+              },
+              icon: Icon(readOnly[5]?Icons.edit:Icons.done),
+            ),
+
         ],
       ),
     if( model.status!.isNotEmpty||openToAdd)
       Row(
         children: [
-          if(statusController.text.isNotEmpty)
-            Icon(Icons.favorite),
+          Icon(Icons.workspace_premium),
           SizedBox(width: 5.0,),
           SizedBox(
-            width: MediaQuery.of(context).size.width*.8,
+            width:widthField ,
             child: TextFormField(
               controller: statusController,
-              onTap: () {
-
+              minLines: 1,
+              maxLines: 2,
+              readOnly:readOnly[6],
+              textInputAction:TextInputAction.done ,
+              onEditingComplete: (){
+                cubit.changeOpenEdit(6);
               },
-              onSaved: (value){
-                cubit.changeOpenEdit(4);
-              },
-              enabled: readOnly[4],
+              enabled: openToAdd,
             ),
           ),
+          if(openToAdd)
+            IconButton(
+              onPressed: (){
+                cubit.changeOpenEdit(6);
+              },
+              icon: Icon(readOnly[6]?Icons.edit:Icons.done),
+            ),
+
         ],
       ),
     SizedBox(height: 10.0,),
@@ -169,7 +195,7 @@ Widget generalDetails({
             Icon(openToAdd?Icons.done:Icons.add_box,),
             SizedBox(width: 5.0,),
             Text(
-              openToAdd?'Done': 'Add General Details',
+              openToAdd?'Done': 'Add More General Details',
               style: Theme.of(context).textTheme.displayMedium,
             ),
 

@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
                             width: double.infinity,
                             height: 150,
                             fit: BoxFit.cover,
-                            imageUrl: userModel.cover ?? '',
+                            imageUrl: userModel.image ?? '',
                             errorWidget: (context, url, error) => Image.asset('assets/images/cover.jpg',
                               width: double.infinity,
                               height: 150,

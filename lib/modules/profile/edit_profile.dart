@@ -14,18 +14,24 @@ import 'package:social_app/modules/profile/cubit/profile_states.dart';
 import 'package:social_app/modules/profile/general_details.dart';
 import 'package:social_app/modules/profile/profile_screen.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:image_picker/image_picker.dart';
 class EditProfileScreen extends StatelessWidget {
   File? image;
   final picker=ImagePicker();
+TextEditingController nameController=TextEditingController();
+TextEditingController bioController=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, ProfileStates>(
         listener: (context, state) {},
         builder: (context, state) {
+          var cubit=ProfileCubit.get(context);
           UserModel userModel = HomeCubit.get(context).userModel;
+          nameController.text=userModel.name;
+          bioController.text=userModel.bio!;
           return Scaffold(
             appBar: AppBar(
               leading:IconButton(
@@ -52,6 +58,7 @@ class EditProfileScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
                       height: 200.0,
@@ -138,10 +145,76 @@ class EditProfileScreen extends StatelessWidget {
                         ],
                       ),
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(width: 30.0,),
+                        SizedBox(
+                          width:MediaQuery.of(context).size.width*.6 ,
+                          child: TextFormField(
+                            controller: nameController,
+                            minLines: 1,
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                                labelText: 'name'
+                            ),
+                            readOnly:cubit.readOnly[0],
+                            textInputAction:TextInputAction.done ,
+                            onEditingComplete: (){
+                              cubit.changeOpenEdit(0);
+                            },
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: (){
+                              cubit.changeOpenEdit(0);
+                            },
+                            icon: Icon(cubit.readOnly[0]?Icons.edit:Icons.done),
+                          ),
+
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(width: 30.0,),
+                        Expanded(
+                          child: TextFormField(
+                            controller: bioController,
+                            minLines: 1,
+                            maxLines: 10,
+                            decoration: InputDecoration(
+                                labelText: 'Bio'
+                            ),
+                            readOnly:cubit.readOnly[1],
+                            textInputAction:TextInputAction.done ,
+                            onEditingComplete: (){
+                              cubit.changeOpenEdit(1);
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: (){
+                            cubit.changeOpenEdit(1);
+                          },
+                          icon: Icon(cubit.readOnly[1]?Icons.edit:Icons.done),
+                        ),
+
+                      ],
+                    ),
+                    SizedBox(height: 50.0,),
+                    if(userModel.generalDetails!=null)
+                    Text('General Details',
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: secondaryColor[600],
+                    ),
+                    ),
                     generalDetails(
                       context: context,
                       model:userModel.generalDetails!,
                     ),
+                    SizedBox(height: 100.0,),
+
                   ],
                 ),
               ),
