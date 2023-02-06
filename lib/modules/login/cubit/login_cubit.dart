@@ -23,7 +23,7 @@ import 'package:social_app/shared/network/local/cache_helper.dart';
        email: email,
        password: password,
      ).then((value) {
-       uIdUser=value.user?.uid;
+       userId=value.user?.uid;
        emit(SuccessesLoginState());
          }).catchError((error){
        emit(ErrorLoginState(error.toString()));

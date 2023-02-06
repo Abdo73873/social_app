@@ -57,23 +57,23 @@ class ProfileScreen extends StatelessWidget {
                       CircleAvatar(
                         radius: 64,
                         backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
+                        Theme.of(context).scaffoldBackgroundColor,
                         child: CircleAvatar(
                           radius: 60.0,
                           child: ClipOval(
-                            child: CachedNetworkImage(
+                            child:userModel.image!.isNotEmpty
+                                ? Image.network(
+                              userModel.image!,
                               width: double.infinity,
                               height: double.infinity,
                               fit: BoxFit.cover,
-                              imageUrl: userModel.image ?? '',
-                              errorWidget: (context, url, error) => Image.asset(
-                                  userModel.male
-                                      ? 'assets/images/male.jpg'
-                                      : 'assets/images/female.jpg',
+                            )
+                                : Image.asset(userModel.male
+                                ?'assets/images/male.jpg'
+                                : 'assets/images/female.jpg',
                                 width: double.infinity,
-                                height: double.infinity,
+                               height: double.infinity,
                                 fit: BoxFit.cover,
-                              ),
                             ),
                           ),
                         ),

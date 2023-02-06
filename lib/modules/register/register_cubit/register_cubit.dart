@@ -80,7 +80,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     );
     FirebaseFirestore.instance.collection("users").doc(uId).set(model.toMaP())
         .then((value){
-      uIdUser=uId;
+      userId=uId;
       emit(SuccessesCreateUserState());
     }).catchError((error){
       emit(ErrorCreateUserState(error.toString()));

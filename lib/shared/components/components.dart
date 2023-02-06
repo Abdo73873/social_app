@@ -8,7 +8,7 @@ Widget defaultTextMatrialButton({
   double width = double.infinity,
   double radius = 30.0,
   required BuildContext context,
-  Color? background,
+  Color? background=defaultColor,
   bool isUppercase = true,
   required String text,
   required Function() onPressed,
@@ -17,7 +17,7 @@ Widget defaultTextMatrialButton({
       width: width,
       height: 40.0,
       decoration: BoxDecoration(
-        color: defaultColor,
+        color: background,
         borderRadius: BorderRadius.circular(radius),
       ),
       child: MaterialButton(

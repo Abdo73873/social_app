@@ -4,6 +4,21 @@ abstract class ProfileStates {}
 
 class ProfileInitializeState extends ProfileStates {}
 
+class ProfileOpenEditState extends ProfileStates {}
+
+class ProfileGetImageProfileSuccessState extends ProfileStates {}
+class ProfileGetImageCoverSuccessState extends ProfileStates {}
+class ProfileGetImageErrorState extends ProfileStates {}
+
+class ProfileUploadImageProfileSuccessState extends ProfileStates {}
+class ProfileUploadImageCoverSuccessState extends ProfileStates {}
+class ProfileUploadErrorState extends ProfileStates {}
+
+
+
+
+
+
 class ProfileLoadingGetUserState extends ProfileStates {}
 
 class ProfileSuccessGetUserState extends ProfileStates {}
@@ -13,7 +28,6 @@ class ProfileErrorGetUserState extends ProfileStates {
   ProfileErrorGetUserState(this.error);
 }
 
-class ProfileOpenEditState extends ProfileStates {}
 
 
 class ProfileLoadingState extends ProfileStates {}

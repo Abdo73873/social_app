@@ -19,9 +19,9 @@ void main() async {
     await CacheHelper.init();
   await Firebase.initializeApp();
 
-   uIdUser =CacheHelper.getData(key: "uId");
+   userId =CacheHelper.getData(key: "uId");
    Widget startWidget;
-    if(uIdUser!=null){
+    if(userId!=null){
       startWidget=HomeLayout();
     }else {startWidget=LoginScreen();}
 

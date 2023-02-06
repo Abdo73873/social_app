@@ -23,7 +23,7 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is SuccessesLoginState) {
-            CacheHelper.saveData(key: "uId", value:uIdUser).then((value) {
+            CacheHelper.saveData(key: "uId", value:userId).then((value) {
               navigateAndFinish(context, HomeLayout());
             });
           }
