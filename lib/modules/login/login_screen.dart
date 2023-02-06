@@ -142,7 +142,7 @@ class LoginScreen extends StatelessWidget {
                           children: [
                             Text(
                               'Don\'t have account?',
-                              style: Theme.of(context).textTheme.labelMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             defaultText(
                               text: 'REGISTER',
