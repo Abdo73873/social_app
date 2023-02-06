@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/home_layout.dart';
@@ -38,6 +39,7 @@ class LoginScreen extends StatelessWidget {
             ),
             body: Center(
               child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Form(
@@ -45,6 +47,14 @@ class LoginScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Center(
+                          child: Image(
+                            width: 90.0,
+                            height: 90.0,
+                            image: AssetImage('assets/images/logo2.PNG',),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                         Text(
                           'LOGIN',
                           style: Theme.of(context).textTheme.headlineMedium,

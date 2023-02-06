@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             themeMode: ThemeMode.light,
-            home: startWidget,
+            home: LoginScreen(),
           );
         },
       ),

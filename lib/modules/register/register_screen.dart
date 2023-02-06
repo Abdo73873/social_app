@@ -49,19 +49,29 @@ class RegisterScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Center(
+                          child: Image(
+                            width: 90.0,
+                            height: 90.0,
+                            image: AssetImage('assets/images/logo2.PNG',),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                         Text(
                           'REGISTER',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                            fontSize: 20.0,
+                          ),
                         ),
                         SizedBox(
                           height: 20.0,
                         ),
                         Text(
-                          'Register now to browse our hot offers',
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          'Register now to communicate with friends',
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         SizedBox(
-                          height: 40.0,
+                          height: 30.0,
                         ),
                         defaultFromField(
                           context: context,
@@ -78,7 +88,7 @@ class RegisterScreen extends StatelessWidget {
                           action: TextInputAction.next,
                         ),
                         SizedBox(
-                          height: 20.0,
+                          height: 10.0,
                         ),
                         defaultFromField(
                           context: context,
@@ -95,7 +105,7 @@ class RegisterScreen extends StatelessWidget {
                           action: TextInputAction.next,
                         ),
                         SizedBox(
-                          height: 20.0,
+                          height: 10.0,
                         ),
                         defaultFromField(
                           context: context,
@@ -112,7 +122,7 @@ class RegisterScreen extends StatelessWidget {
                           action: TextInputAction.next,
                         ),
                         SizedBox(
-                          height: 20.0,
+                          height: 10.0,
                         ),
                         Row(
                           children: [
@@ -126,6 +136,7 @@ class RegisterScreen extends StatelessWidget {
                             child: Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
+                                color: defaultColor.withOpacity(0.05),
                                 border:Border.all(
                                   color: defaultColor,
                                 ),
@@ -183,7 +194,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ],),
                         SizedBox(
-                          height: 20.0,
+                          height: 10.0,
                         ),
                         defaultFromField(
                             context: context,
@@ -217,7 +228,7 @@ class RegisterScreen extends StatelessWidget {
                               }
                             }),
                         SizedBox(
-                          height: 40.0,
+                          height: 30.0,
                         ),
                         ConditionalBuilder(
                           condition: state is! LoadingRegisterState,
@@ -239,7 +250,7 @@ class RegisterScreen extends StatelessWidget {
                           fallback: (context) => Center(child: CircularProgressIndicator()),
                         ),
                         SizedBox(
-                          height: 20.0,
+                          height: 10.0,
                         ),
                         Row(
                           children: [

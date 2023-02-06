@@ -53,6 +53,8 @@ Widget defaultFromField({
       validator: validator,
       obscureText: isPassword,
       decoration: InputDecoration(
+        fillColor: defaultColor.withOpacity(.05),
+        filled: true,
         floatingLabelStyle: TextStyle(
           color: Theme.of(context).primaryColor,
         ),
