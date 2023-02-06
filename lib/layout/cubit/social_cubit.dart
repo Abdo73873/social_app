@@ -9,6 +9,7 @@ import 'package:social_app/modules/feeds/feeds_screen.dart';
 import 'package:social_app/modules/profile/profile_screen.dart';
 import 'package:social_app/modules/users/users_screen.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/shared/network/local/cache_helper.dart';
 
 class HomeCubit extends Cubit<HomeStates>{
   HomeCubit():super(HomeInitializeState());
@@ -56,6 +57,27 @@ class HomeCubit extends Cubit<HomeStates>{
       }
 
     }
+
+  }
+
+  bool isDark=false;
+
+  void changeMode({
+    bool? fromCache,
+  })  {
+    if(fromCache!=null){
+      isDark=fromCache;
+      emit(HomeChangeModeState());
+    }
+    else{
+      isDark=!isDark;
+      CacheHelper.saveData(key:'isDark', value: isDark).then((value){
+        emit(HomeChangeModeState());
+      });
+    }
+
+
+
 
   }
 

@@ -14,6 +14,7 @@ class FeedsScreen extends StatelessWidget {
       child: Column(
         children: [
           Card(
+            color: Theme.of(context).scaffoldBackgroundColor,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             elevation: 10.0,
             margin: EdgeInsets.all(8.0),
@@ -59,6 +60,7 @@ class FeedsScreen extends StatelessWidget {
   }
 
   Widget buildPostItem(context)=>Card(
+    color: Theme.of(context).scaffoldBackgroundColor,
     clipBehavior: Clip.antiAliasWithSaveLayer,
     elevation: 5.0,
     margin: EdgeInsets.symmetric(horizontal: 8.0),

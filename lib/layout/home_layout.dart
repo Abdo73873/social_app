@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/layout/drower.dart';
 import 'package:social_app/modules/new_post/new_post_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -38,6 +39,7 @@ class HomeLayout extends StatelessWidget {
               IconButton(onPressed: (){}, icon: Icon(IconBroken.Search,),),
             ],
           ),
+          drawer:NavigateDrawer(),
           body: cubit.screens[cubit.currentIndex],
           bottomNavigationBar:Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 6.0),
@@ -50,7 +52,6 @@ class HomeLayout extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
                 duration: Duration(milliseconds: 400),
                 tabBackgroundColor: secondaryColor.withOpacity(.1),
-                color: secondaryColor[900],
                 selectedIndex:cubit.currentIndex>=2?cubit.currentIndex+1:cubit.currentIndex,
                 onTabChange: (index){
                   cubit.changeBottomScreen(index);

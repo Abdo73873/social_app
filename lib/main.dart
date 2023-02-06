@@ -18,6 +18,7 @@ void main() async {
   Bloc.observer = MyBlocObserver();
     await CacheHelper.init();
   await Firebase.initializeApp();
+  bool? isDark= CacheHelper.getData(key: 'isDark',);
 
    userId =CacheHelper.getData(key: "uId");
    Widget startWidget;
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
           return  MaterialApp(
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
+            darkTheme: darkTheme,
             themeMode: ThemeMode.light,
             home: startWidget,
           );

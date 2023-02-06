@@ -3,6 +3,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/modules/register/register_cubit/register_cubit.dart';
@@ -27,6 +28,7 @@ class RegisterScreen extends StatelessWidget {
         listener: (context, state) {
           if(state is SuccessesCreateUserState){
               CacheHelper.saveData(key: "uId", value:userId).then((value) {
+                HomeCubit.get(context).getUserData();
                 navigateAndFinish(context, HomeLayout());
               });
           }
@@ -53,7 +55,7 @@ class RegisterScreen extends StatelessWidget {
                           child: Image(
                             width: 90.0,
                             height: 90.0,
-                            image: AssetImage('assets/images/logo2.PNG',),
+                            image: AssetImage('assets/images/logo.png',),
                             fit: BoxFit.cover,
                           ),
                         ),
