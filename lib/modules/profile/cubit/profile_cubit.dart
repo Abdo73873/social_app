@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,7 +39,6 @@ class ProfileCubit extends Cubit<ProfileStates> {
   File? coverImage;
   final picker = ImagePicker();
 
-
   Future getImage(imageName, isGallery) async {
     ImageSource source;
     if (isGallery) {
@@ -75,6 +75,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
   bool? isUploadCompleted;
   void uploadImage(File? image,String name) {
     isUploadCompleted=false;
+    emit(ProfileUploadImageProfileLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child('users/${Uri
@@ -119,5 +120,6 @@ FirebaseFirestore.instance
 
 });
 }
+
 
 }

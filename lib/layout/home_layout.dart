@@ -29,10 +29,20 @@ class HomeLayout extends StatelessWidget {
         var cubit=HomeCubit.get(context);
         return Scaffold(
           appBar: AppBar(
-            title: Text(cubit.titles[cubit.currentIndex],
-            style: TextStyle(
-              color: defaultColor,
-            ),),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(cubit.titles[cubit.currentIndex],
+                style: TextStyle(
+                  color: defaultColor,
+                ),),
+                if(state is HomeLoadingGetUserState)
+                LinearProgressIndicator(
+                  color: defaultColor,
+                  backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+                ),
+              ],
+            ),
             actions: [
               IconButton(onPressed: (){
               }, icon: Icon(IconBroken.Notification,),),

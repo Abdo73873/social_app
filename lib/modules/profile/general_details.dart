@@ -22,7 +22,6 @@ Widget generalDetails({
   countryController.text=model.country!;
   liveController.text=model.live!;
   statusController.text=model.status!;
-
   var cubit=ProfileCubit.get(context);
   List<bool> readOnly=cubit.readOnly;
   double widthField=openToAdd?MediaQuery.of(context).size.width*.7:MediaQuery.of(context).size.width*.8;

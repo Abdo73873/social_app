@@ -11,6 +11,7 @@ import 'package:social_app/modules/profile/edit_profile.dart';
 import 'package:social_app/modules/profile/general_details.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:social_app/shared/styles/colors.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
@@ -25,6 +26,11 @@ class ProfileScreen extends StatelessWidget {
               UserModel userModel = HomeCubit.get(context).userModel;
               return Column(
                 children: [
+                  if(state is HomeLoadingGetUserState)
+                    LinearProgressIndicator(
+                      color: defaultColor,
+                      backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+                    ),
                   SizedBox(
                     height: 200.0,
                     child: Stack(

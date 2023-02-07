@@ -55,12 +55,15 @@ class EditProfileScreen extends StatelessWidget {
                     if(cubit.isUploadCompleted!){
                       cubit.updateUser(context);
                       Navigator.pop(context);
-                    }else{showToast(message: "Wait for Uploading images", state: ToastState.warning);}
+                      cubit.isUploadCompleted=null;
+                    }else{
+                      showToast(message: "Wait for Uploading images", state: ToastState.warning);
+                    }
                   }else{
                     cubit.updateUser(context);
                     Navigator.pop(context);
                   }
-
+                  openToAdd=false;
                 },
                 text: 'Update'),
             SizedBox(
@@ -73,7 +76,12 @@ class EditProfileScreen extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(
+                if(state is ProfileUploadImageProfileLoadingState)
+                LinearProgressIndicator(
+                  color: defaultColor,
+                  backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+                ),
+            SizedBox(
                   height: 200.0,
                   child: Stack(
                     alignment: AlignmentDirectional.bottomCenter,
