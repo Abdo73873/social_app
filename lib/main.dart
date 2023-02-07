@@ -19,7 +19,6 @@ void main() async {
     await CacheHelper.init();
   await Firebase.initializeApp();
   bool? isDark= CacheHelper.getData(key: 'isDark',);
-
    userId =CacheHelper.getData(key: "uId");
    Widget startWidget;
     if(userId!=null){
@@ -27,7 +26,7 @@ void main() async {
     }else {startWidget=LoginScreen();}
 
 
-  runApp( MyApp(startWidget));
+  runApp( MyApp(startWidget,isDark));
 }
 
 
@@ -35,14 +34,15 @@ void main() async {
 
 class MyApp extends StatelessWidget {
    Widget startWidget;
-  MyApp(this.startWidget);
+   bool? isDark;
+  MyApp(this.startWidget,this.isDark);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-        create: (context)=>HomeCubit()..getUserData(),
+        create: (context)=>HomeCubit()..getUserData()..changeMode(fromCache: isDark),
         ),
         BlocProvider(
         create: (context)=>ProfileCubit(),
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: lightTheme,
             darkTheme: darkTheme,
-            themeMode: ThemeMode.light,
+            themeMode: HomeCubit.get(context).isDark?ThemeMode.dark:ThemeMode.light,
             home: startWidget,
           );
         },

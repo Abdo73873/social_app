@@ -59,7 +59,7 @@ class EditProfileScreen extends StatelessWidget {
                       Navigator.pop(context);
                       cubit.isUploadCompleted=null;
                     }else{
-                      showToast(message: "Wait for Uploading images", state: ToastState.warning);
+                      showToast(message: "Wait for Uploading image", state: ToastState.warning);
                     }
                   }else{
                     cubit.updateUser(context);
@@ -119,85 +119,7 @@ class EditProfileScreen extends StatelessWidget {
                                       fit: BoxFit.cover,
                                     ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                  radius: 20.0,
-                                  backgroundColor: defaultColor[300],
-                                  child: IconButton(
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                            backgroundColor: Colors.grey[100],
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
-                                            ),
-                                            actionsOverflowAlignment:
-                                                OverflowBarAlignment.center,
-                                            actionsPadding:
-                                                EdgeInsets.all(20.0),
-                                            elevation: 20.0,
-                                            title: Text(
-                                              'Choose Source :',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium,
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            actions: [
-                                              OutlinedButton(
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.photo),
-                                                    SizedBox(
-                                                      width: 30.0,
-                                                    ),
-                                                    Text(
-                                                      "From Gallery",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium,
-                                                    ),
-                                                  ],
-                                                ),
-                                                onPressed: () {
-                                                  cubit.getImage("cover", true);
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              OutlinedButton(
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.camera_alt),
-                                                    SizedBox(
-                                                      width: 30.0,
-                                                    ),
-                                                    Text(
-                                                      "From Camera",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium,
-                                                    ),
-                                                  ],
-                                                ),
-                                                onPressed: () {
-                                                  cubit.getImage(
-                                                      "cover", false);
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                      icon: Icon(
-                                        Icons.camera_alt_rounded,
-                                        color: Colors.white,
-                                      ))),
-                            ),
+                            addPic(context: context,namePic: "cover"),
                           ],
                         ),
                       ),
@@ -236,84 +158,7 @@ class EditProfileScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CircleAvatar(
-                                radius: 17.0,
-                                backgroundColor: defaultColor[300],
-                                child: IconButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          backgroundColor: Colors.grey[100],
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
-                                          actionsOverflowAlignment:
-                                              OverflowBarAlignment.center,
-                                          actionsPadding: EdgeInsets.all(20.0),
-                                          elevation: 20.0,
-                                          title: Text(
-                                            'Choose Source :',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          actions: [
-                                            OutlinedButton(
-                                              child: Row(
-                                                children: [
-                                                  Icon(Icons.photo),
-                                                  SizedBox(
-                                                    width: 30.0,
-                                                  ),
-                                                  Text(
-                                                    "From Gallery",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyMedium,
-                                                  ),
-                                                ],
-                                              ),
-                                              onPressed: () {
-                                                cubit.getImage("profile", true);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            OutlinedButton(
-                                              child: Row(
-                                                children: [
-                                                  Icon(Icons.camera_alt),
-                                                  SizedBox(
-                                                    width: 30.0,
-                                                  ),
-                                                  Text(
-                                                    "From Camera",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyMedium,
-                                                  ),
-                                                ],
-                                              ),
-                                              onPressed: () {
-                                                cubit.getImage(
-                                                    "profile", false);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    icon: Icon(
-                                      Icons.camera_alt_rounded,
-                                      color: Colors.white,
-                                      size: 20.0,
-                                    ))),
-                          ),
+                          addPic(context: context,namePic: "profile"),
                         ],
                       ),
                     ],
@@ -538,4 +383,109 @@ class EditProfileScreen extends StatelessWidget {
       );
     });
   }
+
+  Widget addPic({
+  required BuildContext context,
+    required String namePic,
+})=> Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: CircleAvatar(
+        radius: 15.0,
+        backgroundColor: defaultColor[300],
+        child: IconButton(
+            color: Colors.white,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(.9),
+                  shadowColor: defaultColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: Theme.of(context).iconTheme.color!,
+                    ),
+                  ),
+                  actionsOverflowAlignment:
+                  OverflowBarAlignment.center,
+                  actionsPadding:
+                  EdgeInsets.all(20.0),
+                  elevation: 20.0,
+                  title: Text(
+                    'Choose Source :',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  actions: [
+                    OutlinedButton(
+                      child: Row(
+                        children: [
+                          Icon(Icons.photo,
+                          color: Theme.of(context).iconTheme.color!,),
+                          SizedBox(
+                            width: 30.0,
+                          ),
+                          Text(
+                            "From Gallery",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium,
+                          ),
+                        ],
+                      ),
+                      onPressed: () {
+                        if(namePic=="profile"){
+                          ProfileCubit.get(context).getImage("profile", true);
+                          Navigator.pop(context);
+                        }
+                        if(namePic=="cover"){
+                          ProfileCubit.get(context).getImage("cover", true);
+                          Navigator.pop(context);
+                        }
+
+
+                      },
+                    ),
+                    OutlinedButton(
+                      child: Row(
+                        children: [
+                          Icon(Icons.camera_alt,
+                            color: Theme.of(context).iconTheme.color!,),
+                          SizedBox(
+                            width: 30.0,
+                          ),
+                          Text(
+                            "From Camera",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium,
+                          ),
+                        ],
+                      ),
+                      onPressed: () {
+
+                        if(namePic=="profile"){
+                          ProfileCubit.get(context).getImage("profile", false);
+                          Navigator.pop(context);
+                        }
+                        if(namePic=="cover"){
+                          ProfileCubit.get(context).getImage("cover", false);
+                          Navigator.pop(context);
+                        }
+
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.camera_alt_rounded,
+              color: Colors.white,
+              size: 16.0,
+            ))),
+  );
+
 }

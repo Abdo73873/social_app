@@ -66,7 +66,7 @@ Widget generalDetails({
     if( model.work!.isNotEmpty||openToAdd)
       Row(
         children: [
-          Icon(Icons.work),
+          Icon(Icons.work_outlined),
           SizedBox(width: 5.0,),
           SizedBox(
             width:widthField ,
@@ -138,7 +138,7 @@ Widget generalDetails({
     if( model.live!.isNotEmpty||openToAdd)
       Row(
         children: [
-          Icon(Icons.place),
+          Icon(Icons.home_work_outlined),
           SizedBox(width: 5.0,),
           SizedBox(
             width:widthField ,
