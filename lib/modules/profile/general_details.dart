@@ -41,12 +41,12 @@ Widget generalDetails({
             decoration: InputDecoration(
               labelText: 'study at'
             ),
-            readOnly:readOnly[2],
+            readOnly:readOnly[3],
             textInputAction:TextInputAction.done ,
             onEditingComplete: (){
               model.school=schoolController.text;
               schoolController.text=model.school!;
-              cubit.changeOpenEdit(2);
+              cubit.changeOpenEdit(3);
             },
             enabled: openToAdd,
           ),
@@ -56,9 +56,9 @@ Widget generalDetails({
             onPressed: (){
               model.school=schoolController.text;
               schoolController.text=model.school!;
-          cubit.changeOpenEdit(2);
+          cubit.changeOpenEdit(3);
         },
-            icon: Icon(readOnly[2]?Icons.edit:Icons.done),
+            icon: Icon(readOnly[3]?Icons.edit:Icons.done),
         ),
 
       ],
@@ -77,12 +77,12 @@ Widget generalDetails({
               decoration: InputDecoration(
                   labelText: 'work at'
               ),
-              readOnly:readOnly[3],
+              readOnly:readOnly[4],
               textInputAction:TextInputAction.done ,
               onEditingComplete: (){
                 model.work=workController.text;
                 workController.text=model.work!;
-                cubit.changeOpenEdit(3);
+                cubit.changeOpenEdit(4);
               },
               enabled: openToAdd,
             ),
@@ -92,9 +92,9 @@ Widget generalDetails({
               onPressed: (){
                 model.work=workController.text;
                 workController.text=model.work!;
-                cubit.changeOpenEdit(3);
+                cubit.changeOpenEdit(4);
               },
-              icon: Icon(readOnly[3]?Icons.edit:Icons.done),
+              icon: Icon(readOnly[4]?Icons.edit:Icons.done),
             ),
 
         ],
@@ -113,12 +113,12 @@ Widget generalDetails({
               decoration: InputDecoration(
                   labelText: 'from'
               ),
-              readOnly:readOnly[4],
+              readOnly:readOnly[5],
               textInputAction:TextInputAction.done ,
               onEditingComplete: (){
                 model.country=countryController.text;
                 countryController.text=model.country!;
-                cubit.changeOpenEdit(4);
+                cubit.changeOpenEdit(5);
               },
               enabled: openToAdd,
             ),
@@ -128,9 +128,9 @@ Widget generalDetails({
               onPressed: (){
                 model.country=countryController.text;
                 countryController.text=model.country!;
-                cubit.changeOpenEdit(4);
+                cubit.changeOpenEdit(5);
               },
-              icon: Icon(readOnly[4]?Icons.edit:Icons.done),
+              icon: Icon(readOnly[5]?Icons.edit:Icons.done),
             ),
 
         ],
@@ -149,12 +149,12 @@ Widget generalDetails({
               decoration: InputDecoration(
                   labelText: 'live in'
               ),
-              readOnly:readOnly[5],
+              readOnly:readOnly[6],
               textInputAction:TextInputAction.done ,
               onEditingComplete: (){
                 model.live=liveController.text;
                 liveController.text=model.live!;
-                cubit.changeOpenEdit(5);
+                cubit.changeOpenEdit(6);
               },
               enabled: openToAdd,
             ),
@@ -164,9 +164,9 @@ Widget generalDetails({
               onPressed: (){
                 model.live=liveController.text;
                 liveController.text=model.live!;
-                cubit.changeOpenEdit(5);
+                cubit.changeOpenEdit(6);
               },
-              icon: Icon(readOnly[5]?Icons.edit:Icons.done),
+              icon: Icon(readOnly[6]?Icons.edit:Icons.done),
             ),
 
         ],
@@ -182,12 +182,12 @@ Widget generalDetails({
               controller: statusController,
               minLines: 1,
               maxLines: 2,
-              readOnly:readOnly[6],
+              readOnly:readOnly[7],
               textInputAction:TextInputAction.done ,
               onEditingComplete: (){
                 model.status=statusController.text;
                 statusController.text=model.status!;
-                cubit.changeOpenEdit(6);
+                cubit.changeOpenEdit(7);
               },
               enabled: openToAdd,
             ),
@@ -197,9 +197,9 @@ Widget generalDetails({
               onPressed: (){
                 model.status=statusController.text;
                 statusController.text=model.status!;
-                cubit.changeOpenEdit(6);
+                cubit.changeOpenEdit(7);
               },
-              icon: Icon(readOnly[6]?Icons.edit:Icons.done),
+              icon: Icon(readOnly[7]?Icons.edit:Icons.done),
             ),
 
         ],

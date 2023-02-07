@@ -21,6 +21,7 @@ import 'package:image_picker/image_picker.dart';
 class EditProfileScreen extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -45,6 +46,7 @@ class EditProfileScreen extends StatelessWidget {
 
       nameController.text = userModel.name;
       bioController.text = userModel.bio!;
+      phoneController.text = userModel.phone;
       return Scaffold(
         appBar: defaultAppBar(
           context: context,
@@ -81,7 +83,7 @@ class EditProfileScreen extends StatelessWidget {
                   color: defaultColor,
                   backgroundColor:Theme.of(context).scaffoldBackgroundColor,
                 ),
-            SizedBox(
+                 SizedBox(
                   height: 200.0,
                   child: Stack(
                     alignment: AlignmentDirectional.bottomCenter,
@@ -442,6 +444,75 @@ class EditProfileScreen extends StatelessWidget {
                         icon: Icon(cubit.readOnly[1] ? Icons.edit : Icons.done),
                       ),
                     ],
+                  ),
+                if (cubit.readOnly[2])
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          cubit.changeOpenEdit(2);
+                        },
+                        splashColor: secondaryColor,
+                        child: Icon(
+                          cubit.readOnly[2] ? Icons.edit : Icons.done,
+                          size: 20.0,
+                        ),
+                      ),
+                      Text('${userModel.phone}    ',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        maxLines: 1,
+                      ),
+                    ],
+                  ),
+                if (!cubit.readOnly[2])
+                  Form(
+                    key: formKey,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 30.0,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * .6,
+                          child: TextFormField(
+                            keyboardType: TextInputType.phone,
+                            controller: phoneController,
+                            minLines: 1,
+                            maxLines: 1,
+                            decoration: InputDecoration(labelText: 'Phone'),
+                            readOnly: cubit.readOnly[2],
+                            textInputAction: TextInputAction.done,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Phone must not be empty';
+                              }
+                              return null;
+                            },
+                            onEditingComplete: () {
+                              if (formKey.currentState!.validate()) {
+                                userModel.phone = phoneController.text;
+                                phoneController.text = userModel.phone;
+                                cubit.changeOpenEdit(2);
+                              }
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              userModel.phone = phoneController.text;
+                              phoneController.text = userModel.phone;
+                              cubit.changeOpenEdit(2);
+                            }
+                          },
+                          icon:
+                          Icon(cubit.readOnly[2] ? Icons.edit : Icons.done),
+                        ),
+                      ],
+                    ),
                   ),
                 SizedBox(
                   height: 50.0,

@@ -23,6 +23,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
     true,
     true,
     true,
+    true,
   ];
 
   void changeOpenEdit(int index) {
