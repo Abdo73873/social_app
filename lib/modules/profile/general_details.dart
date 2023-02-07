@@ -210,6 +210,9 @@ Widget generalDetails({
       OutlinedButton(
         onPressed: (){
         cubit.changeToAdd();
+        if(!openToAdd){
+          cubit.updateUser(context);
+        }
         },
         child: Row(
           children: [
@@ -227,6 +230,9 @@ Widget generalDetails({
       OutlinedButton(
       onPressed: (){
         cubit.changeToAdd();
+        if(!openToAdd){
+          cubit.updateUser(context);
+        }
       },
       child: Row(
         children: [

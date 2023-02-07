@@ -12,7 +12,11 @@ class ProfileGetImageErrorState extends ProfileStates {}
 
 class ProfileUploadImageProfileSuccessState extends ProfileStates {}
 class ProfileUploadImageCoverSuccessState extends ProfileStates {}
+class ProfileUploadCompletedState extends ProfileStates {}
 class ProfileUploadErrorState extends ProfileStates {}
+
+class ProfileUpdateSuccessState extends ProfileStates {}
+class ProfileUpdateErrorState extends ProfileStates {}
 
 
 

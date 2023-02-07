@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/modules/profile/cubit/profile_states.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -37,7 +38,8 @@ class ProfileCubit extends Cubit<ProfileStates> {
   File? coverImage;
   final picker = ImagePicker();
 
-  Future getImage(String imageName, bool isGallery) async {
+
+  Future getImage(imageName, isGallery) async {
     ImageSource source;
     if (isGallery) {
       source = ImageSource.gallery;
@@ -49,11 +51,17 @@ class ProfileCubit extends Cubit<ProfileStates> {
     if (pickedFile != null) {
       if (imageName == "profile") {
         profileImage = File(pickedFile.path);
+        isUploadCompleted=false;
         emit(ProfileGetImageProfileSuccessState());
+        uploadImage(profileImage,"profile");
+
       }
       if (imageName == "cover") {
         coverImage = File(pickedFile.path);
+        isUploadCompleted=false;
         emit(ProfileGetImageCoverSuccessState());
+        uploadImage(coverImage,"cover");
+
       }
     } else {
       print('no image selected');
@@ -62,16 +70,31 @@ class ProfileCubit extends Cubit<ProfileStates> {
   }
 
   String profileImageUrl = '';
+  String coverImageUrl = ' ';
 
-  void uploadProfileImage() {
+  bool? isUploadCompleted;
+  void uploadImage(File? image,String name) {
+    isUploadCompleted=false;
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('users/${Uri.file(profileImage!.path).pathSegments.last}')
-        .putFile(profileImage!)
+        .child('users/${Uri
+        .file(image!.path)
+        .pathSegments
+        .last}')
+        .putFile(image!)
         .then((value) {
-      value.ref.getDownloadURL().then((value) {
-        profileImageUrl = value;
-        emit(ProfileUploadImageProfileSuccessState());
+      value.ref.getDownloadURL().whenComplete((){
+        isUploadCompleted=true;
+        emit(ProfileUploadCompletedState());
+      }).then((value) {
+        if(name=="profile"){
+          profileImageUrl = value;
+          emit(ProfileUploadImageProfileSuccessState());
+        }
+         if(name=="cover"){
+          coverImageUrl = value;
+          emit(ProfileUploadImageCoverSuccessState());
+        }
       }).catchError((error) {
         emit(ProfileUploadErrorState());
       });
@@ -80,32 +103,21 @@ class ProfileCubit extends Cubit<ProfileStates> {
     });
   }
 
-  String coverImageUrl = '';
 
-  void uploadCoverImage() {
-    firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('users/${Uri.file(coverImage!.path).pathSegments.last}')
-        .putFile(coverImage!)
-        .then((value) {
-      value.ref.getDownloadURL().then((value) {
-        coverImageUrl = value;
-        emit(ProfileUploadImageCoverSuccessState());
-      }).catchError((error) {
-        emit(ProfileUploadErrorState());
-      });
-    }).catchError((error) {
-      emit(ProfileUploadErrorState());
-    });
-  }
 
-  /*void updateUser() {
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .update()
-        .then((value) {})
-        .catchError((error) {});
-  }
-  */
+  void updateUser(context) {
+
+FirebaseFirestore.instance
+    .collection('users')
+    .doc(userId)
+    .update(HomeCubit.get(context).userModel.toMaP())
+    .then((value) {
+        emit(ProfileUpdateSuccessState());
+})
+    .catchError((error) {
+  emit(ProfileUpdateErrorState());
+
+});
+}
+
 }

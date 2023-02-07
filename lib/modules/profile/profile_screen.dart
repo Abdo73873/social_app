@@ -15,7 +15,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    UserModel userModel = HomeCubit.get(context).userModel;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SingleChildScrollView(
@@ -23,6 +22,7 @@ class ProfileScreen extends StatelessWidget {
         child: BlocConsumer<HomeCubit, HomeStates>(
             listener: (context, state) {},
             builder: (context, state) {
+              UserModel userModel = HomeCubit.get(context).userModel;
               return Column(
                 children: [
                   SizedBox(
@@ -175,7 +175,11 @@ class ProfileScreen extends StatelessWidget {
                     height: 10.0,
                   ),
                   BlocConsumer<ProfileCubit,ProfileStates>(
-                    listener: (context, state) {},
+                    listener: (context, state) {
+                      if(state is ProfileUpdateSuccessState){
+                        HomeCubit.get(context).getUserData();
+                      }
+                    },
                     builder: (context, state) {
                       return SizedBox(
                         width: double.infinity,
