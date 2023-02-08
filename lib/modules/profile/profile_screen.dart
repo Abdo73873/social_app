@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
-import 'package:social_app/models/usersModel.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
 import 'package:social_app/modules/profile/cubit/profile_states.dart';
 import 'package:social_app/modules/profile/edit_profile.dart';
 import 'package:social_app/modules/profile/general_details.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -23,7 +23,6 @@ class ProfileScreen extends StatelessWidget {
         child: BlocConsumer<HomeCubit, HomeStates>(
             listener: (context, state) {},
             builder: (context, state) {
-              UserModel userModel = HomeCubit.get(context).userModel;
               return Column(
                 children: [
                   if(state is HomeLoadingGetUserState)
@@ -65,21 +64,20 @@ class ProfileScreen extends StatelessWidget {
                           child: CircleAvatar(
                             radius: 60.0,
                             child: ClipOval(
-                              child: userModel.image!.isNotEmpty
-                                  ? Image.network(
-                                      userModel.image!,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.asset(
-                                      userModel.male
-                                          ? 'assets/images/male.jpg'
-                                          : 'assets/images/female.jpg',
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
+                              child: CachedNetworkImage(
+                                width: double.infinity,
+                                height: double.infinity,
+                                fit: BoxFit.cover,
+                                imageUrl: userModel.image,
+                                errorWidget:(context,url,error)=> Image.asset(
+                                 userModel.male
+                                      ? 'assets/images/male.jpg'
+                                      : 'assets/images/female.jpg',
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
                           ),
                         ),

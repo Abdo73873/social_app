@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/usersModel.dart';
 import 'package:social_app/modules/chats/chats_screen.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
@@ -32,22 +33,10 @@ class HomeCubit extends Cubit<HomeStates>{
   int perIndex=0;
   void changeBottomScreen(int index) {
     if(index<2){
-      {
         currentIndex = index;
         emit(HomeChangeBottomState());
-      }
     }
    else if(index==2){
-
-      if(currentIndex<2){
-       perIndex=currentIndex;
-       currentIndex = 2;
-     }
-     else if(currentIndex>=2){
-       perIndex=currentIndex+1;
-       currentIndex = 0;
-     }
-
      emit(HomeNewPostState());
     }
     else if(index>2){
@@ -82,7 +71,7 @@ class HomeCubit extends Cubit<HomeStates>{
   }
 
 
-  late  UserModel userModel;
+
  void getUserData(){
    emit(HomeLoadingGetUserState());
    FirebaseFirestore.instance.collection('users').doc(userId).get().then((value) {
@@ -93,6 +82,17 @@ class HomeCubit extends Cubit<HomeStates>{
    });
  }
 
+
+  late  PostsModel postsModel;
+  void getPostsData(){
+    emit(HomeLoadingGetUserState());
+    FirebaseFirestore.instance.collection('users').doc(userId).get().then((value) {
+      userModel=UserModel.fromJson(value.data()!);
+      emit(HomeSuccessGetUserState());
+    }).catchError((error){
+      emit(HomeErrorGetUserState(error.toString()));
+    });
+  }
 
 
 

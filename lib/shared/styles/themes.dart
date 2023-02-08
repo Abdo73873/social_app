@@ -108,7 +108,7 @@ ThemeData darkTheme = ThemeData(
   shadowColor: Colors.black,
   primarySwatch: defaultColor,
   primaryColor: defaultColor,
-  scaffoldBackgroundColor: Colors.black12,
+  scaffoldBackgroundColor: Colors.black12.withOpacity(.05),
   appBarTheme: AppBarTheme(
     titleSpacing: 20.0,
     systemOverlayStyle: SystemUiOverlayStyle(
@@ -158,11 +158,15 @@ ThemeData darkTheme = ThemeData(
       color: Colors.grey[200],
     ),
     labelMedium: TextStyle(
-      color: Colors.grey[200],
+      color: Colors.white,
       fontSize: 13.0,
     ),
     labelLarge: TextStyle(
       fontSize: 16.0,
+      color: Colors.white,
+    ),
+    labelSmall:TextStyle(
+      fontSize: 14.0,
       color: Colors.white,
     ),
     headlineMedium: TextStyle(

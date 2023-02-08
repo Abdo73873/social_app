@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/modules/profile/cubit/profile_states.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -70,8 +68,6 @@ class ProfileCubit extends Cubit<ProfileStates> {
     }
   }
 
-  String profileImageUrl = '';
-  String coverImageUrl = ' ';
 
   bool? isUploadCompleted;
   void uploadImage(File? image,String name) {
@@ -90,11 +86,11 @@ class ProfileCubit extends Cubit<ProfileStates> {
         emit(ProfileUploadCompletedState());
       }).then((value) {
         if(name=="profile"){
-          profileImageUrl = value;
+          userModel.image=value;
           emit(ProfileUploadImageProfileSuccessState());
         }
          if(name=="cover"){
-          coverImageUrl = value;
+          userModel.cover = value;
           emit(ProfileUploadImageCoverSuccessState());
         }
       }).catchError((error) {
@@ -106,13 +102,12 @@ class ProfileCubit extends Cubit<ProfileStates> {
   }
 
 
-
-  void updateUser(context) {
+  void updateUser() {
 
 FirebaseFirestore.instance
     .collection('users')
     .doc(userId)
-    .update(HomeCubit.get(context).userModel.toMaP())
+    .update(userModel.toMaP())
     .then((value) {
         emit(ProfileUpdateSuccessState());
 })

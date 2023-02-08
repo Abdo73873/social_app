@@ -5,18 +5,12 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/layout/home_layout.dart';
-import 'package:social_app/models/usersModel.dart';
-import 'package:social_app/modules/chats/chats_screen.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
 import 'package:social_app/modules/profile/cubit/profile_states.dart';
 import 'package:social_app/modules/profile/general_details.dart';
-import 'package:social_app/modules/profile/profile_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
-import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
@@ -28,17 +22,9 @@ class EditProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<ProfileCubit, ProfileStates>(
         listener: (context, state) {
-      if (state is ProfileUploadImageProfileSuccessState) {
-        HomeCubit.get(context).userModel.image =
-            ProfileCubit.get(context).profileImageUrl;
-      }
-      if (state is ProfileUploadImageCoverSuccessState) {
-        HomeCubit.get(context).userModel.cover =
-            ProfileCubit.get(context).coverImageUrl;
-      }
+
 
     }, builder: (context, state) {
-      UserModel userModel = HomeCubit.get(context).userModel;
 
       var cubit = ProfileCubit.get(context);
       File? profileImage = cubit.profileImage;
@@ -55,14 +41,14 @@ class EditProfileScreen extends StatelessWidget {
                 onPressed: () {
                   if(cubit.isUploadCompleted!=null){
                     if(cubit.isUploadCompleted!){
-                      cubit.updateUser(context);
+                      cubit.updateUser();
                       Navigator.pop(context);
                       cubit.isUploadCompleted=null;
                     }else{
-                      showToast(message: "Wait for Uploading images", state: ToastState.warning);
+                      showToast(message: "Wait for Uploading image", state: ToastState.warning);
                     }
                   }else{
-                    cubit.updateUser(context);
+                    cubit.updateUser();
                     Navigator.pop(context);
                   }
                   openToAdd=false;
@@ -119,85 +105,7 @@ class EditProfileScreen extends StatelessWidget {
                                       fit: BoxFit.cover,
                                     ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircleAvatar(
-                                  radius: 20.0,
-                                  backgroundColor: defaultColor[300],
-                                  child: IconButton(
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                            backgroundColor: Colors.grey[100],
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.0),
-                                            ),
-                                            actionsOverflowAlignment:
-                                                OverflowBarAlignment.center,
-                                            actionsPadding:
-                                                EdgeInsets.all(20.0),
-                                            elevation: 20.0,
-                                            title: Text(
-                                              'Choose Source :',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium,
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            actions: [
-                                              OutlinedButton(
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.photo),
-                                                    SizedBox(
-                                                      width: 30.0,
-                                                    ),
-                                                    Text(
-                                                      "From Gallery",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium,
-                                                    ),
-                                                  ],
-                                                ),
-                                                onPressed: () {
-                                                  cubit.getImage("cover", true);
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                              OutlinedButton(
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.camera_alt),
-                                                    SizedBox(
-                                                      width: 30.0,
-                                                    ),
-                                                    Text(
-                                                      "From Camera",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyMedium,
-                                                    ),
-                                                  ],
-                                                ),
-                                                onPressed: () {
-                                                  cubit.getImage(
-                                                      "cover", false);
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                      icon: Icon(
-                                        Icons.camera_alt_rounded,
-                                        color: Colors.white,
-                                      ))),
-                            ),
+                            addPic(context: context,namePic: "cover"),
                           ],
                         ),
                       ),
@@ -216,7 +124,7 @@ class EditProfileScreen extends StatelessWidget {
                                         width: double.infinity,
                                         height: double.infinity,
                                         fit: BoxFit.cover,
-                                        imageUrl: userModel.image ?? 'http://',
+                                        imageUrl: userModel.image,
                                         errorWidget: (context, url, error) =>
                                             Image.asset(
                                           userModel.male
@@ -236,84 +144,7 @@ class EditProfileScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CircleAvatar(
-                                radius: 17.0,
-                                backgroundColor: defaultColor[300],
-                                child: IconButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          backgroundColor: Colors.grey[100],
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
-                                          ),
-                                          actionsOverflowAlignment:
-                                              OverflowBarAlignment.center,
-                                          actionsPadding: EdgeInsets.all(20.0),
-                                          elevation: 20.0,
-                                          title: Text(
-                                            'Choose Source :',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          actions: [
-                                            OutlinedButton(
-                                              child: Row(
-                                                children: [
-                                                  Icon(Icons.photo),
-                                                  SizedBox(
-                                                    width: 30.0,
-                                                  ),
-                                                  Text(
-                                                    "From Gallery",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyMedium,
-                                                  ),
-                                                ],
-                                              ),
-                                              onPressed: () {
-                                                cubit.getImage("profile", true);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            OutlinedButton(
-                                              child: Row(
-                                                children: [
-                                                  Icon(Icons.camera_alt),
-                                                  SizedBox(
-                                                    width: 30.0,
-                                                  ),
-                                                  Text(
-                                                    "From Camera",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyMedium,
-                                                  ),
-                                                ],
-                                              ),
-                                              onPressed: () {
-                                                cubit.getImage(
-                                                    "profile", false);
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    icon: Icon(
-                                      Icons.camera_alt_rounded,
-                                      color: Colors.white,
-                                      size: 20.0,
-                                    ))),
-                          ),
+                          addPic(context: context,namePic: "profile"),
                         ],
                       ),
                     ],
@@ -357,8 +188,14 @@ class EditProfileScreen extends StatelessWidget {
                             controller: nameController,
                             minLines: 1,
                             maxLines: 3,
-                            decoration: InputDecoration(labelText: 'Name'),
+                            decoration: InputDecoration(
+                                labelText: 'Name',
+                                labelStyle: Theme.of(context).textTheme.labelLarge,
+                            ),
                             readOnly: cubit.readOnly[0],
+                            keyboardType: TextInputType.text,
+                            textDirection:TextDirection.ltr ,
+                            cursorRadius:Radius.circular(20.0) ,
                             textInputAction: TextInputAction.done,
                             validator: (value) {
                               if (value!.isEmpty) {
@@ -425,7 +262,9 @@ class EditProfileScreen extends StatelessWidget {
                           controller: bioController,
                           minLines: 1,
                           maxLines: 5,
-                          decoration: InputDecoration(labelText: 'Bio'),
+                          decoration: InputDecoration(labelText: 'Bio',
+                            labelStyle: Theme.of(context).textTheme.labelLarge,
+                          ),
                           readOnly: cubit.readOnly[1],
                           textInputAction: TextInputAction.done,
                           onEditingComplete: () {
@@ -482,7 +321,9 @@ class EditProfileScreen extends StatelessWidget {
                             controller: phoneController,
                             minLines: 1,
                             maxLines: 1,
-                            decoration: InputDecoration(labelText: 'Phone'),
+                            decoration: InputDecoration(labelText: 'Phone',
+                              labelStyle: Theme.of(context).textTheme.labelLarge,
+                            ),
                             readOnly: cubit.readOnly[2],
                             textInputAction: TextInputAction.done,
                             validator: (value) {
@@ -538,4 +379,109 @@ class EditProfileScreen extends StatelessWidget {
       );
     });
   }
+
+  Widget addPic({
+  required BuildContext context,
+    required String namePic,
+})=> Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: CircleAvatar(
+        radius: 15.0,
+        backgroundColor: defaultColor[300],
+        child: IconButton(
+            color: Colors.white,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(.9),
+                  shadowColor: defaultColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: Theme.of(context).iconTheme.color!,
+                    ),
+                  ),
+                  actionsOverflowAlignment:
+                  OverflowBarAlignment.center,
+                  actionsPadding:
+                  EdgeInsets.all(20.0),
+                  elevation: 20.0,
+                  title: Text(
+                    'Choose Source :',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  actions: [
+                    OutlinedButton(
+                      child: Row(
+                        children: [
+                          Icon(Icons.photo,
+                          color: Theme.of(context).iconTheme.color!,),
+                          SizedBox(
+                            width: 30.0,
+                          ),
+                          Text(
+                            "From Gallery",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium,
+                          ),
+                        ],
+                      ),
+                      onPressed: () {
+                        if(namePic=="profile"){
+                          ProfileCubit.get(context).getImage("profile", true);
+                          Navigator.pop(context);
+                        }
+                        if(namePic=="cover"){
+                          ProfileCubit.get(context).getImage("cover", true);
+                          Navigator.pop(context);
+                        }
+
+
+                      },
+                    ),
+                    OutlinedButton(
+                      child: Row(
+                        children: [
+                          Icon(Icons.camera_alt,
+                            color: Theme.of(context).iconTheme.color!,),
+                          SizedBox(
+                            width: 30.0,
+                          ),
+                          Text(
+                            "From Camera",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium,
+                          ),
+                        ],
+                      ),
+                      onPressed: () {
+
+                        if(namePic=="profile"){
+                          ProfileCubit.get(context).getImage("profile", false);
+                          Navigator.pop(context);
+                        }
+                        if(namePic=="cover"){
+                          ProfileCubit.get(context).getImage("cover", false);
+                          Navigator.pop(context);
+                        }
+
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.camera_alt_rounded,
+              color: Colors.white,
+              size: 16.0,
+            ))),
+  );
+
 }
