@@ -7,6 +7,7 @@ import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
 import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/login/login_screen.dart';
+import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
 import 'package:social_app/modules/register/register_screen.dart';
 import 'package:social_app/shared/bloc_observer.dart';
@@ -46,6 +47,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
         create: (context)=>ProfileCubit(),
+        ),
+        BlocProvider(
+        create: (context)=>PostsCubit(),
         ),
       ],
       child: BlocConsumer<HomeCubit,HomeStates>(

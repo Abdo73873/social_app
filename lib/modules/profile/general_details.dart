@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:social_app/models/usersModel.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
-import 'package:social_app/modules/profile/edit_profile.dart';
-import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 
 
@@ -39,8 +37,10 @@ Widget generalDetails({
             minLines: 1,
             maxLines: 3,
             decoration: InputDecoration(
-              labelText: 'study at'
-            ),
+              labelText: 'study at',
+            labelStyle: Theme.of(context).textTheme.labelLarge,
+
+          ),
             readOnly:readOnly[3],
             textInputAction:TextInputAction.done ,
             onEditingComplete: (){
@@ -75,7 +75,9 @@ Widget generalDetails({
               minLines: 1,
               maxLines: 3,
               decoration: InputDecoration(
-                  labelText: 'work at'
+                  labelText: 'work at',
+                labelStyle: Theme.of(context).textTheme.labelLarge,
+
               ),
               readOnly:readOnly[4],
               textInputAction:TextInputAction.done ,
@@ -111,7 +113,9 @@ Widget generalDetails({
               minLines: 1,
               maxLines: 2,
               decoration: InputDecoration(
-                  labelText: 'from'
+                  labelText: 'from',
+                labelStyle: Theme.of(context).textTheme.labelLarge,
+
               ),
               readOnly:readOnly[5],
               textInputAction:TextInputAction.done ,
@@ -147,7 +151,9 @@ Widget generalDetails({
               minLines: 1,
               maxLines: 2,
               decoration: InputDecoration(
-                  labelText: 'live in'
+                  labelText: 'live in',
+                labelStyle: Theme.of(context).textTheme.labelLarge,
+
               ),
               readOnly:readOnly[6],
               textInputAction:TextInputAction.done ,
@@ -210,7 +216,7 @@ Widget generalDetails({
         onPressed: (){
         cubit.changeToAdd();
         if(!openToAdd){
-          cubit.updateUser(context);
+          cubit.updateUser();
         }
         },
         child: Row(
@@ -230,7 +236,7 @@ Widget generalDetails({
       onPressed: (){
         cubit.changeToAdd();
         if(!openToAdd){
-          cubit.updateUser(context);
+          cubit.updateUser();
         }
       },
       child: Row(
