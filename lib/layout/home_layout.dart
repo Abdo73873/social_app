@@ -8,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
 import 'package:social_app/layout/drower.dart';
+import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
+import 'package:social_app/modules/new_post/cubit/posts_states.dart';
 import 'package:social_app/modules/new_post/new_post_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -28,21 +30,12 @@ class HomeLayout extends StatelessWidget {
       builder: (context,state){
         var cubit=HomeCubit.get(context);
         return Scaffold(
+          primary: true,
           appBar: AppBar(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(cubit.titles[cubit.currentIndex],
-                style: TextStyle(
-                  color: defaultColor,
-                ),),
-                if(state is HomeLoadingGetUserState)
-                LinearProgressIndicator(
-                  color: defaultColor,
-                  backgroundColor:Theme.of(context).scaffoldBackgroundColor,
-                ),
-              ],
-            ),
+            title: Text(cubit.titles[cubit.currentIndex],
+            style: TextStyle(
+              color: defaultColor,
+            ),),
             actions: [
               IconButton(onPressed: (){
               }, icon: Icon(IconBroken.Notification,),),
@@ -50,7 +43,27 @@ class HomeLayout extends StatelessWidget {
             ],
           ),
           drawer:NavigateDrawer(),
-          body: cubit.screens[cubit.currentIndex],
+          body: Column(
+              children: [
+                if(state is HomeLoadingGetUserState)
+                  LinearProgressIndicator(
+                    color: defaultColor,
+                    backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+                  ),
+                BlocConsumer<PostsCubit,PostsStates>(
+                    listener:(context,stat){} ,
+                    builder:(context,stat)=>Column(
+                      children: [
+                         if(state is PostsLoadingState)
+                        LinearProgressIndicator(
+                          color: defaultColor,
+                          backgroundColor:Colors.white,
+                        ),
+                      ],
+                    )),
+                Expanded(child: cubit.screens[cubit.currentIndex]),
+              ],
+          ),
           bottomNavigationBar:Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 6.0),
             child: SafeArea(
@@ -63,6 +76,7 @@ class HomeLayout extends StatelessWidget {
                 duration: Duration(milliseconds: 400),
                 tabBackgroundColor: secondaryColor.withOpacity(.1),
                 selectedIndex:cubit.currentIndex>=2?cubit.currentIndex+1:cubit.currentIndex,
+
                 onTabChange: (index){
                   cubit.changeBottomScreen(index);
                 },

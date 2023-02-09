@@ -1,10 +1,12 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/models/usersModel.dart';
+import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/shared/components/components.dart';
+import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
 import 'package:social_app/shared/styles/colors.dart';
 
@@ -12,7 +14,6 @@ class NavigateDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit=HomeCubit.get(context);
-    UserModel userModel=cubit.userModel;
     return Drawer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -37,20 +38,19 @@ class NavigateDrawer extends StatelessWidget {
                       child: CircleAvatar(
                         radius: 38.0,
                         child: ClipOval(
-                          child: userModel.image!.isNotEmpty
-                              ? Image.network(
-                            userModel.image!,
+                          child: CachedNetworkImage(
                             width: double.infinity,
                             height: double.infinity,
                             fit: BoxFit.cover,
-                          )
-                              : Image.asset(
-                            userModel.male
-                                ? 'assets/images/male.jpg'
-                                : 'assets/images/female.jpg',
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
+                            imageUrl: userModel.image,
+                            errorWidget:(context,url,error)=> Image.asset(
+                              userModel.male
+                                  ? 'assets/images/male.jpg'
+                                  : 'assets/images/female.jpg',
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),

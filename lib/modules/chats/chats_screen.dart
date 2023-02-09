@@ -6,9 +6,20 @@ class ChatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       children: [
-        Text('chats'),
+        Column(
+          children: [
+            Text('chats'),
+            Container(
+              width: 50.0,
+              height: 2000,
+              color: Colors.red,
+            )
+          ],
+        ),
       ],
     );
   }

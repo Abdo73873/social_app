@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/models/usersModel.dart';
+import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/register/register_cubit/register_states.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_app/shared/components/constants.dart';
@@ -73,7 +73,10 @@ class RegisterCubit extends Cubit<RegisterStates> {
       phone: phone,
       male: male,
       bio: bio,
-      image: image,
+      image: image??(male?'https://firebasestorage.googleapis.com/v0/b/social-app-644bc.appspot.com/o/users%2Fsystem%2Fmale.jpg?alt=media&token=56c9aae6-6c3d-471a-8179-56edfd833e8f'
+      :'https://firebasestorage.googleapis.com/v0/b/social-app-644bc.appspot.com/o/users%2Fsystem%2Ffemale.jpg?alt=media&token=017d7bd7-080e-476e-ba0c-53f8af8a19b2'),
+
+
       cover: cover,
       isEmailVerified: false,
     generalDetails: generalDetailsModel,

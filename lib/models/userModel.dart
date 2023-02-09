@@ -5,7 +5,7 @@ class UserModel {
   late String phone;
   late bool male;
   String? bio;
-   String? image;
+   late String image;
    String? cover;
   late bool isEmailVerified;
   GeneralDetailsModel? generalDetails;
@@ -17,7 +17,7 @@ class UserModel {
     required this.phone,
     required this.male,
     this.bio,
-    this.image,
+    required this.image,
     this.cover,
     required this.isEmailVerified,
     this.generalDetails,
