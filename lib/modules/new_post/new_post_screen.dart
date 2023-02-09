@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/gestures.dart';
@@ -15,7 +15,6 @@ import 'package:social_app/shared/styles/icon_broken.dart';
 
 class NewPostScreen extends StatelessWidget {
   TextEditingController textController = TextEditingController();
-  var now=DateTime.now();
 
   @override
   Widget build(BuildContext context) {

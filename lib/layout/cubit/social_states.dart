@@ -4,28 +4,38 @@ abstract class HomeStates {}
 
 class HomeInitializeState extends HomeStates {}
 
+class HomeChangeBottomState extends HomeStates {}
+
+class HomeChangeModeState extends HomeStates{}
+
 class HomeLoadingGetUserState extends HomeStates {}
-
 class HomeSuccessGetUserState extends HomeStates {}
-
 class HomeErrorGetUserState extends HomeStates {
   final String error;
   HomeErrorGetUserState(this.error);
 }
 
-class HomeChangeBottomState extends HomeStates {}
 class HomeNewPostState extends HomeStates {}
+class HomeLoadingGetPostsState extends HomeStates {}
+class HomeSuccessGetPostsState extends HomeStates {}
+class HomeErrorGetPostsState extends HomeStates {
+  final String error;
+  HomeErrorGetPostsState(this.error);
+}
 
-class HomeChangeModeState extends HomeStates{}
+
+class HomeLoadingGetUsersState extends HomeStates {}
+class HomeSuccessGetUsersState extends HomeStates {}
+class HomeErrorGetUsersState extends HomeStates {
+  final String error;
+  HomeErrorGetUsersState(this.error);
+}
 
 
 
 class HomeChangeLanguageState extends HomeStates {}
-
 class HomeLoadingHomeState extends HomeStates {}
-
 class HomeSuccessHomeState extends HomeStates {}
-
 class HomeErrorHomeState extends HomeStates {
   final String error;
   HomeErrorHomeState(this.error);

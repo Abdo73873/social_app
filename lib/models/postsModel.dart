@@ -2,15 +2,16 @@ class PostsModel {
   late String name;
   late String uId;
   late String dateTime;
+  late String image;
+
   String? text;
-  String? image;
   String? postImage;
 
   PostsModel({
     required this.name,
     required this.uId,
     required this.dateTime,
-    this.image,
+    required this.image,
     this.text,
     this.postImage,
   });

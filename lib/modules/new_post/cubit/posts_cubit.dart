@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/modules/new_post/cubit/posts_states.dart';
 import 'package:social_app/shared/components/constants.dart';
@@ -43,7 +44,6 @@ class PostsCubit extends Cubit<PostsStates> {
   }
 
   String postImageUrl = '';
-    var now=DateTime.now();
   void uploadImage({String? text}) {
     emit(PostsLoadingState());
     firebase_storage.FirebaseStorage.instance
@@ -68,7 +68,7 @@ class PostsCubit extends Cubit<PostsStates> {
   }
 
 
-
+String formattedData=DateFormat('yyyy-MM-dd - kk:mm').format(DateTime.now());
   void createPost({
     String? text,
 
@@ -80,7 +80,7 @@ emit(PostsLoadingState());
         name: userModel.name,
         uId: userModel.uId,
        image: userModel.image,
-      dateTime: now.toString(),
+      dateTime: formattedData,
       text: text,
       postImage: postImageUrl,
 
