@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
-import 'package:social_app/models/usersModel.dart';
+import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
 import 'package:social_app/shared/components/constants.dart';
 

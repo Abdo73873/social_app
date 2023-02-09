@@ -43,7 +43,11 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-        create: (context)=>HomeCubit()..getUserData()..changeMode(fromCache: isDark),
+        create: (context)=>HomeCubit()
+          ..getUserData()
+          ..getUsersData()
+          ..getPosts()
+          ..changeMode(fromCache: isDark),
         ),
         BlocProvider(
         create: (context)=>ProfileCubit(),

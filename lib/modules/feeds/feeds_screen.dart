@@ -1,293 +1,374 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:social_app/shared/components/components.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/layout/cubit/social_cubit.dart';
+import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/models/postsModel.dart';
+import 'package:social_app/models/userModel.dart';
+import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
 class FeedsScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          Card(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 10.0,
-            margin: EdgeInsets.all(8.0),
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
+    ScrollController scrollController=ScrollController();
+
+    return BlocConsumer<HomeCubit, HomeStates>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return RefreshIndicator(
+          onRefresh: ()async {
+            HomeCubit.get(context).getUsersData();
+          },
+          child: SingleChildScrollView(
+            controller:scrollController ,
+            physics: BouncingScrollPhysics(),
+            child: Column(
               children: [
-                Image(
-                  width: double.infinity,
-                  height: 200.0,
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                      'https://img.freepik.com/free-photo/photo-delighted-african-american-woman-points-away-with-both-index-fingers-promots-awesome-place-your-advertising-content_273609-27157.jpg'),),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('communicate with friends',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(
-                      color: Colors.white,
-                      backgroundColor: secondaryColor.withOpacity(.1),
-                      height: 1.0,
-                    ),),
+                Card(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 10.0,
+                  margin: EdgeInsets.all(8.0),
+                  child: Stack(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    children: [
+                      Image(
+                        width: double.infinity,
+                        height: 200.0,
+                        fit: BoxFit.cover,
+                        image: NetworkImage(
+                            'https://img.freepik.com/free-photo/photo-delighted-african-american-woman-points-away-with-both-index-fingers-promots-awesome-place-your-advertising-content_273609-27157.jpg'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'communicate with friends',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                color: Colors.white,
+                                backgroundColor: secondaryColor.withOpacity(.1),
+                                height: 1.0,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    for (int i = 0; i < HomeCubit.get(context).users.length; i++) {
+                      if (HomeCubit.get(context).posts[index].uId ==
+                          HomeCubit.get(context).users[i].uId) {
+                        return buildPostItem(
+                            context,
+                            HomeCubit.get(context).posts[index],
+                            HomeCubit.get(context).users[i]);
+                      }
+                    }
+                  },
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 10.0,
+                  ),
+                  itemCount: HomeCubit.get(context).posts.length,
+                ),
+                SizedBox(
+                  height: 20.0,
                 ),
               ],
             ),
-
           ),
-        ListView.separated(
-          shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder:(context,index)=>buildPostItem(context),
-            separatorBuilder: (context,index)=>SizedBox(
-              height: 10.0,
-            ),
-            itemCount: 10,
-        ),
-          SizedBox(height: 10,),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget buildPostItem(context)=>Card(
-    color: Theme.of(context).scaffoldBackgroundColor,
-    clipBehavior: Clip.antiAliasWithSaveLayer,
-    elevation: 5.0,
-    margin: EdgeInsets.symmetric(horizontal: 8.0),
-    child: Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: [
-          Row(
+  Widget buildPostItem(context, PostsModel postModel, UserModel usModel) =>
+      Card(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: 5.0,
+        margin: EdgeInsets.symmetric(horizontal: 8.0),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://img.freepik.com/free-photo/young-woman-with-afro-haircut-wearing-orange-sweater_273609-22398.jpg?w=900&t=st=1675442690~exp=1675443290~hmac=c7aea7072ec4dbf5d2fe566934754c6a57ca4fa9aa3578c7a33aaf7df8419633'),
-                radius: 25.0,
-              ),
-              SizedBox(width: 10.0,),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30.0,
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                        imageUrl: usModel.image,
+                        errorWidget: (context, url, error) => Image.asset(
+                          'assets/images/person.png',
+                          width: double.infinity,
+                          height: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Bassant waleed',
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleMedium,),
-                        SizedBox(width: 5.0,),
-                        Icon(Icons.check_circle,
-                          color: Colors.blue,
-                          size: 18.0,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                usModel.name,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.blue,
+                              size: 18.0,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 3.0,
+                        ),
+                        Text(
+                          postModel.dateTime,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
                     ),
-                    SizedBox(height: 3.0,),
-                    Text('june 6, 2022 at 12:00 AM',
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleSmall,),
-
-                  ],
-                ),
-              ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz,
-                size: 18.0,
-              ),),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Divider(
-              height: 2.0,
-              color: secondaryColor,
-            ),
-          ),
-          Text(
-            'I would say I love you to the moon and back, but that’s pretty far—how about to the mailbox and back? All jokes aside, I’m so lucky to have you as a sibling. Happy birthday, and cheers to a wonderful year!',
-            style: Theme
-                .of(context)
-                .textTheme
-                .bodyMedium,),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(
-              top: 5.0,
-              bottom: 10.0,
-            ),
-            child: SizedBox(
-              width: double.infinity,
-              child: Wrap(
-                direction: Axis.horizontal,
-                children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                      end: 6.0,
-                    ),
-                    child: SizedBox(
-                      height: 25.0,
-                      child: MaterialButton(
-                          height: 25.0,
-                          minWidth: 1.0,
-                          padding: EdgeInsets.zero,
-                          child: Text('#birthday',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.blue,
-                            ),
-                          ),
-                          onPressed: (){}
-                      ),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.more_horiz,
+                      size: 18.0,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(
-                      end: 10.0,
-                    ),
-                    child: SizedBox(
-                      height: 25.0,
-                      child: MaterialButton(
-                          height: 25.0,
-                          minWidth: 1.0,
-                          padding: EdgeInsets.zero,
-                          child: Text('#birthday',
-                            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.blue,
-                            ),
-                          ),
-                          onPressed: (){}
-                      ),
-                    ),
-                  ),
-
                 ],
               ),
-            ),
-          ),
-          Container(
-            width: double.infinity,
-            height: 140.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://hips.hearstapps.com/hmg-prod/images/birthday-cake-decorated-with-colorful-sprinkles-and-royalty-free-image-1653509348.jpg'),
-                fit: BoxFit.cover,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Divider(
+                  height: 2.0,
+                  color: secondaryColor,
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: (){},
-                    child: Row(
-                      children: [
-                        Icon(
-                          IconBroken.Heart,
-                          color: defaultColor,
-                        ),
-                        Text('1200',
-                          style: Theme.of(context).textTheme.titleSmall,),
-                      ],
-                    ),
-                  ),
+              if (postModel.text != null)
+                Text(
+                  postModel.text!,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
-                Expanded(
-                  child: InkWell(
-                    onTap: (){},
-                    child: Text('120 comments',
-                      textAlign:TextAlign.end ,
-                      style: Theme.of(context).textTheme.titleSmall,),
-                  ),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(
+                  top: 5.0,
+                  bottom: 10.0,
                 ),
-              ],
-            ),
-          ),
-          Divider(
-            height: 2.0,
-            color: secondaryColor,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: (){},
-                  child: Row(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Wrap(
+                    direction: Axis.horizontal,
                     children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'https://img.freepik.com/free-photo/young-woman-with-afro-haircut-wearing-orange-sweater_273609-22398.jpg?w=900&t=st=1675442690~exp=1675443290~hmac=c7aea7072ec4dbf5d2fe566934754c6a57ca4fa9aa3578c7a33aaf7df8419633'),
-                        radius: 18.0,
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                          end: 6.0,
+                        ),
+                        child: SizedBox(
+                          height: 25.0,
+                          child: MaterialButton(
+                              height: 25.0,
+                              minWidth: 1.0,
+                              padding: EdgeInsets.zero,
+                              child: Text(
+                                '#birthday',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color: Colors.blue,
+                                    ),
+                              ),
+                              onPressed: () {}),
+                        ),
                       ),
-                      SizedBox(width: 10.0,),
-                      Text('write a comment ...',
-                        textAlign: TextAlign.start,
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .titleSmall,),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                          end: 10.0,
+                        ),
+                        child: SizedBox(
+                          height: 25.0,
+                          child: MaterialButton(
+                              height: 25.0,
+                              minWidth: 1.0,
+                              padding: EdgeInsets.zero,
+                              child: Text(
+                                '#birthday',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color: Colors.blue,
+                                    ),
+                              ),
+                              onPressed: () {}),
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
-              MaterialButton(
-                minWidth: 1.0,
-                padding: EdgeInsets.symmetric(horizontal: 3.0),
-                onPressed: () {},
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(IconBroken.Heart,
-                      color: defaultColor,
-                      size: 18.0,
+              if (postModel.postImage!.isNotEmpty)
+                Container(
+                  width: double.infinity,
+                  height: 140.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.0),
+                    image: DecorationImage(
+                      image: NetworkImage(postModel.postImage!),
+                      fit: BoxFit.cover,
                     ),
-                    Text(' Like',
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleSmall,),
-                  ],
-                ),),
-              MaterialButton(
-                onPressed: () {},
-                minWidth: 1.0,
-                padding: EdgeInsets.symmetric(horizontal: 3.0),
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.share,
-                      color: secondaryColor,
-                      size: 18.0,
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {},
+                        child: Row(
+                          children: [
+                            Icon(
+                              IconBroken.Heart,
+                              color: defaultColor,
+                            ),
+                            Text(
+                              '1200',
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    Text(' Share',
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleSmall,),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {},
+                        child: Text(
+                          '120 comments',
+                          textAlign: TextAlign.end,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ),
+                    ),
                   ],
-                ),),
-
+                ),
+              ),
+              Divider(
+                height: 2.0,
+                color: secondaryColor,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {},
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 20.0,
+                              child: ClipOval(
+                                child: CachedNetworkImage(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  fit: BoxFit.cover,
+                                  imageUrl: userModel.image,
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                    userModel.male
+                                        ? 'assets/images/male.jpg'
+                                        : 'assets/images/female.jpg',
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10.0,
+                            ),
+                            Text(
+                              'write a comment ...',
+                              textAlign: TextAlign.start,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    MaterialButton(
+                      minWidth: 1.0,
+                      padding: EdgeInsets.symmetric(horizontal: 3.0),
+                      onPressed: () {},
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            IconBroken.Heart,
+                            color: defaultColor,
+                            size: 18.0,
+                          ),
+                          Text(
+                            ' Like',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                    MaterialButton(
+                      onPressed: () {},
+                      minWidth: 1.0,
+                      padding: EdgeInsets.symmetric(horizontal: 3.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.share,
+                            color: secondaryColor,
+                            size: 18.0,
+                          ),
+                          Text(
+                            ' Share',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-
-        ],
-      ),
-    ),
-
-  );
-
+        ),
+      );
 }

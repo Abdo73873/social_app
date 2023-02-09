@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/models/usersModel.dart';
+import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/register/register_cubit/register_states.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:social_app/shared/components/constants.dart';
