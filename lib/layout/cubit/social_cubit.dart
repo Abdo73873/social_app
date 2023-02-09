@@ -102,55 +102,59 @@ class HomeCubit extends Cubit<HomeStates> {
     .snapshots().listen((event) {
       posts = [];
        index=0;
+      likes =0;
       for (var docPost in event.docs) {
+        print("----------------------\n");
         posts.add(PostsModel.fromJson(docPost.data()));
         docPost.reference
             .collection('likes')
-            .snapshots().listen((event) {
-          likes =0;
-          for (var docLike in event.docs) {
-            print(docLike.id);
-            print('=============================\n');
-            likes++;
-            posts[index].likes=likes;
-            emit(HomeCounterLikesState());
-          }
-          for (var docLike in event.docs) {
-            if (docLike.id == userId) {
-              like = true;
-              emit(HomeSuccessLikeState());
-              break;
-            }
-            else{
-              like=false;
-              emit(HomeSuccessUnLikeState());
-            }
-          }
-          index++;
-
+            .get()
+            .then((value) {
+              for (var element in value.docs) {
+                print("==================\n");
+                likes++;
+                emit(HomeCounterLikesState());
+              }
+        }).catchError((error){
+          emit(HomeErrorLikeState(error.toString()));
         });
-
 
       }
       emit(HomeSuccessGetPostsState());
     });
   }
 
-  void getLikes(){
 
-    FirebaseFirestore.instance
-        .collection('posts' )
-    .doc('3DWmyQgOgTfu16TETggS')
-    .collection('likes')
-    .snapshots()
-    .listen((event) {
-      event.docs.forEach((element) {
-       print(element.id);
-      });
-    });
+/*
 
-      print('==========================\n');
+  void getLikes(String postId){
+
+    emit(HomeLoadingGetPostsState());
+    for(var element in posts){
+      if(element.postId==postId){
+    FirebaseFirestore.instance.
+    collection('posts')
+        .doc(postId)
+        .collection('likes')
+    .snapshots().listen((event) {
+      index = 0;
+      likes = 0;
+      for (var docLikes in event.docs) {
+        print("----------------------\n");
+
+        element.usersLiked;
+      }
+    }
+
+        }
+
+
+      }
+      emit(HomeSuccessGetPostsState());
+
   }
+
+*/
 
 
   List<UserModel> users=[];

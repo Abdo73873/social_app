@@ -4,7 +4,8 @@ class PostsModel {
   late String postId;
   String? text;
   String? postImage;
-   int likes=0;
+  List<String>? usersLiked;
+   int countLikes=0;
    int comments=0;
   PostsModel({
     required this.uId,

@@ -1,6 +1,9 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/social_cubit.dart';
@@ -14,17 +17,17 @@ import 'package:social_app/shared/styles/icon_broken.dart';
 class FeedsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ScrollController scrollController=ScrollController();
+    ScrollController scrollController = ScrollController();
 
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return RefreshIndicator(
-          onRefresh: ()async {
+          onRefresh: () async {
             HomeCubit.get(context).getUsersData();
           },
           child: SingleChildScrollView(
-            controller:scrollController ,
+            controller: scrollController,
             physics: BouncingScrollPhysics(),
             child: Column(
               children: [
@@ -60,26 +63,47 @@ class FeedsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                if(HomeCubit.get(context).users.isNotEmpty)
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    for (int i = 0; i < HomeCubit.get(context).users.length; i++) {
-                      if (HomeCubit.get(context).posts[index].uId ==
-                          HomeCubit.get(context).users[i].uId) {
-                        return buildPostItem(
-                            context,
-                            HomeCubit.get(context).posts[index],
-                            HomeCubit.get(context).users[i]);
+                if (HomeCubit.get(context).users.isNotEmpty)
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+                    builder: (context, snapShot) {
+                      late List<PostsModel> postModel=[];
+                      if (snapShot.hasData) {
+                        for (var docPost in snapShot.data!.docs) {
+                          postModel.add(PostsModel.fromJson(
+                              docPost.data() as Map<String, dynamic>));
+                        }
+                        return ListView.separated(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            for (int i = 0; i < HomeCubit
+                                .get(context)
+                                .users
+                                .length; i++) {
+                              if (postModel[index].uId ==
+                                  HomeCubit
+                                      .get(context)
+                                      .users[i].uId) {
+                                return buildPostItem(
+                                    context,
+                                    postModel[index],
+                                    HomeCubit
+                                        .get(context)
+                                        .users[i]);
+                              }
+                            }
+                          },
+                          separatorBuilder: (context, index) =>
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                          itemCount: postModel.length,
+                        );
                       }
-                    }
-                  },
-                  separatorBuilder: (context, index) => SizedBox(
-                    height: 10.0,
+                      return Text('field in get dada');
+                    },
                   ),
-                  itemCount: HomeCubit.get(context).posts.length,
-                ),
                 SizedBox(
                   height: 20.0,
                 ),
@@ -91,8 +115,8 @@ class FeedsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPostItem(context, PostsModel postModel, UserModel usModel){
-    return  Card(
+  Widget buildPostItem(context, PostsModel postModel, UserModel usModel) {
+    return Card(
       color: Theme.of(context).scaffoldBackgroundColor,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5.0,
@@ -203,8 +227,8 @@ class FeedsScreen extends StatelessWidget {
                                   .textTheme
                                   .bodyMedium!
                                   .copyWith(
-                                color: Colors.blue,
-                              ),
+                                    color: Colors.blue,
+                                  ),
                             ),
                             onPressed: () {}),
                       ),
@@ -225,8 +249,8 @@ class FeedsScreen extends StatelessWidget {
                                   .textTheme
                                   .bodyMedium!
                                   .copyWith(
-                                color: Colors.blue,
-                              ),
+                                    color: Colors.blue,
+                                  ),
                             ),
                             onPressed: () {}),
                       ),
@@ -247,105 +271,121 @@ class FeedsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: InkWell(
-                onTap: (){},
-                child: Row(
-                  children: [
-                    Icon(
-                      IconBroken.Heart,
-                      color: defaultColor,
-                    ),
-                    Text(
-                      '${postModel.likes}',
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                    Spacer(),
-                    Text(
-                      '${postModel.comments} comments',
-                      textAlign: TextAlign.end,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Divider(
-              height: 2.0,
-              color: secondaryColor,
-            ),
-            Padding(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {},
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 20.0,
-                            child: ClipOval(
-                              child: CachedNetworkImage(
-                                width: double.infinity,
-                                height: double.infinity,
-                                fit: BoxFit.cover,
-                                imageUrl: userModel.image,
-                                errorWidget: (context, url, error) =>
-                                    Image.asset(
-                                      userModel.male
-                                          ? 'assets/images/male.jpg'
-                                          : 'assets/images/female.jpg',
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
-                              ),
+              StreamBuilder<QuerySnapshot>(
+                stream:FirebaseFirestore.instance.collection('posts').doc(postModel.postId).collection('likes').snapshots(),
+                builder: (context,snapshot){
+                  bool liked=false;
+                  int likes=0;
+                  if(snapshot.hasData) {
+                    for (var docLike in snapshot.data!.docs) {
+                      if(docLike.id==userId){liked=true;}
+                      likes++;
+                    }
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
+                          child: InkWell(
+                            onTap: () {},
+                            child: Row(
+                              children: [
+                                Icon(
+                                  IconBroken.Heart,
+                                  color: defaultColor,
+                                ),
+                                Text(
+                                  '$likes',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                                Spacer(),
+                                Text(
+                                  '${postModel.comments} comments',
+                                  textAlign: TextAlign.end,
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            width: 10.0,
-                          ),
-                          Text(
-                            'write a comment ...',
-                            textAlign: TextAlign.start,
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  MaterialButton(
-                    minWidth: 1.0,
-                    padding: EdgeInsets.symmetric(horizontal: 3.0),
-                    onPressed: () {
-                      HomeCubit.get(context).likePost(postModel.postId);
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          IconBroken.Heart,
-                          color: defaultColor,
-                          size: 18.0,
                         ),
-                        Text(
-                          HomeCubit.get(context).like?' liked':' Like',
-                          style: Theme.of(context).textTheme.titleSmall,
+                        Divider(
+                          height: 2.0,
+                          color: secondaryColor,
+                        ),
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 20.0,
+                                        child: ClipOval(
+                                          child: CachedNetworkImage(
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            fit: BoxFit.cover,
+                                            imageUrl: userModel.image,
+                                            errorWidget: (context, url, error) =>
+                                                Image.asset(
+                                                  userModel.male
+                                                      ? 'assets/images/male.jpg'
+                                                      : 'assets/images/female.jpg',
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 10.0,
+                                      ),
+                                      Text(
+                                        'write a comment ...',
+                                        textAlign: TextAlign.start,
+                                        style: Theme.of(context).textTheme.titleSmall,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              MaterialButton(
+                                minWidth: 1.0,
+                                padding: EdgeInsets.symmetric(horizontal: 3.0),
+                                onPressed: () {
+                                  HomeCubit.get(context).likePost(postModel.postId);
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      IconBroken.Heart,
+                                      color: defaultColor,
+                                      size: 18.0,
+                                    ),
+                                    Text(
+                                      liked ? ' liked' : ' Like',
+                                      style: Theme.of(context).textTheme.titleSmall,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  }
+                  return Text('field in get dada');
+                },
               ),
-            ),
           ],
         ),
       ),
     );
-
   }
-
 }
