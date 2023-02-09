@@ -38,6 +38,7 @@ class HomeLayout extends StatelessWidget {
             ),),
             actions: [
               IconButton(onPressed: (){
+                HomeCubit.get(context).scroll();
               }, icon: Icon(IconBroken.Notification,),),
               IconButton(onPressed: (){}, icon: Icon(IconBroken.Search,),),
             ],

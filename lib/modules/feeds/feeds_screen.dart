@@ -7,6 +7,7 @@ import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
+import 'package:social_app/modules/feeds/commets.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
@@ -20,6 +21,7 @@ class FeedsScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return RefreshIndicator(
+
           onRefresh: ()async {
             HomeCubit.get(context).getUsersData();
           },
@@ -60,6 +62,7 @@ class FeedsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                if(HomeCubit.get(context).users.isNotEmpty)
                 ListView.separated(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
@@ -90,285 +93,288 @@ class FeedsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildPostItem(context, PostsModel postModel, UserModel usModel) =>
-      Card(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        elevation: 5.0,
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 30.0,
-                    child: ClipOval(
-                      child: CachedNetworkImage(
+  Widget buildPostItem(context, PostsModel postModel, UserModel usModel){
+    bool like=false;
+    return Card(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      elevation: 5.0,
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 30.0,
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                      imageUrl: usModel.image,
+                      errorWidget: (context, url, error) => Image.asset(
+                        'assets/images/person.png',
                         width: double.infinity,
                         height: double.infinity,
                         fit: BoxFit.cover,
-                        imageUrl: usModel.image,
-                        errorWidget: (context, url, error) => Image.asset(
-                          'assets/images/person.png',
-                          width: double.infinity,
-                          height: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: 10.0,
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              usModel.name,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          Icon(
+                            Icons.check_circle,
+                            color: Colors.blue,
+                            size: 18.0,
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 3.0,
+                      ),
+                      Text(
+                        postModel.dateTime,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                usModel.name,
-                                style: Theme.of(context).textTheme.titleMedium,
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.more_horiz,
+                    size: 18.0,
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Divider(
+                height: 2.0,
+                color: secondaryColor,
+              ),
+            ),
+            if (postModel.text != null)
+              Text(
+                postModel.text!,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            Padding(
+              padding: const EdgeInsetsDirectional.only(
+                top: 5.0,
+                bottom: 10.0,
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        end: 6.0,
+                      ),
+                      child: SizedBox(
+                        height: 25.0,
+                        child: MaterialButton(
+                            height: 25.0,
+                            minWidth: 1.0,
+                            padding: EdgeInsets.zero,
+                            child: Text(
+                              '#birthday',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                color: Colors.blue,
                               ),
                             ),
-                            SizedBox(
-                              width: 5.0,
+                            onPressed: () {}),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        end: 10.0,
+                      ),
+                      child: SizedBox(
+                        height: 25.0,
+                        child: MaterialButton(
+                            height: 25.0,
+                            minWidth: 1.0,
+                            padding: EdgeInsets.zero,
+                            child: Text(
+                              '#birthday',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                color: Colors.blue,
+                              ),
                             ),
-                            Icon(
-                              Icons.check_circle,
-                              color: Colors.blue,
-                              size: 18.0,
+                            onPressed: () {}),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            if (postModel.postImage!.isNotEmpty)
+              Container(
+                width: double.infinity,
+                height: 140.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  image: DecorationImage(
+                    image: NetworkImage(postModel.postImage!),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: InkWell(
+                onTap: (){},
+                child: Row(
+                  children: [
+                    Icon(
+                      IconBroken.Heart,
+                      color: defaultColor,
+                    ),
+                    if(postModel.likes>0)
+                      Text(
+                        '${postModel.likes}',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    if(postModel.likes==1)
+                      Text(
+                        usModel.name.split(" ").first,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    Spacer(),
+                    Text(
+                      '${postModel.comments} comments',
+                      textAlign: TextAlign.end,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+
+                  ],
+                ),
+              ),
+            ),
+            Divider(
+              height: 2.0,
+              color: secondaryColor,
+            ),
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {},
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 20.0,
+                            child: ClipOval(
+                              child: CachedNetworkImage(
+                                width: double.infinity,
+                                height: double.infinity,
+                                fit: BoxFit.cover,
+                                imageUrl: userModel.image,
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                      userModel.male
+                                          ? 'assets/images/male.jpg'
+                                          : 'assets/images/female.jpg',
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      fit: BoxFit.cover,
+                                    ),
+                              ),
                             ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3.0,
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          Text(
+                            'write a comment ...',
+                            textAlign: TextAlign.start,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  MaterialButton(
+                    minWidth: 1.0,
+                    padding: EdgeInsets.symmetric(horizontal: 3.0),
+                    onPressed: () {
+                      like=!like;
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          IconBroken.Heart,
+                          color: defaultColor,
+                          size: 18.0,
                         ),
                         Text(
-                          postModel.dateTime,
+                          ' Like',
                           style: Theme.of(context).textTheme.titleSmall,
                         ),
                       ],
                     ),
                   ),
-                  IconButton(
+                  MaterialButton(
                     onPressed: () {},
-                    icon: Icon(
-                      Icons.more_horiz,
-                      size: 18.0,
+                    minWidth: 1.0,
+                    padding: EdgeInsets.symmetric(horizontal: 3.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.share,
+                          color: secondaryColor,
+                          size: 18.0,
+                        ),
+                        Text(
+                          ' Share',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Divider(
-                  height: 2.0,
-                  color: secondaryColor,
-                ),
-              ),
-              if (postModel.text != null)
-                Text(
-                  postModel.text!,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  top: 5.0,
-                  bottom: 10.0,
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                          end: 6.0,
-                        ),
-                        child: SizedBox(
-                          height: 25.0,
-                          child: MaterialButton(
-                              height: 25.0,
-                              minWidth: 1.0,
-                              padding: EdgeInsets.zero,
-                              child: Text(
-                                '#birthday',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      color: Colors.blue,
-                                    ),
-                              ),
-                              onPressed: () {}),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                          end: 10.0,
-                        ),
-                        child: SizedBox(
-                          height: 25.0,
-                          child: MaterialButton(
-                              height: 25.0,
-                              minWidth: 1.0,
-                              padding: EdgeInsets.zero,
-                              child: Text(
-                                '#birthday',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      color: Colors.blue,
-                                    ),
-                              ),
-                              onPressed: () {}),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              if (postModel.postImage!.isNotEmpty)
-                Container(
-                  width: double.infinity,
-                  height: 140.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    image: DecorationImage(
-                      image: NetworkImage(postModel.postImage!),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Row(
-                          children: [
-                            Icon(
-                              IconBroken.Heart,
-                              color: defaultColor,
-                            ),
-                            Text(
-                              '1200',
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Text(
-                          '120 comments',
-                          textAlign: TextAlign.end,
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Divider(
-                height: 2.0,
-                color: secondaryColor,
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {},
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 20.0,
-                              child: ClipOval(
-                                child: CachedNetworkImage(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  fit: BoxFit.cover,
-                                  imageUrl: userModel.image,
-                                  errorWidget: (context, url, error) =>
-                                      Image.asset(
-                                    userModel.male
-                                        ? 'assets/images/male.jpg'
-                                        : 'assets/images/female.jpg',
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                              'write a comment ...',
-                              textAlign: TextAlign.start,
-                              style: Theme.of(context).textTheme.titleSmall,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    MaterialButton(
-                      minWidth: 1.0,
-                      padding: EdgeInsets.symmetric(horizontal: 3.0),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            IconBroken.Heart,
-                            color: defaultColor,
-                            size: 18.0,
-                          ),
-                          Text(
-                            ' Like',
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                    MaterialButton(
-                      onPressed: () {},
-                      minWidth: 1.0,
-                      padding: EdgeInsets.symmetric(horizontal: 3.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.share,
-                            color: secondaryColor,
-                            size: 18.0,
-                          ),
-                          Text(
-                            ' Share',
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
+
+
 }

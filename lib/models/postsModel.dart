@@ -3,7 +3,8 @@ class PostsModel {
   late String uId;
   late String dateTime;
   late String image;
-
+   int likes=0;
+   int comments=0;
   String? text;
   String? postImage;
 
@@ -14,6 +15,8 @@ class PostsModel {
     required this.image,
     this.text,
     this.postImage,
+     this.likes=0,
+     this.comments=0,
   });
 
   PostsModel.fromJson(Map<String, dynamic> json) {

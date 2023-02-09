@@ -99,7 +99,6 @@ class HomeCubit extends Cubit<HomeStates> {
         .collection('posts')
         .get()
         .then((value) {
-
       for (var element in value.docs) {
         posts.add(PostsModel.fromJson(element.data()));
       }
@@ -129,8 +128,9 @@ class HomeCubit extends Cubit<HomeStates> {
 
 
   void scroll(){
-    getUsersData();
-    emit(HomeChangeLanguageState());
-  }
+
+      print(users.length);
+
+}
 
 }

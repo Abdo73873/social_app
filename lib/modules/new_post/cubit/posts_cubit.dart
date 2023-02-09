@@ -69,6 +69,7 @@ class PostsCubit extends Cubit<PostsStates> {
 
 
 String formattedData=DateFormat('yyyy-MM-dd - kk:mm').format(DateTime.now());
+
   void createPost({
     String? text,
 
