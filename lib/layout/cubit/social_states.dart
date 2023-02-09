@@ -31,6 +31,18 @@ class HomeErrorGetUsersState extends HomeStates {
   HomeErrorGetUsersState(this.error);
 }
 
+class HomeSuccessLikeState extends HomeStates {}
+class HomeErrorLikeState extends HomeStates {
+  final String error;
+  HomeErrorLikeState(this.error);
+}
+class HomeSuccessUnLikeState extends HomeStates {}
+class HomeErrorUnLikeState extends HomeStates {
+  final String error;
+  HomeErrorUnLikeState(this.error);
+}
+class HomeCounterLikesState extends HomeStates {}
+
 
 
 class HomeChangeLanguageState extends HomeStates {}

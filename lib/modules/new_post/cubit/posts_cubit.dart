@@ -75,20 +75,40 @@ String formattedData=DateFormat('yyyy-MM-dd - kk:mm').format(DateTime.now());
 }) {
 emit(PostsLoadingState());
 
+  print(FirebaseFirestore.instance.collection('posts').id);
+
     PostsModel model=PostsModel
       (
-        name: userModel.name,
         uId: userModel.uId,
-       image: userModel.image,
       dateTime: formattedData,
       text: text,
       postImage: postImageUrl,
+      postId: '',
 
     );
+
     FirebaseFirestore.instance
         .collection('posts')
         .add(model.toMaP())
-        .then((value) {
+        .then((docRef) {
+       model=PostsModel
+        (
+        uId: userModel.uId,
+        dateTime: formattedData,
+        text: text,
+        postImage: postImageUrl,
+          postId: docRef.id
+      );
+       FirebaseFirestore.instance
+           .collection('posts')
+       .doc(docRef.id)
+       .update(model.toMaP())
+       .then((value) {
+         emit(PostsCreateSuccessState());
+       }).catchError((error){
+         emit(PostsCreateErrorState());
+
+       });
       emit(PostsCreateSuccessState());
     })
         .catchError((error) {

@@ -1,39 +1,35 @@
 class PostsModel {
-  late String name;
   late String uId;
   late String dateTime;
-  late String image;
-
+  late String postId;
   String? text;
   String? postImage;
-
+   int likes=0;
+   int comments=0;
   PostsModel({
-    required this.name,
     required this.uId,
     required this.dateTime,
-    required this.image,
     this.text,
     this.postImage,
+    required this.postId,
   });
 
   PostsModel.fromJson(Map<String, dynamic> json) {
-    name = json["name"];
     uId = json["uId"];
-    image = json["image"];
     postImage = json["postImage"];
     dateTime = json["dateTime"];
     text = json["text"];
+    postId = json["postId"];
 
   }
 
   Map<String, dynamic> toMaP() {
     return {
-      "name": name,
       "uId": uId,
       "dateTime": dateTime,
       "text": text,
-      "image": image,
       "postImage": postImage,
+      "postId": postId,
     };
   }
 

@@ -91,22 +91,67 @@ class HomeCubit extends Cubit<HomeStates> {
 
 
 
-
   List<PostsModel> posts = [];
+  int likes =0;
+  bool like=false;
+  int index=0;
+
   void getPosts() {
     emit(HomeLoadingGetPostsState());
-    FirebaseFirestore.instance
-        .collection('posts')
-        .get()
-        .then((value) {
-      for (var element in value.docs) {
-        posts.add(PostsModel.fromJson(element.data()));
+    FirebaseFirestore.instance.collection('posts')
+    .snapshots().listen((event) {
+      posts = [];
+       index=0;
+      for (var docPost in event.docs) {
+        posts.add(PostsModel.fromJson(docPost.data()));
+        docPost.reference
+            .collection('likes')
+            .snapshots().listen((event) {
+          likes =0;
+          for (var docLike in event.docs) {
+            print(docLike.id);
+            print('=============================\n');
+            likes++;
+            posts[index].likes=likes;
+            emit(HomeCounterLikesState());
+          }
+          for (var docLike in event.docs) {
+            if (docLike.id == userId) {
+              like = true;
+              emit(HomeSuccessLikeState());
+              break;
+            }
+            else{
+              like=false;
+              emit(HomeSuccessUnLikeState());
+            }
+          }
+          index++;
+
+        });
+
+
       }
       emit(HomeSuccessGetPostsState());
-    }).catchError((error){
-      emit(HomeErrorGetPostsState(error));
     });
   }
+
+  void getLikes(){
+
+    FirebaseFirestore.instance
+        .collection('posts' )
+    .doc('3DWmyQgOgTfu16TETggS')
+    .collection('likes')
+    .snapshots()
+    .listen((event) {
+      event.docs.forEach((element) {
+       print(element.id);
+      });
+    });
+
+      print('==========================\n');
+  }
+
 
   List<UserModel> users=[];
   void getUsersData(){
@@ -126,11 +171,33 @@ class HomeCubit extends Cubit<HomeStates> {
 
   }
 
+  void likePost(String postId){
+    like=!like;
+    if(like){
+      FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .collection('likes')
+          .doc(userId).set({'like' : true, })
+      .then((value){
+      emit(HomeSuccessLikeState());
+      }).catchError((error){
+        emit(HomeErrorLikeState(error.toString()));
 
-  void scroll(){
+      });
 
-      print(users.length);
+    }
+    else{
+      FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .collection('likes')
+          .doc(userId)
+          .delete();
+      emit(HomeSuccessUnLikeState());
+    }
 
 }
+
 
 }
