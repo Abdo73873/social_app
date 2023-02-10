@@ -34,7 +34,7 @@ class UserModel {
     image = json["image"];
     cover = json["cover"];
     isEmailVerified = json["isEmailVerified"];
-    generalDetails = GeneralDetailsModel.fromJson(json["generalDetails"]);
+    generalDetails = json["generalDetails"]!=null?GeneralDetailsModel.fromJson(json["generalDetails"]):null;
   }
 
   Map<String, dynamic> toMaP() {

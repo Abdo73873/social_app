@@ -27,6 +27,7 @@ class LoginScreen extends StatelessWidget {
           if (state is SuccessesLoginState) {
             CacheHelper.saveData(key: "uId", value:userId).then((value) {
               HomeCubit.get(context).getUserData();
+              HomeCubit.get(context).changeBottomScreen(0);
               navigateAndFinish(context, HomeLayout());
             });
           }

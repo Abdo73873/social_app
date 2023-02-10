@@ -43,6 +43,7 @@ class HomeErrorUnLikeState extends HomeStates {
 }
 class HomeCounterLikesState extends HomeStates {}
 
+class HomeChatSearchState extends HomeStates {}
 
 
 class HomeChangeLanguageState extends HomeStates {}

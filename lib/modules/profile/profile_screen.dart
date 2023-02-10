@@ -189,7 +189,7 @@ class ProfileScreen extends StatelessWidget {
                         width: double.infinity,
                         child: generalDetails(
                           context: context,
-                          model: userModel.generalDetails!,
+                          model: userModel.generalDetails,
                         ),
                       );
                     },

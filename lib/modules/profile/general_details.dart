@@ -8,24 +8,27 @@ import 'package:social_app/shared/components/constants.dart';
 
 Widget generalDetails({
   required BuildContext context,
-  required GeneralDetailsModel model,
+   GeneralDetailsModel? model,
 }) {
   TextEditingController? schoolController = TextEditingController();
   TextEditingController? workController = TextEditingController();
   TextEditingController? countryController = TextEditingController();
   TextEditingController? liveController = TextEditingController();
   TextEditingController? statusController = TextEditingController();
-  schoolController.text=model.school!;
-  workController.text=model.work!;
-  countryController.text=model.country!;
-  liveController.text=model.live!;
-  statusController.text=model.status!;
+  if(model!=null) {
+    schoolController.text = model.school!;
+    workController.text = model.work!;
+    countryController.text = model.country!;
+    liveController.text = model.live!;
+    statusController.text = model.status!;
+  }
   var cubit=ProfileCubit.get(context);
   List<bool> readOnly=cubit.readOnly;
   double widthField=openToAdd?MediaQuery.of(context).size.width*.7:MediaQuery.of(context).size.width*.8;
   return Column(
   children: [
-    if( model.school!.isNotEmpty||openToAdd)
+    if(model!=null||openToAdd)
+    if( model!.school!.isNotEmpty||openToAdd)
     Row(
       children: [
         Icon(Icons.workspace_premium),
@@ -63,7 +66,8 @@ Widget generalDetails({
 
       ],
     ),
-    if( model.work!.isNotEmpty||openToAdd)
+    if(model!=null||openToAdd)
+      if( model!.work!.isNotEmpty||openToAdd)
       Row(
         children: [
           Icon(Icons.work_outlined),
@@ -101,7 +105,8 @@ Widget generalDetails({
 
         ],
       ),
-    if( model.country!.isNotEmpty||openToAdd)
+    if(model!=null||openToAdd)
+      if( model!.country!.isNotEmpty||openToAdd)
       Row(
         children: [
           Icon(Icons.place),
@@ -139,7 +144,8 @@ Widget generalDetails({
 
         ],
       ),
-    if( model.live!.isNotEmpty||openToAdd)
+    if(model!=null||openToAdd)
+      if( model!.live!.isNotEmpty||openToAdd)
       Row(
         children: [
           Icon(Icons.home_work_outlined),
@@ -177,7 +183,8 @@ Widget generalDetails({
 
         ],
       ),
-    if( model.status!.isNotEmpty||openToAdd)
+    if(model!=null||openToAdd)
+      if( model!.status!.isNotEmpty||openToAdd)
       Row(
         children: [
           Icon(Icons.workspace_premium),
@@ -211,9 +218,19 @@ Widget generalDetails({
         ],
       ),
     SizedBox(height: 10.0,),
-    if(model.school!.isEmpty||model.work!.isEmpty||model.country!.isEmpty||model.live!.isEmpty||model.status!.isEmpty)
+    if(model==null||(model.school!.isEmpty||model.work!.isEmpty||model.country!.isEmpty||model.live!.isEmpty||model.status!.isEmpty))
       OutlinedButton(
         onPressed: (){
+          if(model==null){
+            userModel.generalDetails=GeneralDetailsModel.fromJson({
+              'school':'',
+              'work':'',
+              'country':'',
+              'live':'',
+              'status':'',
+            });
+            cubit.updateUser();
+          }
         cubit.changeToAdd();
         if(!openToAdd){
           cubit.updateUser();
@@ -231,6 +248,7 @@ Widget generalDetails({
           ],),
       ),
     SizedBox(height: 10.0,),
+    if(model!=null)
     if(model.school!.isNotEmpty&&model.work!.isNotEmpty&&model.country!.isNotEmpty&&model.live!.isNotEmpty&&model.status!.isNotEmpty)
       OutlinedButton(
       onPressed: (){

@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:social_app/layout/home_layout.dart';
 import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
 import 'package:social_app/modules/new_post/cubit/posts_states.dart';
@@ -94,11 +95,21 @@ class NewPostScreen extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              width: 5.0,
+                              width: 20.0,
                             ),
-                            Text(
-                              userModel.name,
-                              style: Theme.of(context).textTheme.titleMedium,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  userModel.name,
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                ),
+                                SizedBox(height: 5.0,),
+                                Text(
+                                 DateFormat.yMd().add_jm().format(DateTime.now()),
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
                             ),
                           ],
                         ),

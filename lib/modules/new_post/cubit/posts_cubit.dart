@@ -68,19 +68,18 @@ class PostsCubit extends Cubit<PostsStates> {
   }
 
 
-String formattedData=DateFormat('yyyy-MM-dd - kk:mm').format(DateTime.now());
+
   void createPost({
     String? text,
 
 }) {
 emit(PostsLoadingState());
-
   print(FirebaseFirestore.instance.collection('posts').id);
 
     PostsModel model=PostsModel
       (
         uId: userModel.uId,
-      dateTime: formattedData,
+      dateTime: DateFormat.yMd().add_jm().format(DateTime.now()).toString(),
       text: text,
       postImage: postImageUrl,
       postId: '',
@@ -91,14 +90,8 @@ emit(PostsLoadingState());
         .collection('posts')
         .add(model.toMaP())
         .then((docRef) {
-       model=PostsModel
-        (
-        uId: userModel.uId,
-        dateTime: formattedData,
-        text: text,
-        postImage: postImageUrl,
-          postId: docRef.id
-      );
+       model.postId=docRef.id;
+
        FirebaseFirestore.instance
            .collection('posts')
        .doc(docRef.id)

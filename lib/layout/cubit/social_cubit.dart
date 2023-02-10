@@ -166,6 +166,8 @@ class HomeCubit extends Cubit<HomeStates> {
         .then((value) {
       for (var element in value.docs) {
         users.add(UserModel.fromJson(element.data()));
+        print(element.data());
+        print('===============================\n');
       }
       emit(HomeSuccessGetUsersState());
     }).catchError((error) {
@@ -251,6 +253,34 @@ class HomeCubit extends Cubit<HomeStates> {
       });
 
     }
+
+    List<UserModel> friendsWhenSearch=[];
+  bool found=false;
+  void chatSearch(String text){
+    String word='';
+    if(text.isEmpty){
+      found=false;
+      emit(HomeChatSearchState());
+    }
+    else{
+      friendsWhenSearch=[];
+      for(int iText=0;iText<text.length;iText++){
+        word+=text[iText];
+      }
+      for(int index=0;index<users.length;index++){
+        if(word.toLowerCase()==users[index].name.substring(0,word.length<=users[index].name.length?word.length:users[index].name.length).toLowerCase()){
+          found=true;
+          friendsWhenSearch.add(users[index]);
+          emit(HomeChatSearchState());
+        }
+
+      }
+
+    }
+
+
+  }
+
 
 
   }
