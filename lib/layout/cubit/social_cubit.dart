@@ -13,7 +13,7 @@ import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
 
 class HomeCubit extends Cubit<HomeStates> {
-  HomeCubit() :super(HomeInitializeState());
+  HomeCubit() : super(HomeInitializeState());
 
   static HomeCubit get(context) => BlocProvider.of(context);
 
@@ -39,20 +39,17 @@ class HomeCubit extends Cubit<HomeStates> {
         currentIndex = index;
         emit(HomeChangeBottomState());
       }
-    }
-    else if (index == 2) {
+    } else if (index == 2) {
       if (currentIndex < 2) {
         perIndex = currentIndex;
         currentIndex = 2;
-      }
-      else if (currentIndex >= 2) {
+      } else if (currentIndex >= 2) {
         perIndex = currentIndex + 1;
         currentIndex = 0;
       }
 
       emit(HomeNewPostState());
-    }
-    else if (index > 2) {
+    } else if (index > 2) {
       {
         currentIndex = index - 1;
         emit(HomeChangeBottomState());
@@ -68,8 +65,7 @@ class HomeCubit extends Cubit<HomeStates> {
     if (fromCache != null) {
       isDark = fromCache;
       emit(HomeChangeModeState());
-    }
-    else {
+    } else {
       isDark = !isDark;
       CacheHelper.saveData(key: 'isDark', value: isDark).then((value) {
         emit(HomeChangeModeState());
@@ -77,18 +73,19 @@ class HomeCubit extends Cubit<HomeStates> {
     }
   }
 
-
   void getUserData() {
     emit(HomeLoadingGetUserState());
-    FirebaseFirestore.instance.collection('users').doc(userId).get().then((
-        value) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get()
+        .then((value) {
       userModel = UserModel.fromJson(value.data()!);
       emit(HomeSuccessGetUserState());
     }).catchError((error) {
       emit(HomeErrorGetUserState(error.toString()));
     });
   }
-
 
 /*
   List<PostsModel> posts = [];
@@ -156,14 +153,12 @@ class HomeCubit extends Cubit<HomeStates> {
 
 */
 
+  List<UserModel> users = [];
 
-  List<UserModel> users=[];
-  void getUsersData(){
-    users=[];
+  void getUsersData() {
+    users = [];
     emit(HomeLoadingGetUsersState());
-    FirebaseFirestore.instance.collection('users')
-        .get()
-        .then((value) {
+    FirebaseFirestore.instance.collection('users').get().then((value) {
       for (var element in value.docs) {
         users.add(UserModel.fromJson(element.data()));
         print(element.data());
@@ -173,28 +168,26 @@ class HomeCubit extends Cubit<HomeStates> {
     }).catchError((error) {
       emit(HomeErrorGetUsersState(error.toString()));
     });
-
-
   }
 
-  bool like=false;
-  void likePost(String postId){
-    like=!like;
-    if(like){
+  bool like = false;
+
+  void likePost(String postId) {
+    like = !like;
+    if (like) {
       FirebaseFirestore.instance
           .collection('posts')
           .doc(postId)
           .collection('likes')
-          .doc(userId).set({'like' : true, })
-      .then((value){
-      emit(HomeSuccessLikeState());
-      }).catchError((error){
+          .doc(userId)
+          .set({
+        'like': true,
+      }).then((value) {
+        emit(HomeSuccessLikeState());
+      }).catchError((error) {
         emit(HomeErrorLikeState(error.toString()));
-
       });
-
-    }
-    else{
+    } else {
       FirebaseFirestore.instance
           .collection('posts')
           .doc(postId)
@@ -203,86 +196,79 @@ class HomeCubit extends Cubit<HomeStates> {
           .delete();
       emit(HomeSuccessUnLikeState());
     }
-}
+  }
 
-  void addComment(String postId,List<Map<String,String>> comment){
+  void addComment(String postId, List<Map<String, String>> comment) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('comments')
+        .doc(userId)
+        .update({
+          'comments': FieldValue.arrayUnion([comment]),
+        })
+        .then((value) {})
+        .catchError((error) {});
+  }
 
-      FirebaseFirestore.instance
-          .collection('posts')
-          .doc(postId)
-          .collection('comments')
-          .doc(userId).update(
-          {
-            'comments':FieldValue.arrayUnion([comment]),
-      })
-          .then((value){
-      }).catchError((error){
+  void updateComment(String postId, String comment) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('comments')
+        .doc(userId)
+        .update({
+          'comments': FieldValue.arrayRemove([comment]),
+        })
+        .then((value) {})
+        .catchError((error) {});
+  }
 
-      });
+  void removeComment(String postId, String comment) {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('comments')
+        .doc(userId)
+        .update({
+          'comments': FieldValue.delete,
+        })
+        .then((value) {})
+        .catchError((error) {});
+  }
 
-    }
-  void updateComment(String postId,String comment){
+  List<UserModel> friendsWhenSearch = [];
+  bool found = false;
 
-      FirebaseFirestore.instance
-          .collection('posts')
-          .doc(postId)
-          .collection('comments')
-          .doc(userId).update(
-          {
-            'comments':FieldValue.arrayRemove([comment]),
-      })
-          .then((value){
-      }).catchError((error){
-
-      });
-
-    }
-  void removeComment(String postId,String comment){
-
-      FirebaseFirestore.instance
-          .collection('posts')
-          .doc(postId)
-          .collection('comments')
-          .doc(userId).update(
-          {
-            'comments':FieldValue.delete,
-      })
-          .then((value){
-      }).catchError((error){
-
-      });
-
-    }
-
-    List<UserModel> friendsWhenSearch=[];
-  bool found=false;
-  void chatSearch(String text){
-    String word='';
-    if(text.isEmpty){
-      found=false;
+  void chatSearch(String text) {
+    String word = '';
+    if (text.isEmpty) {
+      found = false;
       emit(HomeChatSearchState());
-    }
-    else{
-      friendsWhenSearch=[];
-      for(int iText=0;iText<text.length;iText++){
-        word+=text[iText];
+    } else {
+      friendsWhenSearch = [];
+      for (int iText = 0; iText < text.length; iText++) {
+        word += text[iText];
       }
-      for(int index=0;index<users.length;index++){
-        if(word.toLowerCase()==users[index].name.substring(0,word.length<=users[index].name.length?word.length:users[index].name.length).toLowerCase()){
-          found=true;
-          friendsWhenSearch.add(users[index]);
-          emit(HomeChatSearchState());
+      for (int index = 0; index < users.length; index++) {
+        if(users[index].uId!=userId){
+          if (word.toLowerCase() ==
+              users[index].name
+                  .substring(0,
+                  word.length <= users[index].name.length
+                      ? word.length
+                      : users[index].name.length)
+                  .toLowerCase()) {
+            found = true;
+            friendsWhenSearch.add(users[index]);
+            emit(HomeChatSearchState());
+          }
         }
+        else{found=false;
+        emit(HomeChatSearchState());
 
+        }
       }
-
     }
-
-
   }
-
-
-
-  }
-
-
+}
