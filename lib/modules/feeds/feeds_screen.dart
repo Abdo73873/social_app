@@ -10,6 +10,8 @@ import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
+import 'package:social_app/modules/feeds/comments.dart';
+import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
@@ -77,20 +79,10 @@ class FeedsScreen extends StatelessWidget {
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            for (int i = 0; i < HomeCubit
-                                .get(context)
-                                .users
-                                .length; i++) {
-                              if (postModel[index].uId ==
-                                  HomeCubit
-                                      .get(context)
-                                      .users[i].uId) {
+                            for (int i = 0; i < HomeCubit.get(context).users.length; i++) {
+                              if (postModel[index].uId == HomeCubit.get(context).users[i].uId) {
                                 return buildPostItem(
-                                    context,
-                                    postModel[index],
-                                    HomeCubit
-                                        .get(context)
-                                        .users[i]);
+                                    context, postModel[index], HomeCubit.get(context).users[i]);
                               }
                             }
                           },
@@ -281,7 +273,7 @@ class FeedsScreen extends StatelessWidget {
                       if(docLike.id==userId){liked=true;}
                       likes++;
                     }
-                    return Column(
+                    return  Column(
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -318,7 +310,9 @@ class FeedsScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    navigateTo(context, CommentsScreen(postModel));
+                                  },
                                   child: Row(
                                     children: [
                                       CircleAvatar(
@@ -380,7 +374,7 @@ class FeedsScreen extends StatelessWidget {
                       ],
                     );
                   }
-                  return Text('field in get dada');
+                  return Text('Loading data ... please wait');
                 },
               ),
           ],

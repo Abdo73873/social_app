@@ -90,10 +90,9 @@ class HomeCubit extends Cubit<HomeStates> {
   }
 
 
-
+/*
   List<PostsModel> posts = [];
   int likes =0;
-  bool like=false;
   int index=0;
 
   void getPosts() {
@@ -124,6 +123,7 @@ class HomeCubit extends Cubit<HomeStates> {
     });
   }
 
+*/
 
 /*
 
@@ -175,6 +175,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   }
 
+  bool like=false;
   void likePost(String postId){
     like=!like;
     if(like){
@@ -200,8 +201,58 @@ class HomeCubit extends Cubit<HomeStates> {
           .delete();
       emit(HomeSuccessUnLikeState());
     }
-
 }
 
+  void addComment(String postId,List<Map<String,String>> comment){
 
-}
+      FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .collection('comments')
+          .doc(userId).update(
+          {
+            'comments':FieldValue.arrayUnion([comment]),
+      })
+          .then((value){
+      }).catchError((error){
+
+      });
+
+    }
+  void updateComment(String postId,String comment){
+
+      FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .collection('comments')
+          .doc(userId).update(
+          {
+            'comments':FieldValue.arrayRemove([comment]),
+      })
+          .then((value){
+      }).catchError((error){
+
+      });
+
+    }
+  void removeComment(String postId,String comment){
+
+      FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .collection('comments')
+          .doc(userId).update(
+          {
+            'comments':FieldValue.delete,
+      })
+          .then((value){
+      }).catchError((error){
+
+      });
+
+    }
+
+
+  }
+
+
