@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/user_layout.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
@@ -215,8 +216,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   List<UserModel> friendsWhenSearch = [];
   bool found = false;
-/*
-  void chatSearch(String text) {
+  void chatSearch(List<UserModel>users,String text) {
     String word = '';
     if (text.isEmpty) {
       found = false;
@@ -248,7 +248,6 @@ class HomeCubit extends Cubit<HomeStates> {
     }
   }
 
-  */
   void typing(){
     emit(HomeChatTypingState());
   }

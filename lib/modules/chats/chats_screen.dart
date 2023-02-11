@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/Home/cubit/social_cubit.dart';
@@ -18,73 +19,83 @@ class ChatsScreen extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var cubit=UsersCubit.get(context);
-        bool search=cubit.foundUser;
+        var cubit=HomeCubit.get(context);
+        bool search=cubit.found;
         return Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 30.0,
-                child: TextFormField(
-                  controller: searchController,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 1.0,
-                    ),
-                    hintText: 'search',
-                    prefixIcon: Icon(
-                      Icons.search,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        30.0,
+          child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .doc(userId)
+                .collection('friends')
+                .snapshots(),
+            builder: (context,snapShot){
+              if(snapShot.hasData){
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 35.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: defaultFromField(
+                          context: context,
+                          controller: searchController,
+                          keyboardType: TextInputType.text,
+                          validator: (value) {
+                            return null;
+                          },
+                          onChange: (text) {
+                            HomeCubit.get(context).chatSearch(UsersCubit.get(context).users, text);
+                          },
+                          labelText: 'search',
+                          prefix: Icons.search,
+                        ),
                       ),
                     ),
-                  ),
-                  onChanged: (text){
-                   // cubit.chatSearch(text);
+                    SizedBox(height: 20.0,),
+                    if(searchController.text.isEmpty)
+                      Expanded(
+                        child: ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            for (var docFriend in snapShot.data!.docs) {
+                              if (UsersCubit.get(context).users[index].uId == docFriend.id) {
+                                return buildChatItem(
+                                    context, UsersCubit.get(context).users[index]);
+                              }
+                            }
+                            return SizedBox();
+                          },
+                          separatorBuilder: (context, index) {
+                            for (var docFriend in snapShot.data!.docs) {
+                              if (UsersCubit.get(context).users[index].uId == docFriend.id) {
+                                return SizedBox(height: 20.0,);
+                              }
+                            }
+                            return SizedBox();
+                          },
+                          itemCount: UsersCubit.get(context).users.length,
+                        ),
+                      ),
+                    if(searchController.text.isNotEmpty&&search)
+                      Expanded(
+                        child: ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return buildChatItem(context, cubit.friendsWhenSearch[index]);
+                          },
+                          separatorBuilder: (context, index)=> SizedBox(height: 20.0,),
+                          itemCount: cubit.friendsWhenSearch.length,
+                        ),
+                      ),
+                  ],
+                );
+              } else{return Text('You have not any Friend');}
 
-                  },
-                ),
-              ), // search
-              SizedBox(
-                height: 15.0,
-              ),
-              if(searchController.text.isEmpty)
-              Expanded(
-                child: ListView.separated(
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    if (cubit.users[index].uId != userId) {
-                      return buildChatItem(context, cubit.users[index]);
-                    }else{return SizedBox();}
-                  },
-                  separatorBuilder: (context, index) {
-                    if (cubit.users[index].uId != userId) {
-                      return SizedBox(
-                        height: 20.0,
-                      );
-                    } else {
-                      return SizedBox();
-                    }
-                  },
-                  itemCount: cubit.users.length,
-                ),
-              ),
-              if(searchController.text.isNotEmpty&&search)
-                Expanded(
-                child: ListView.separated(
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) => buildChatItem(context, cubit.friendsWhenSearch[index]),
-                  separatorBuilder: (context, index) => SizedBox(height: 20.0,),
-
-                  itemCount:  cubit.friendsWhenSearch.length,
-                ),
-              ),
-            ],
+            },
           ),
+
         );
       },
     );
