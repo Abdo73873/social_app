@@ -63,7 +63,7 @@ class FiendsScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               for (var docFriend in snapShot.data!.docs) {
                                 if (cubit.users[index].uId == docFriend.id) {
-                                  return buildChatItem(
+                                  return buildFriendItem(
                                       context, cubit.users[index]);
                                 }
                               }
@@ -85,7 +85,7 @@ class FiendsScreen extends StatelessWidget {
                           child: ListView.separated(
                             physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
-                                  return buildChatItem(context, cubit.friendsWhenSearch[index]);
+                                  return buildFriendItem(context, cubit.friendsWhenSearch[index]);
                             },
                             separatorBuilder: (context, index)=> SizedBox(height: 20.0,),
                             itemCount: cubit.friendsWhenSearch.length,
@@ -104,7 +104,7 @@ class FiendsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(context, UserModel friend) => InkWell(
+  Widget buildFriendItem(context, UserModel friend) => InkWell(
         onTap: () {
           //navigateTo(context, ChatItemScreen(friend));
         },

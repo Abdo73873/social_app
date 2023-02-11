@@ -54,7 +54,7 @@ class AllUsersScreen extends StatelessWidget {
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       if (cubit.users[index].uId != userId) {
-                        return buildChatItem(context, cubit.users[index],index);
+                        return buildUserItem(context, cubit.users[index],index);
                       }else{return SizedBox();}
                     },
                     separatorBuilder: (context, index) {
@@ -73,7 +73,7 @@ class AllUsersScreen extends StatelessWidget {
                 Expanded(
                   child: ListView.separated(
                     physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) => buildChatItem(context, cubit.friendsWhenSearch[index],index),
+                    itemBuilder: (context, index) => buildUserItem(context, cubit.friendsWhenSearch[index],index),
                     separatorBuilder: (context, index) => SizedBox(height: 20.0,),
 
                     itemCount:  cubit.friendsWhenSearch.length,
@@ -86,7 +86,7 @@ class AllUsersScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(context, UserModel friend,index) => InkWell(
+  Widget buildUserItem(context, UserModel friend,index) => InkWell(
     onTap: (){
       //navigateTo(context, ChatItemScreen(friend));
     },
