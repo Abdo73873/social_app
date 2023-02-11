@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/users/cubit/users_states.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/users/requests.dart';
-import 'package:social_app/modules/users/users_screen.dart';
+import 'package:social_app/modules/users/all_users_screen.dart';
 import 'package:social_app/modules/users/friends_screen.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
@@ -17,7 +17,7 @@ class UsersCubit extends Cubit<UsersStates> {
 
   int currentIndex = 0;
   List<Widget> usersScreens = [
-    UsersScreen(),
+    AllUsersScreen(),
     FiendsScreen(),
     RequestsScreen(),
   ];
@@ -60,11 +60,11 @@ class UsersCubit extends Cubit<UsersStates> {
 
 
   List<UserModel> friendsWhenSearch = [];
-  bool found = false;
+  bool foundUser = false;
   void usersSearch(String text) {
     String word = '';
     if (text.isEmpty) {
-      found = false;
+      foundUser = false;
       emit(UsersFriendsSearchState());
     }
     else {
@@ -83,13 +83,13 @@ class UsersCubit extends Cubit<UsersStates> {
                           ? word.length
                           : users[index].email.length)
                       .toLowerCase()) {
-                found = true;
+                foundUser = true;
                 friendsWhenSearch.add(users[index]);
                 emit(UsersFriendsSearchState());
               }
             }
             else {
-              found = false;
+              foundUser = false;
               emit(UsersFriendsSearchState());
             }
           }
@@ -105,13 +105,13 @@ class UsersCubit extends Cubit<UsersStates> {
                         ? word.length
                         : users[index].name.length)
                     .toLowerCase()) {
-              found = true;
+              foundUser = true;
               friendsWhenSearch.add(users[index]);
               emit(UsersFriendsSearchState());
             }
           }
           else {
-            found = false;
+            foundUser = false;
             emit(UsersFriendsSearchState());
           }
         }
@@ -119,6 +119,52 @@ class UsersCubit extends Cubit<UsersStates> {
 
     }
   }
+
+  bool foundFriend = false;
+
+  void friendsSearch(String text) {
+    String word = '';
+    if (text.isEmpty) {
+      foundFriend = false;
+      emit(UsersFriendsSearchState());
+    }
+    else {
+      friendsWhenSearch = [];
+      for (int iText = 0; iText < text.length; iText++) {
+        word += text[iText];
+      }
+      FirebaseFirestore.instance
+      .collection('users')
+      .doc(userId)
+      .collection('friends')
+      .snapshots().listen((event) {
+        for (var docFriend in event.docs) {
+          FirebaseFirestore.instance
+              .collection('users')
+              .doc(docFriend.id)
+              .get().then((value){
+                if(word.toLowerCase()==value.data()!['name']
+                    .toString()
+                    .substring(0,word.length<=value.data()!['name']
+                    .toString().length?word.length:value.data()!['name']
+                    .toString().length)
+                    .toLowerCase()){
+                  friendsWhenSearch.add(UserModel.fromJson(value.data()!));
+                  foundFriend = true;
+                  emit(UsersFriendsSearchState());
+                }else{
+                  foundFriend = false;
+                  emit(UsersFriendsSearchState());
+                }
+          });
+
+        }
+      });
+
+
+    }
+  }
+
 
   void addFriend(int index,String friendId){
     FirebaseFirestore.instance

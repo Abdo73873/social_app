@@ -9,7 +9,7 @@ import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/chats/chats_screen.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
 import 'package:social_app/modules/profile/profile_screen.dart';
-import 'package:social_app/modules/users/users_screen.dart';
+import 'package:social_app/modules/users/all_users_screen.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
 

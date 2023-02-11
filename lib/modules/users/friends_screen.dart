@@ -21,7 +21,6 @@ class FiendsScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = UsersCubit.get(context);
-        bool search = cubit.found;
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0),
           body: Padding(
@@ -34,53 +33,71 @@ class FiendsScreen extends StatelessWidget {
               .snapshots(),
                builder: (context,snapShot){
                 if(snapShot.hasData){
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 35.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(1.0),
-                          child: defaultFromField(
-                            context: context,
-                            controller: searchController,
-                            keyboardType: TextInputType.text,
-                            validator: (value) {return null;},
-                            onChange: (text){
-                              cubit.usersSearch(text);
-                            },
-                            labelText: 'search',
-                            prefix: Icons.search,
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 35.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: defaultFromField(
+                              context: context,
+                              controller: searchController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                return null;
+                              },
+                              onChange: (text) {
+                                cubit.friendsSearch(text);
+                              },
+                              labelText: 'search',
+                              prefix: Icons.search,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 20.0,),
-                      Expanded(
-                        child: ListView.separated(
-                          physics: BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            for (var docFriend in snapShot.data!.docs) {
-                              if(cubit.users[index].uId==docFriend.id){
-                                return buildChatItem(context, cubit.users[index]);
+                        SizedBox(height: 20.0,),
+                        if(false)
+                        Expanded(
+                          child: ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              for (var docFriend in snapShot.data!.docs) {
+                                if (cubit.users[index].uId == docFriend.id) {
+                                  return buildChatItem(
+                                      context, cubit.users[index]);
+                                }
                               }
-                            }return SizedBox();
-                          },
-                          separatorBuilder: (context, index) {
-                            for (var docFriend in snapShot.data!.docs) {
-                              if(cubit.users[index].uId==docFriend.id){
-                                return SizedBox(height: 20.0,);
+                              return SizedBox();
+                            },
+                            separatorBuilder: (context, index) {
+                              for (var docFriend in snapShot.data!.docs) {
+                                if (cubit.users[index].uId == docFriend.id) {
+                                  return SizedBox(height: 20.0,);
+                                }
                               }
-                            }return SizedBox();
-                          },
-                          itemCount: cubit.users.length,
+                              return SizedBox();
+                            },
+                            itemCount: cubit.users.length,
+                          ),
                         ),
-                      ),
-                    ],
-                  );
+                        if(cubit.foundFriend)
+                          Expanded(
+                          child: ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                                  return buildChatItem(context, cubit.friendsWhenSearch[index]);
+                            },
+                            separatorBuilder: (context, index)=> SizedBox(height: 20.0,),
+                            itemCount: cubit.friendsWhenSearch.length,
+                          ),
+                        ),
+                      ],
+                    );
                 } else{return Text('You have not any Friend');}
 
                },
             ),
+
           ),
         );
       },

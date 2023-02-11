@@ -12,7 +12,7 @@ import 'package:social_app/models/userModel.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 
-class UsersScreen extends StatelessWidget {
+class AllUsersScreen extends StatelessWidget {
 
   TextEditingController searchController=TextEditingController();
 
@@ -22,7 +22,7 @@ class UsersScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit=UsersCubit.get(context);
-        bool search=cubit.found;
+        bool search=cubit.foundUser;
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(

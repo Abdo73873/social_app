@@ -19,7 +19,7 @@ class ChatsScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit=UsersCubit.get(context);
-        bool search=cubit.found;
+        bool search=cubit.foundUser;
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
