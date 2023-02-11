@@ -61,7 +61,7 @@ class UsersCubit extends Cubit<UsersStates> {
 
   List<UserModel> friendsWhenSearch = [];
   bool found = false;
-  void friendsSearch(String text) {
+  void usersSearch(String text) {
     String word = '';
     if (text.isEmpty) {
       found = false;
@@ -72,24 +72,26 @@ class UsersCubit extends Cubit<UsersStates> {
       for (int iText = 0; iText < text.length; iText++) {
         word += text[iText];
       }
-      if (word.substring(-4) == ".com") {
-        for (int index = 0; index < users.length; index++) {
-          if (users[index].uId != userId) {
-            if (word.toLowerCase() ==
-                users[index].email
-                    .substring(0,
-                    word.length <= users[index].email.length
-                        ? word.length
-                        : users[index].email.length)
-                    .toLowerCase()) {
-              found = true;
-              friendsWhenSearch.add(users[index]);
+      if(word.length>=4) {
+        if (word.substring(word.length - 4) == ".com") {
+          for (int index = 0; index < users.length; index++) {
+            if (users[index].uId != userId) {
+              if (word.toLowerCase() ==
+                  users[index].email
+                      .substring(0,
+                      word.length <= users[index].email.length
+                          ? word.length
+                          : users[index].email.length)
+                      .toLowerCase()) {
+                found = true;
+                friendsWhenSearch.add(users[index]);
+                emit(UsersFriendsSearchState());
+              }
+            }
+            else {
+              found = false;
               emit(UsersFriendsSearchState());
             }
-          }
-          else {
-            found = false;
-            emit(UsersFriendsSearchState());
           }
         }
       }
@@ -114,6 +116,7 @@ class UsersCubit extends Cubit<UsersStates> {
           }
         }
       }
+
     }
   }
 

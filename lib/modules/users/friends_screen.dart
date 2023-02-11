@@ -34,7 +34,6 @@ class FiendsScreen extends StatelessWidget {
               .snapshots(),
                builder: (context,snapShot){
                 if(snapShot.hasData){
-
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -46,18 +45,16 @@ class FiendsScreen extends StatelessWidget {
                             context: context,
                             controller: searchController,
                             keyboardType: TextInputType.text,
-                            validator: (value) {},
+                            validator: (value) {return null;},
                             onChange: (text){
-                              cubit.friendsSearch(text);
+                              cubit.usersSearch(text);
                             },
                             labelText: 'search',
                             prefix: Icons.search,
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 30.0,
-                      ),
+                      SizedBox(height: 20.0,),
                       Expanded(
                         child: ListView.separated(
                           physics: BouncingScrollPhysics(),
@@ -68,9 +65,13 @@ class FiendsScreen extends StatelessWidget {
                               }
                             }return SizedBox();
                           },
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: 20.0,
-                          ),
+                          separatorBuilder: (context, index) {
+                            for (var docFriend in snapShot.data!.docs) {
+                              if(cubit.users[index].uId==docFriend.id){
+                                return SizedBox(height: 20.0,);
+                              }
+                            }return SizedBox();
+                          },
                           itemCount: cubit.users.length,
                         ),
                       ),

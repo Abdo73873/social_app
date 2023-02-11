@@ -9,6 +9,7 @@ import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/cubit/users_states.dart';
 import 'package:social_app/models/userModel.dart';
+import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 
 class UsersScreen extends StatelessWidget {
@@ -27,7 +28,23 @@ class UsersScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
+              SizedBox(
+                height: 35.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: defaultFromField(
+                    context: context,
+                    controller: searchController,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {return null;},
+                    onChange: (text){
+                      cubit.usersSearch(text);
+                    },
+                    labelText: 'search',
+                    prefix: Icons.search,
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 15.0,
               ),
