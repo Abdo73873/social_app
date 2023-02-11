@@ -30,9 +30,9 @@ class EditProfileScreen extends StatelessWidget {
       File? profileImage = cubit.profileImage;
       File? coverImage = cubit.coverImage;
 
-      nameController.text = userModel.name;
-      bioController.text = userModel.bio!;
-      phoneController.text = userModel.phone;
+      nameController.text = myModel.name;
+      bioController.text = myModel.bio!;
+      phoneController.text = myModel.phone;
       return Scaffold(
         appBar: defaultAppBar(
           context: context,
@@ -89,7 +89,7 @@ class EditProfileScreen extends StatelessWidget {
                                       width: double.infinity,
                                       height: 150,
                                       fit: BoxFit.cover,
-                                      imageUrl: userModel.cover ?? '',
+                                      imageUrl: myModel.cover ?? '',
                                       errorWidget: (context, url, error) =>
                                           Image.asset(
                                         'assets/images/cover.jpg',
@@ -124,10 +124,10 @@ class EditProfileScreen extends StatelessWidget {
                                         width: double.infinity,
                                         height: double.infinity,
                                         fit: BoxFit.cover,
-                                        imageUrl: userModel.image,
+                                        imageUrl: myModel.image,
                                         errorWidget: (context, url, error) =>
                                             Image.asset(
-                                          userModel.male
+                                          myModel.male
                                               ? 'assets/images/male.jpg'
                                               : 'assets/images/female.jpg',
                                           width: double.infinity,
@@ -167,7 +167,7 @@ class EditProfileScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${userModel.name}    ',
+                        '${myModel.name}    ',
                         style: Theme.of(context).textTheme.titleMedium,
                         maxLines: 2,
                       ),
@@ -205,8 +205,8 @@ class EditProfileScreen extends StatelessWidget {
                             },
                             onEditingComplete: () {
                               if (formKey.currentState!.validate()) {
-                                userModel.name = nameController.text;
-                                nameController.text = userModel.name;
+                                myModel.name = nameController.text;
+                                nameController.text = myModel.name;
                                 cubit.changeOpenEdit(0);
                               }
                             },
@@ -215,8 +215,8 @@ class EditProfileScreen extends StatelessWidget {
                         IconButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-                              userModel.name = nameController.text;
-                              nameController.text = userModel.name;
+                              myModel.name = nameController.text;
+                              nameController.text = myModel.name;
                               cubit.changeOpenEdit(0);
                             }
                           },
@@ -243,7 +243,7 @@ class EditProfileScreen extends StatelessWidget {
                       ),
                       Text(
                         bioController.text.isNotEmpty
-                            ? '${userModel.bio}    '
+                            ? '${myModel.bio}    '
                             : 'bio ...   ',
                         style: Theme.of(context).textTheme.bodyMedium,
                         maxLines: 5,
@@ -268,16 +268,16 @@ class EditProfileScreen extends StatelessWidget {
                           readOnly: cubit.readOnly[1],
                           textInputAction: TextInputAction.done,
                           onEditingComplete: () {
-                            userModel.bio = bioController.text;
-                            bioController.text = userModel.bio!;
+                            myModel.bio = bioController.text;
+                            bioController.text = myModel.bio!;
                             cubit.changeOpenEdit(1);
                           },
                         ),
                       ),
                       IconButton(
                         onPressed: () {
-                          userModel.bio = bioController.text;
-                          bioController.text = userModel.bio!;
+                          myModel.bio = bioController.text;
+                          bioController.text = myModel.bio!;
                           cubit.changeOpenEdit(1);
                         },
                         icon: Icon(cubit.readOnly[1] ? Icons.edit : Icons.done),
@@ -299,7 +299,7 @@ class EditProfileScreen extends StatelessWidget {
                           size: 20.0,
                         ),
                       ),
-                      Text('${userModel.phone}    ',
+                      Text('${myModel.phone}    ',
                         style: Theme.of(context).textTheme.bodyMedium,
                         maxLines: 1,
                       ),
@@ -334,8 +334,8 @@ class EditProfileScreen extends StatelessWidget {
                             },
                             onEditingComplete: () {
                               if (formKey.currentState!.validate()) {
-                                userModel.phone = phoneController.text;
-                                phoneController.text = userModel.phone;
+                                myModel.phone = phoneController.text;
+                                phoneController.text = myModel.phone;
                                 cubit.changeOpenEdit(2);
                               }
                             },
@@ -344,8 +344,8 @@ class EditProfileScreen extends StatelessWidget {
                         IconButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-                              userModel.phone = phoneController.text;
-                              phoneController.text = userModel.phone;
+                              myModel.phone = phoneController.text;
+                              phoneController.text = myModel.phone;
                               cubit.changeOpenEdit(2);
                             }
                           },
@@ -358,7 +358,7 @@ class EditProfileScreen extends StatelessWidget {
                 SizedBox(
                   height: 50.0,
                 ),
-                if (userModel.generalDetails != null)
+                if (myModel.generalDetails != null)
                   Text(
                     'General Details',
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -367,7 +367,7 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                 generalDetails(
                   context: context,
-                  model: userModel.generalDetails!,
+                  model: myModel.generalDetails!,
                 ),
                 SizedBox(
                   height: 100.0,

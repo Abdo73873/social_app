@@ -22,9 +22,9 @@ class UsersAddFriendState extends UsersStates {}
 class UsersRemoveRequestState extends UsersStates {}
 
 
-class UsersLoadingUsersState extends UsersStates {}
-class UsersSuccessUsersState extends UsersStates {}
-class UsersErrorUsersState extends UsersStates {
+class UsersLoadingUserState extends UsersStates {}
+class UsersSuccessUserState extends UsersStates {}
+class UsersErrorUserState extends UsersStates {
   final String error;
-  UsersErrorUsersState(this.error);
+  UsersErrorUserState(this.error);
 }

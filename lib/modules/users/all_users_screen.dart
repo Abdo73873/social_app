@@ -156,7 +156,7 @@ class AllUsersScreen extends StatelessWidget {
                               if(!isDone)
                                 ElevatedButton(
                                   onPressed:(){
-                                    UsersCubit.get(context).addFriend(index, friend.uId);
+                                    UsersCubit.get(context).sendRequest(friend.uId);
                                   },
                                   style:ButtonStyle(
                                     padding: MaterialStatePropertyAll(EdgeInsets.zero),
@@ -189,7 +189,7 @@ class AllUsersScreen extends StatelessWidget {
                                       if(!accepted)
                                       OutlinedButton(
                                         onPressed: () {
-                                          UsersCubit.get(context).removeRequest(index, friend.uId);
+                                          UsersCubit.get(context).removeRequest(friend.uId);
                                         },
                                         style: ButtonStyle(
                                           padding:

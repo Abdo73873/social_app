@@ -65,14 +65,14 @@ class HomeCubit extends Cubit<HomeStates> {
     }
   }
 
-  void getUserData() {
+  void getMyData() {
     emit(HomeLoadingGetUserState());
     FirebaseFirestore.instance
         .collection('users')
         .doc(userId)
         .get()
         .then((value) {
-      userModel = UserModel.fromJson(value.data()!);
+      myModel = UserModel.fromJson(value.data()!);
       emit(HomeSuccessGetUserState());
     }).catchError((error) {
       emit(HomeErrorGetUserState(error.toString()));

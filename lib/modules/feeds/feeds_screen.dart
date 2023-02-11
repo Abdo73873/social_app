@@ -322,10 +322,10 @@ class FeedsScreen extends StatelessWidget {
                                             width: double.infinity,
                                             height: double.infinity,
                                             fit: BoxFit.cover,
-                                            imageUrl: userModel.image,
+                                            imageUrl: myModel.image,
                                             errorWidget: (context, url, error) =>
                                                 Image.asset(
-                                                  userModel.male
+                                                  myModel.male
                                                       ? 'assets/images/male.jpg'
                                                       : 'assets/images/female.jpg',
                                                   width: double.infinity,

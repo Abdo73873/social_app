@@ -56,8 +56,8 @@ class FiendsScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: 20.0,),
-                        if(false)
-                        Expanded(
+                        if(searchController.text.isEmpty)
+                          Expanded(
                           child: ListView.separated(
                             physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {

@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
         create: (context)=>HomeCubit()
-          ..getUserData()
+          ..getMyData()
           ..changeMode(fromCache: isDark),
         ),
         BlocProvider(

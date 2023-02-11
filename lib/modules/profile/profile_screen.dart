@@ -46,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
                               width: double.infinity,
                               height: 150,
                               fit: BoxFit.cover,
-                              imageUrl: userModel.cover ?? '',
+                              imageUrl: myModel.cover ?? '',
                               errorWidget: (context, url, error) =>
                                   Image.asset(
                                 'assets/images/cover.jpg',
@@ -68,9 +68,9 @@ class ProfileScreen extends StatelessWidget {
                                 width: double.infinity,
                                 height: double.infinity,
                                 fit: BoxFit.cover,
-                                imageUrl: userModel.image,
+                                imageUrl: myModel.image,
                                 errorWidget:(context,url,error)=> Image.asset(
-                                 userModel.male
+                                 myModel.male
                                       ? 'assets/images/male.jpg'
                                       : 'assets/images/female.jpg',
                                   width: double.infinity,
@@ -88,15 +88,15 @@ class ProfileScreen extends StatelessWidget {
                     height: 5.0,
                   ),
                   Text(
-                    userModel.name,
+                    myModel.name,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   SizedBox(
                     height: 5.0,
                   ),
-                  if (userModel.bio != null)
+                  if (myModel.bio != null)
                     Text(
-                      userModel.bio!,
+                      myModel.bio!,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                   Padding(
@@ -181,7 +181,7 @@ class ProfileScreen extends StatelessWidget {
                   BlocConsumer<ProfileCubit,ProfileStates>(
                     listener: (context, state) {
                       if(state is ProfileUpdateSuccessState){
-                        HomeCubit.get(context).getUserData();
+                        HomeCubit.get(context).getMyData();
                       }
                     },
                     builder: (context, state) {
@@ -189,7 +189,7 @@ class ProfileScreen extends StatelessWidget {
                         width: double.infinity,
                         child: generalDetails(
                           context: context,
-                          model: userModel.generalDetails,
+                          model: myModel.generalDetails,
                         ),
                       );
                     },

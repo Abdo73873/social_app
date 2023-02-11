@@ -82,10 +82,10 @@ class NewPostScreen extends StatelessWidget {
                                   height: double.infinity,
                                   fit: BoxFit.cover,
                                   imageUrl:
-                                      userModel.image,
+                                      myModel.image,
                                   errorWidget: (context, url, error) =>
                                       Image.asset(
-                                   userModel.male
+                                   myModel.male
                                         ? 'assets/images/male.jpg'
                                         : 'assets/images/female.jpg',
                                     width: double.infinity,
@@ -102,7 +102,7 @@ class NewPostScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  userModel.name,
+                                  myModel.name,
                                   style: Theme.of(context).textTheme.titleMedium,
                                 ),
                                 SizedBox(height: 5.0,),

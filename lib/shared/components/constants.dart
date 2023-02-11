@@ -9,4 +9,4 @@ void printFullText(String text){
 
 String? userId='';
 bool openToAdd=false;
-late  UserModel userModel;
+late  UserModel myModel;
