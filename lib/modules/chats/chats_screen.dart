@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/cubit/social_cubit.dart';
 import 'package:social_app/layout/cubit/social_states.dart';
 import 'package:social_app/models/userModel.dart';
+import 'package:social_app/modules/chats/chat_item.dart';
+import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 
 class ChatsScreen extends StatelessWidget {
@@ -87,69 +89,74 @@ class ChatsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(context, UserModel friend) => Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            radius: 30.0,
-            child: ClipOval(
-              child: CachedNetworkImage(
-                width: double.infinity,
-                height: double.infinity,
-                fit: BoxFit.cover,
-                imageUrl: friend.image,
-                errorWidget: (context, url, error) => Image.asset(
-                  'assets/images/person.png',
+  Widget buildChatItem(context, UserModel friend) => InkWell(
+    onTap: (){
+      navigateTo(context, ChatItemScreen(friend));
+    },
+    child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 30.0,
+              child: ClipOval(
+                child: CachedNetworkImage(
                   width: double.infinity,
                   height: double.infinity,
                   fit: BoxFit.cover,
+                  imageUrl: friend.image,
+                  errorWidget: (context, url, error) => Image.asset(
+                    'assets/images/person.png',
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    friend.name,
-                    maxLines: 1,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'hi, i\'m here ',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0,
-                        ),
-                        child: Container(
-                          height: 8.0,
-                          width: 8.0,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            shape: BoxShape.circle,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      friend.name,
+                      maxLines: 1,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'hi, i\'m here ',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                      ),
-                      Text(
-                        '10:05pm',
-                      ),
-                    ],
-                  ),
-                ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                          ),
+                          child: Container(
+                            height: 8.0,
+                            width: 8.0,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '10:05pm',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      );
+          ],
+        ),
+  );
 }

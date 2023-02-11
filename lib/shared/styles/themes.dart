@@ -102,13 +102,12 @@ ThemeData lightTheme = ThemeData(
 
 );
 
-
 ThemeData darkTheme = ThemeData(
 
   shadowColor: Colors.black,
   primarySwatch: defaultColor,
   primaryColor: defaultColor,
-  scaffoldBackgroundColor: Colors.black12.withOpacity(.05),
+  scaffoldBackgroundColor: Colors.grey.shade800.withOpacity(.5),
   appBarTheme: AppBarTheme(
     titleSpacing: 20.0,
     systemOverlayStyle: SystemUiOverlayStyle(

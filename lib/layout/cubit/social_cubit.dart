@@ -31,7 +31,6 @@ class HomeCubit extends Cubit<HomeStates> {
     'Profile',
   ];
 
-  int perIndex = 0;
 
   void changeBottomScreen(int index) {
     if (index < 2) {
@@ -40,14 +39,6 @@ class HomeCubit extends Cubit<HomeStates> {
         emit(HomeChangeBottomState());
       }
     } else if (index == 2) {
-      if (currentIndex < 2) {
-        perIndex = currentIndex;
-        currentIndex = 2;
-      } else if (currentIndex >= 2) {
-        perIndex = currentIndex + 1;
-        currentIndex = 0;
-      }
-
       emit(HomeNewPostState());
     } else if (index > 2) {
       {
@@ -161,8 +152,6 @@ class HomeCubit extends Cubit<HomeStates> {
     FirebaseFirestore.instance.collection('users').get().then((value) {
       for (var element in value.docs) {
         users.add(UserModel.fromJson(element.data()));
-        print(element.data());
-        print('===============================\n');
       }
       emit(HomeSuccessGetUsersState());
     }).catchError((error) {
