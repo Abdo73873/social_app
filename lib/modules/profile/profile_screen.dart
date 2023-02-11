@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
 import 'package:social_app/modules/profile/cubit/profile_states.dart';
 import 'package:social_app/modules/profile/edit_profile.dart';

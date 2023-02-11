@@ -3,9 +3,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/layout/cubit/social_states.dart';
-import 'package:social_app/layout/home_layout.dart';
+import 'package:social_app/layout/Home/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/Home/home_layout.dart';
+import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
@@ -45,7 +46,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
         create: (context)=>HomeCubit()
           ..getUserData()
-          ..getUsersData()
           ..changeMode(fromCache: isDark),
         ),
         BlocProvider(
@@ -53,6 +53,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
         create: (context)=>PostsCubit(),
+        ),
+        BlocProvider(
+          create: (context)=>UsersCubit()..getUsersData(),
         ),
       ],
       child: BlocConsumer<HomeCubit,HomeStates>(

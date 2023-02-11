@@ -3,8 +3,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
@@ -90,7 +90,7 @@ TextEditingController messageController=TextEditingController();
                             horizontal: 10.0,
                           ),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
+                            color: HomeCubit.get(context).isDark?defaultColor:defaultColor.withOpacity(0.2),
                             borderRadius: BorderRadiusDirectional.only(
                               bottomStart: Radius.circular(15.0),
                               topStart: Radius.circular(15.0),

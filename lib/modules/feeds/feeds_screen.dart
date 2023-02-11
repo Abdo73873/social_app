@@ -1,13 +1,13 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/feeds/comments.dart';
@@ -26,7 +26,7 @@ class FeedsScreen extends StatelessWidget {
       builder: (context, state) {
         return RefreshIndicator(
           onRefresh: () async {
-            HomeCubit.get(context).getUsersData();
+            UsersCubit.get(context).getUsersData();
           },
           child: SingleChildScrollView(
             controller: scrollController,
@@ -65,7 +65,7 @@ class FeedsScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                if (HomeCubit.get(context).users.isNotEmpty)
+                if (UsersCubit.get(context).users.isNotEmpty)
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance.collection('posts').snapshots(),
                     builder: (context, snapShot) {
@@ -79,10 +79,10 @@ class FeedsScreen extends StatelessWidget {
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            for (int i = 0; i < HomeCubit.get(context).users.length; i++) {
-                              if (postModel[index].uId == HomeCubit.get(context).users[i].uId) {
+                            for (int i = 0; i <UsersCubit.get(context).users.length; i++) {
+                              if (postModel[index].uId == UsersCubit.get(context).users[i].uId) {
                                 return buildPostItem(
-                                    context, postModel[index], HomeCubit.get(context).users[i]);
+                                    context, postModel[index], UsersCubit.get(context).users[i]);
                               }
                             }
                           },

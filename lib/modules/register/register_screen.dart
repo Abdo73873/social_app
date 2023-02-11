@@ -3,8 +3,8 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/layout/home_layout.dart';
+import 'package:social_app/layout/Home/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/home_layout.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/modules/register/register_cubit/register_cubit.dart';
 import 'package:social_app/modules/register/register_cubit/register_states.dart';

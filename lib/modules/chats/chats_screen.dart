@@ -3,8 +3,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/chats/chat_item.dart';
 import 'package:social_app/shared/components/components.dart';
@@ -17,7 +18,7 @@ class ChatsScreen extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var cubit=HomeCubit.get(context);
+        var cubit=UsersCubit.get(context);
         bool search=cubit.found;
         return Padding(
           padding: const EdgeInsets.all(20.0),
@@ -43,7 +44,7 @@ class ChatsScreen extends StatelessWidget {
                     ),
                   ),
                   onChanged: (text){
-                    cubit.chatSearch(text);
+                   // cubit.chatSearch(text);
 
                   },
                 ),
@@ -61,7 +62,7 @@ class ChatsScreen extends StatelessWidget {
                     }else{return SizedBox();}
                   },
                   separatorBuilder: (context, index) {
-                    if (HomeCubit.get(context).users[index].uId != userId) {
+                    if (cubit.users[index].uId != userId) {
                       return SizedBox(
                         height: 20.0,
                       );

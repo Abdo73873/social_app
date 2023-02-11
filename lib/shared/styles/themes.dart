@@ -6,7 +6,7 @@ import 'package:social_app/shared/styles/colors.dart';
 
 ThemeData lightTheme = ThemeData(
   primarySwatch: defaultColor,
-  primaryColor: defaultColor.withOpacity(.2),
+  primaryColor: defaultColor,
   scaffoldBackgroundColor: Colors.white,
   appBarTheme: AppBarTheme(
     titleSpacing: 20.0,
@@ -106,7 +106,7 @@ ThemeData darkTheme = ThemeData(
 
   shadowColor: Colors.black,
   primarySwatch: defaultColor,
-  primaryColor: defaultColor.withOpacity(.9),
+  primaryColor: defaultColor,
   scaffoldBackgroundColor: Colors.grey.shade800.withOpacity(.5),
   appBarTheme: AppBarTheme(
     titleSpacing: 20.0,

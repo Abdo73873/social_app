@@ -1,10 +1,13 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/cubit/social_cubit.dart';
-import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/users/cubit/users_cubit.dart';
+import 'package:social_app/layout/users/cubit/users_states.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/shared/components/constants.dart';
 
@@ -14,40 +17,17 @@ class UsersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeCubit, HomeStates>(
+    return BlocConsumer<UsersCubit, UsersStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var cubit=HomeCubit.get(context);
+        var cubit=UsersCubit.get(context);
         bool search=cubit.found;
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 30.0,
-                child: TextFormField(
-                  controller: searchController,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 1.0,
-                    ),
-                    hintText: 'search',
-                    prefixIcon: Icon(
-                      Icons.search,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        30.0,
-                      ),
-                    ),
-                  ),
-                  onChanged: (text){
-                    cubit.chatSearch(text);
 
-                  },
-                ),
-              ), // search
               SizedBox(
                 height: 15.0,
               ),
@@ -57,11 +37,11 @@ class UsersScreen extends StatelessWidget {
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       if (cubit.users[index].uId != userId) {
-                        return buildChatItem(context, cubit.users[index]);
+                        return buildChatItem(context, cubit.users[index],index);
                       }else{return SizedBox();}
                     },
                     separatorBuilder: (context, index) {
-                      if (HomeCubit.get(context).users[index].uId != userId) {
+                      if (cubit.users[index].uId != userId) {
                         return SizedBox(
                           height: 20.0,
                         );
@@ -76,7 +56,7 @@ class UsersScreen extends StatelessWidget {
                 Expanded(
                   child: ListView.separated(
                     physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) => buildChatItem(context, cubit.friendsWhenSearch[index]),
+                    itemBuilder: (context, index) => buildChatItem(context, cubit.friendsWhenSearch[index],index),
                     separatorBuilder: (context, index) => SizedBox(height: 20.0,),
 
                     itemCount:  cubit.friendsWhenSearch.length,
@@ -89,7 +69,7 @@ class UsersScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(context, UserModel friend) => InkWell(
+  Widget buildChatItem(context, UserModel friend,index) => InkWell(
     onTap: (){
       //navigateTo(context, ChatItemScreen(friend));
     },
@@ -139,28 +119,57 @@ class UsersScreen extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 5.0,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed:(){},
-                          style:ButtonStyle(
-                            padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                            minimumSize: MaterialStatePropertyAll(Size(45,25)),
-                          ) ,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: Text('Add'),
-                        ),
-                        SizedBox(width: 20.0,),
-                        OutlinedButton(
-                          onPressed: (){},
-                          style:ButtonStyle(
-                            padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                            minimumSize: MaterialStatePropertyAll(Size(65,2)),
-                          ) ,
-                        child:Text('Remove'),
-                        ),
-                      ],
+                    StreamBuilder(
+                      stream:FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(friend.uId)
+                      .collection('requests')
+                      .snapshots(),
+                      builder: (context,snapShots){
+                        bool isDone=false;
+                        if(snapShots.hasData){
+                          for (var docReq in snapShots.data!.docs) {
+                            if(docReq.id==userId){
+                              isDone=true;
+                            }
+                          }
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              if(!isDone)
+                                ElevatedButton(
+                                  onPressed:(){
+                                    UsersCubit.get(context).addFriend(index, friend.uId);
+                                  },
+                                  style:ButtonStyle(
+                                    padding: MaterialStatePropertyAll(EdgeInsets.zero),
+                                    minimumSize: MaterialStatePropertyAll(Size(45,25)),
+                                  ) ,
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  child: Text('Add'),
+                                ),
+                              SizedBox(
+                                width: 20.0,
+                              ),
+                              if(isDone)
+                                OutlinedButton(
+                                  onPressed: () {
+                                    UsersCubit.get(context).removeRequest(index, friend.uId);
+                                  },
+                                  style: ButtonStyle(
+                                    padding:
+                                    MaterialStatePropertyAll(EdgeInsets.zero),
+                                    minimumSize:
+                                    MaterialStatePropertyAll(Size(65, 20)),
+                                  ),
+                                  child: Text('Remove'),
+                                ),
+
+                            ],
+                          );
+                        }
+                        else{return Text('wait ...');}
+                      },
                     ),
                   ],
                 ),

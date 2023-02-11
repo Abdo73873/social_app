@@ -2,7 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/users/user_layout.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/chats/chats_screen.dart';
@@ -21,7 +22,7 @@ class HomeCubit extends Cubit<HomeStates> {
   List<Widget> screens = [
     FeedsScreen(),
     ChatsScreen(),
-    UsersScreen(),
+    UserLayout(),
     ProfileScreen(),
   ];
   List<String> titles = [
@@ -144,20 +145,6 @@ class HomeCubit extends Cubit<HomeStates> {
 
 */
 
-  List<UserModel> users = [];
-
-  void getUsersData() {
-    users = [];
-    emit(HomeLoadingGetUsersState());
-    FirebaseFirestore.instance.collection('users').get().then((value) {
-      for (var element in value.docs) {
-        users.add(UserModel.fromJson(element.data()));
-      }
-      emit(HomeSuccessGetUsersState());
-    }).catchError((error) {
-      emit(HomeErrorGetUsersState(error.toString()));
-    });
-  }
 
   bool like = false;
 
@@ -228,7 +215,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   List<UserModel> friendsWhenSearch = [];
   bool found = false;
-
+/*
   void chatSearch(String text) {
     String word = '';
     if (text.isEmpty) {
@@ -260,7 +247,11 @@ class HomeCubit extends Cubit<HomeStates> {
       }
     }
   }
+
+  */
   void typing(){
     emit(HomeChatTypingState());
   }
+
+
 }

@@ -2,7 +2,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:social_app/layout/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/cubit/social_cubit.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/shared/components/components.dart';
