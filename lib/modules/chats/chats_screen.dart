@@ -93,7 +93,10 @@ class ChatsScreen extends StatelessWidget {
     onTap: (){
       navigateTo(context, ChatItemScreen(friend));
     },
-    child: Row(
+    child: BlocConsumer<HomeCubit,HomeStates>(
+      listener: (context,state){},
+      builder: (context,state){
+        return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CircleAvatar(
@@ -132,6 +135,7 @@ class ChatsScreen extends StatelessWidget {
                             'hi, i\'m here ',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ),
                         Padding(
@@ -157,6 +161,8 @@ class ChatsScreen extends StatelessWidget {
               ),
             ),
           ],
-        ),
+        );
+      },
+    ),
   );
 }

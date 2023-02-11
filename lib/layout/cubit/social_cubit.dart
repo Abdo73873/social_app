@@ -260,4 +260,7 @@ class HomeCubit extends Cubit<HomeStates> {
       }
     }
   }
+  void typing(){
+    emit(HomeChatTypingState());
+  }
 }
