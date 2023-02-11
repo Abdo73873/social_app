@@ -119,20 +119,48 @@ class UsersScreen extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   children: [
-                    Text(
-                      friend.name,
-                      maxLines: 1,
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Row(
+                      children: [
+                        Text(
+                          friend.name,
+                          maxLines: 1,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.blue,
+                          size: 18.0,
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: 5.0,
-                    ),
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.blue,
-                      size: 18.0,
+                    SizedBox(height: 5.0,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed:(){},
+                          style:ButtonStyle(
+                            padding: MaterialStatePropertyAll(EdgeInsets.zero),
+                            minimumSize: MaterialStatePropertyAll(Size(45,25)),
+                          ) ,
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                            child: Text('Add'),
+                        ),
+                        SizedBox(width: 20.0,),
+                        OutlinedButton(
+                          onPressed: (){},
+                          style:ButtonStyle(
+                            padding: MaterialStatePropertyAll(EdgeInsets.zero),
+                            minimumSize: MaterialStatePropertyAll(Size(65,2)),
+                          ) ,
+                        child:Text('Remove'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
