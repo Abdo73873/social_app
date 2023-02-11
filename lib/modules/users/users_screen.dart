@@ -152,17 +152,44 @@ class UsersScreen extends StatelessWidget {
                                 width: 20.0,
                               ),
                               if(isDone)
-                                OutlinedButton(
-                                  onPressed: () {
-                                    UsersCubit.get(context).removeRequest(index, friend.uId);
-                                  },
-                                  style: ButtonStyle(
-                                    padding:
-                                    MaterialStatePropertyAll(EdgeInsets.zero),
-                                    minimumSize:
-                                    MaterialStatePropertyAll(Size(65, 20)),
-                                  ),
-                                  child: Text('Remove'),
+                                StreamBuilder(
+                                    stream:FirebaseFirestore.instance
+                                        .collection('users')
+                                        .doc(userId)
+                                        .collection('friends')
+                                        .snapshots(),
+                                    builder: (context,snapShots){
+                                      if(snapShots.hasData){
+                                      bool  accepted=false;
+                                      for (var docFriend in snapShots.data!.docs) {
+                                        if(docFriend.id==friend.uId){
+                                          accepted=true;
+                                        }
+                                      }
+
+                                        return Column(
+                                    children: [
+                                      if(!accepted)
+                                      OutlinedButton(
+                                        onPressed: () {
+                                          UsersCubit.get(context).removeRequest(index, friend.uId);
+                                        },
+                                        style: ButtonStyle(
+                                          padding:
+                                          MaterialStatePropertyAll(EdgeInsets.zero),
+                                          minimumSize:
+                                          MaterialStatePropertyAll(Size(65, 20)),
+                                        ),
+                                        child: Text('Remove'),
+                                      ),
+                                      if(accepted)
+                                        Text('you\'re friends '),
+
+                                    ],
+                                  );
+                                    }
+                                      else{return Text('wait ...');}
+                                    }
                                 ),
 
                             ],
