@@ -52,6 +52,12 @@ class HomeSendMessageErrorState extends HomeStates {}
 class HomeReceiveMessageSuccessState extends HomeStates {}
 class HomeReceiveMessageErrorState extends HomeStates {}
 
+class HomeStreamFriendState extends HomeStates {}
+
+class HomeLoadingGetFriendState extends HomeStates {}
+class HomeSuccessGetFriendState extends HomeStates {}
+
+
 
 class HomeChangeLanguageState extends HomeStates {}
 class HomeLoadingHomeState extends HomeStates {}

@@ -55,7 +55,9 @@ class MyApp extends StatelessWidget {
         create: (context)=>PostsCubit(),
         ),
         BlocProvider(
-          create: (context)=>UsersCubit()..getUsersData(),
+          create: (context)=>UsersCubit()
+            ..getUsersData()
+            ..streamFriends(),
         ),
       ],
       child: BlocConsumer<HomeCubit,HomeStates>(

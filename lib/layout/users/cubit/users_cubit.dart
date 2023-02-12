@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +59,35 @@ class UsersCubit extends Cubit<UsersStates> {
       emit(UsersErrorGetUsersState(error.toString()));
     });
   }
+
+
+
+
+StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> getUserData(String id)=>
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(id)
+        .snapshots()
+        .listen((event) {
+
+});
+
+
+  List<String> friendsIds=[];
+  void streamFriends() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(myId)
+        .collection('friends')
+        .snapshots().listen((event) {
+      friendsIds = [];
+      for (var docFriend in event.docs) {
+        friendsIds.add(docFriend.id);
+      }
+      emit(UsersStreamFriendState());
+    });
+  }
+
 
   List<UserModel> friendsWhenSearch = [];
   bool foundUser = false;
@@ -118,6 +149,7 @@ class UsersCubit extends Cubit<UsersStates> {
 
     }
   }
+
 
   bool foundFriend = false;
 

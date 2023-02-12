@@ -78,6 +78,7 @@ class HomeCubit extends Cubit<HomeStates> {
     });
   }
 
+
   bool like = false;
 
   void likePost(String postId) {
@@ -145,39 +146,8 @@ class HomeCubit extends Cubit<HomeStates> {
         .catchError((error) {});
   }
 
-  List<UserModel> friendsWhenSearch = [];
-  bool found = false;
-  void chatSearch(List<UserModel>users,String text) {
-    String word = '';
-    if (text.isEmpty) {
-      found = false;
-      emit(HomeChatSearchState());
-    } else {
-      friendsWhenSearch = [];
-      for (int iText = 0; iText < text.length; iText++) {
-        word += text[iText];
-      }
-      for (int index = 0; index < users.length; index++) {
-        if(users[index].uId!=myId){
-          if (word.toLowerCase() ==
-              users[index].name
-                  .substring(0,
-                  word.length <= users[index].name.length
-                      ? word.length
-                      : users[index].name.length)
-                  .toLowerCase()) {
-            found = true;
-            friendsWhenSearch.add(users[index]);
-            emit(HomeChatSearchState());
-          }
-        }
-        else{found=false;
-        emit(HomeChatSearchState());
 
-        }
-      }
-    }
-  }
+
 
   void typing(){
     emit(HomeChatTypingState());

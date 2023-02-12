@@ -22,6 +22,9 @@ class UsersAddFriendState extends UsersStates {}
 class UsersRemoveRequestState extends UsersStates {}
 
 
+class UsersStreamFriendState extends UsersStates {}
+
+
 class UsersLoadingUsersState extends UsersStates {}
 class UsersSuccessUsersState extends UsersStates {}
 class UsersErrorUsersState extends UsersStates {
