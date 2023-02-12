@@ -7,6 +7,6 @@ void printFullText(String text){
   pattern.allMatches(text).forEach((match)=>print(match.group(0)));
 }
 
-String? userId='';
+String myId='';
 bool openToAdd=false;
-late  UserModel userModel;
+late  UserModel myModel;

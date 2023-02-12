@@ -13,44 +13,49 @@ import 'package:social_app/shared/components/constants.dart';
 
 class RequestsScreen extends StatelessWidget {
 
-  TextEditingController searchController=TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<UsersCubit, UsersStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var cubit=UsersCubit.get(context);
+        var cubit = UsersCubit.get(context);
         return Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0),
+          backgroundColor: Theme
+              .of(context)
+              .scaffoldBackgroundColor
+              .withOpacity(0),
           body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: StreamBuilder(
-              stream:FirebaseFirestore.instance
-              .collection('users')
-              .doc(userId)
-              .collection('requests')
-              .snapshots(),
-              builder:(context,snapShots){
-                int length=0;
-                if(snapShots.hasData) {
+              stream: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(myId)
+                  .collection('requests')
+                  .snapshots(),
+              builder: (context, snapShots) {
+                if (snapShots.hasData) {
                   return ListView.separated(
                     physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index){
+                    itemBuilder: (context, index) {
                       for (var docRequest in snapShots.data!.docs) {
-                        if(cubit.users[index].uId==docRequest.id){
-                          length++;
-                          return buildChatItem(context,cubit.users[index] );
+                        if(docRequest.id==cubit.users[index].uId){
+                          return buildRequestItem(context,cubit.users[index]);
                         }
-                      }return SizedBox();
+                      }
 
+                      return SizedBox();
                     },
-                    separatorBuilder: (context, index) => SizedBox(height: 20.0,),
-                    itemCount: length,
+                    separatorBuilder: (context, index) =>
+                        SizedBox(height: 20.0,),
+                    itemCount: cubit.users.length,
                   );
                 }
-                else{return Text('Loading data ... please wait');}
-              } ,
+                else {
+                  return Text('Loading data ... please wait');
+                }
+              },
             ),
           ),
         );
@@ -58,91 +63,106 @@ class RequestsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(context, UserModel friend) => InkWell(
-    onTap: (){
-      //navigateTo(context, ChatItemScreen(friend));
-    },
-    child: BlocConsumer<HomeCubit,HomeStates>(
-      listener: (context,state){},
-      builder: (context,state){
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 30.0,
-              child: ClipOval(
-                child: CachedNetworkImage(
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                  imageUrl: friend.image,
-                  errorWidget: (context, url, error) => Image.asset(
-                    'assets/images/person.png',
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
+  Widget buildRequestItem(context, UserModel friend) =>
+      InkWell(
+        onTap: () {
+          //navigateTo(context, ChatItemScreen(friend));
+        },
+        child: BlocConsumer<HomeCubit, HomeStates>(
+          listener: (context, state) {},
+          builder: (context, state) {
+            print(friend.name);
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 30.0,
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                      imageUrl: friend.image,
+                      errorWidget: (context, url, error) =>
+                          Image.asset(
+                            'assets/images/person.png',
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
                       children: [
-                        Text(
-                          friend.name,
-                          maxLines: 1,
-                          style: Theme.of(context).textTheme.titleMedium,
+                        Row(
+                          children: [
+                            Text(
+                              friend.name,
+                              maxLines: 1,
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .titleMedium,
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.blue,
+                              size: 18.0,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Icon(
-                          Icons.check_circle,
-                          color: Colors.blue,
-                          size: 18.0,
+                        SizedBox(height: 5.0,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                UsersCubit.get(context).acceptFriend(friend.uId);
+                              },
+                              style: ButtonStyle(
+                                padding: MaterialStatePropertyAll(
+                                    EdgeInsets.zero),
+                                minimumSize: MaterialStatePropertyAll(
+                                    Size(65, 25)),
+                              ),
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
+                              child: Text('Accept'),
+                            ),
+                            SizedBox(width: 20.0,),
+                            OutlinedButton(
+                              onPressed: () {
+                                UsersCubit.get(context).deleteRequest(friend.uId);
+                              },
+                              style: ButtonStyle(
+                                padding: MaterialStatePropertyAll(
+                                    EdgeInsets.zero),
+                                minimumSize: MaterialStatePropertyAll(
+                                    Size(65, 20)),
+                              ),
+                              child: Text('Delete'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    SizedBox(height: 5.0,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed:(){
-                          },
-                          style:ButtonStyle(
-                            padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                            minimumSize: MaterialStatePropertyAll(Size(65,25)),
-                          ) ,
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: Text('Accept'),
-                        ),
-                        SizedBox(width: 20.0,),
-                        OutlinedButton(
-                          onPressed: (){},
-                          style:ButtonStyle(
-                            padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                            minimumSize: MaterialStatePropertyAll(Size(65,20)),
-                          ) ,
-                          child:Text('Delete'),
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
 
-          ],
-        );
-      },
-    ),
-  );
+              ],
+            );
+          },
+        ),
+      );
 
+  late UserModel item;
 
 
 }

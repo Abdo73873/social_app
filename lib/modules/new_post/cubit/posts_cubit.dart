@@ -78,7 +78,7 @@ emit(PostsLoadingState());
 
     PostsModel model=PostsModel
       (
-        uId: userModel.uId,
+        uId: myModel.uId,
       dateTime: DateFormat.yMd().add_jm().format(DateTime.now()).toString(),
       text: text,
       postImage: postImageUrl,

@@ -103,8 +103,6 @@ ThemeData lightTheme = ThemeData(
 );
 
 ThemeData darkTheme = ThemeData(
-
-  shadowColor: Colors.black,
   primarySwatch: defaultColor,
   primaryColor: defaultColor,
   scaffoldBackgroundColor: Colors.grey.shade800.withOpacity(.5),
@@ -197,10 +195,13 @@ ThemeData darkTheme = ThemeData(
   iconTheme: IconThemeData(
     color: Colors.white,
   ),
+  secondaryHeaderColor:Colors.white,
   colorScheme: ThemeData().colorScheme.copyWith(
     primary: defaultColor,
     secondary: Colors.white,
+
   ),
+
 
 
 );

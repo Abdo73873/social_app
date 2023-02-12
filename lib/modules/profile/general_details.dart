@@ -222,7 +222,7 @@ Widget generalDetails({
       OutlinedButton(
         onPressed: (){
           if(model==null){
-            userModel.generalDetails=GeneralDetailsModel.fromJson({
+            myModel.generalDetails=GeneralDetailsModel.fromJson({
               'school':'',
               'work':'',
               'country':'',

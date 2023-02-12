@@ -21,7 +21,6 @@ class FiendsScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = UsersCubit.get(context);
-        bool search = cubit.found;
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0),
           body: Padding(
@@ -29,64 +28,83 @@ class FiendsScreen extends StatelessWidget {
             child: StreamBuilder(
               stream: FirebaseFirestore.instance
               .collection('users')
-              .doc(userId)
+              .doc(myId)
               .collection('friends')
               .snapshots(),
                builder: (context,snapShot){
                 if(snapShot.hasData){
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 35.0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(1.0),
-                          child: defaultFromField(
-                            context: context,
-                            controller: searchController,
-                            keyboardType: TextInputType.text,
-                            validator: (value) {},
-                            onChange: (text){
-                              cubit.friendsSearch(text);
-                            },
-                            labelText: 'search',
-                            prefix: Icons.search,
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 35.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(1.0),
+                            child: defaultFromField(
+                              context: context,
+                              controller: searchController,
+                              keyboardType: TextInputType.text,
+                              validator: (value) {
+                                return null;
+                              },
+                              onChange: (text) {
+                                cubit.friendsSearch(text);
+                              },
+                              labelText: 'search',
+                              prefix: Icons.search,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 30.0,
-                      ),
-                      Expanded(
-                        child: ListView.separated(
-                          physics: BouncingScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            for (var docFriend in snapShot.data!.docs) {
-                              if(cubit.users[index].uId==docFriend.id){
-                                return buildChatItem(context, cubit.users[index]);
+                        SizedBox(height: 20.0,),
+                        if(searchController.text.isEmpty)
+                          Expanded(
+                          child: ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              for (var docFriend in snapShot.data!.docs) {
+                                if (cubit.users[index].uId == docFriend.id) {
+                                  return buildFriendItem(
+                                      context, cubit.users[index]);
+                                }
                               }
-                            }return SizedBox();
-                          },
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: 20.0,
+                              return SizedBox();
+                            },
+                            separatorBuilder: (context, index) {
+                              for (var docFriend in snapShot.data!.docs) {
+                                if (cubit.users[index].uId == docFriend.id) {
+                                  return SizedBox(height: 20.0,);
+                                }
+                              }
+                              return SizedBox();
+                            },
+                            itemCount: cubit.users.length,
                           ),
-                          itemCount: cubit.users.length,
                         ),
-                      ),
-                    ],
-                  );
+                        if(cubit.foundFriend)
+                          Expanded(
+                          child: ListView.separated(
+                            physics: BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                                  return buildFriendItem(context, cubit.friendsWhenSearch[index]);
+                            },
+                            separatorBuilder: (context, index)=> SizedBox(height: 20.0,),
+                            itemCount: cubit.friendsWhenSearch.length,
+                          ),
+                        ),
+                      ],
+                    );
                 } else{return Text('You have not any Friend');}
 
                },
             ),
+
           ),
         );
       },
     );
   }
 
-  Widget buildChatItem(context, UserModel friend) => InkWell(
+  Widget buildFriendItem(context, UserModel friend) => InkWell(
         onTap: () {
           //navigateTo(context, ChatItemScreen(friend));
         },
@@ -142,7 +160,9 @@ class FiendsScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                UsersCubit.get(context).deleteFriend(friend.uId);
+                              },
                               style: ButtonStyle(
                                 padding:
                                     MaterialStatePropertyAll(EdgeInsets.zero),

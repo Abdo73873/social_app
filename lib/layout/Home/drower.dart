@@ -42,9 +42,9 @@ class NavigateDrawer extends StatelessWidget {
                             width: double.infinity,
                             height: double.infinity,
                             fit: BoxFit.cover,
-                            imageUrl: userModel.image,
+                            imageUrl: myModel.image,
                             errorWidget:(context,url,error)=> Image.asset(
-                              userModel.male
+                              myModel.male
                                   ? 'assets/images/male.jpg'
                                   : 'assets/images/female.jpg',
                               width: double.infinity,
@@ -57,7 +57,7 @@ class NavigateDrawer extends StatelessWidget {
                     ),
                     SizedBox(height: 10.0,),
                     Text(
-                      userModel.name,
+                      myModel.name,
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
@@ -67,7 +67,7 @@ class NavigateDrawer extends StatelessWidget {
                     ),
                     SizedBox(height: 5.0,),
                     Text(
-                      userModel.phone,
+                      myModel.phone,
                       style: TextStyle(
                         color: secondaryColor[200],
                         fontWeight: FontWeight.bold,

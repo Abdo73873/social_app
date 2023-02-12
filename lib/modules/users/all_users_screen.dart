@@ -9,9 +9,10 @@ import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/cubit/users_states.dart';
 import 'package:social_app/models/userModel.dart';
+import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 
-class UsersScreen extends StatelessWidget {
+class AllUsersScreen extends StatelessWidget {
 
   TextEditingController searchController=TextEditingController();
 
@@ -21,13 +22,29 @@ class UsersScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit=UsersCubit.get(context);
-        bool search=cubit.found;
+        bool search=cubit.foundUser;
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
+              SizedBox(
+                height: 35.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: defaultFromField(
+                    context: context,
+                    controller: searchController,
+                    keyboardType: TextInputType.text,
+                    validator: (value) {return null;},
+                    onChange: (text){
+                      cubit.usersSearch(text);
+                    },
+                    labelText: 'search',
+                    prefix: Icons.search,
+                  ),
+                ),
+              ),
               SizedBox(
                 height: 15.0,
               ),
@@ -36,12 +53,12 @@ class UsersScreen extends StatelessWidget {
                   child: ListView.separated(
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
-                      if (cubit.users[index].uId != userId) {
-                        return buildChatItem(context, cubit.users[index],index);
+                      if (cubit.users[index].uId != myId) {
+                        return buildUserItem(context, cubit.users[index],index);
                       }else{return SizedBox();}
                     },
                     separatorBuilder: (context, index) {
-                      if (cubit.users[index].uId != userId) {
+                      if (cubit.users[index].uId != myId) {
                         return SizedBox(
                           height: 20.0,
                         );
@@ -56,7 +73,7 @@ class UsersScreen extends StatelessWidget {
                 Expanded(
                   child: ListView.separated(
                     physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) => buildChatItem(context, cubit.friendsWhenSearch[index],index),
+                    itemBuilder: (context, index) => buildUserItem(context, cubit.friendsWhenSearch[index],index),
                     separatorBuilder: (context, index) => SizedBox(height: 20.0,),
 
                     itemCount:  cubit.friendsWhenSearch.length,
@@ -69,7 +86,7 @@ class UsersScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(context, UserModel friend,index) => InkWell(
+  Widget buildUserItem(context, UserModel friend,index) => InkWell(
     onTap: (){
       //navigateTo(context, ChatItemScreen(friend));
     },
@@ -129,7 +146,7 @@ class UsersScreen extends StatelessWidget {
                         bool isDone=false;
                         if(snapShots.hasData){
                           for (var docReq in snapShots.data!.docs) {
-                            if(docReq.id==userId){
+                            if(docReq.id==myId){
                               isDone=true;
                             }
                           }
@@ -139,7 +156,7 @@ class UsersScreen extends StatelessWidget {
                               if(!isDone)
                                 ElevatedButton(
                                   onPressed:(){
-                                    UsersCubit.get(context).addFriend(index, friend.uId);
+                                    UsersCubit.get(context).sendRequest(friend.uId);
                                   },
                                   style:ButtonStyle(
                                     padding: MaterialStatePropertyAll(EdgeInsets.zero),
@@ -155,7 +172,7 @@ class UsersScreen extends StatelessWidget {
                                 StreamBuilder(
                                     stream:FirebaseFirestore.instance
                                         .collection('users')
-                                        .doc(userId)
+                                        .doc(myId)
                                         .collection('friends')
                                         .snapshots(),
                                     builder: (context,snapShots){
@@ -172,7 +189,7 @@ class UsersScreen extends StatelessWidget {
                                       if(!accepted)
                                       OutlinedButton(
                                         onPressed: () {
-                                          UsersCubit.get(context).removeRequest(index, friend.uId);
+                                          UsersCubit.get(context).removeRequest(friend.uId);
                                         },
                                         style: ButtonStyle(
                                           padding:

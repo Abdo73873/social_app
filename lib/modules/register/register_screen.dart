@@ -27,8 +27,8 @@ class RegisterScreen extends StatelessWidget {
       child: BlocConsumer<RegisterCubit, RegisterStates>(
         listener: (context, state) {
           if(state is SuccessesCreateUserState){
-              CacheHelper.saveData(key: "uId", value:userId).then((value) {
-                HomeCubit.get(context).getUserData();
+              CacheHelper.saveData(key: "uId", value:myId).then((value) {
+                HomeCubit.get(context).getMyData();
                 HomeCubit.get(context).changeBottomScreen(0);
                 navigateAndFinish(context, HomeLayout());
               });

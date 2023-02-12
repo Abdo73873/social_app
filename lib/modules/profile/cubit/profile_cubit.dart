@@ -86,11 +86,11 @@ class ProfileCubit extends Cubit<ProfileStates> {
         emit(ProfileUploadCompletedState());
       }).then((value) {
         if(name=="profile"){
-          userModel.image=value;
+          myModel.image=value;
           emit(ProfileUploadImageProfileSuccessState());
         }
          if(name=="cover"){
-          userModel.cover = value;
+          myModel.cover = value;
           emit(ProfileUploadImageCoverSuccessState());
         }
       }).catchError((error) {
@@ -106,8 +106,8 @@ class ProfileCubit extends Cubit<ProfileStates> {
 
 FirebaseFirestore.instance
     .collection('users')
-    .doc(userId)
-    .update(userModel.toMaP())
+    .doc(myId)
+    .update(myModel.toMaP())
     .then((value) {
         emit(ProfileUpdateSuccessState());
 })

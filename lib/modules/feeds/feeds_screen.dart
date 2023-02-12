@@ -270,7 +270,7 @@ class FeedsScreen extends StatelessWidget {
                   int likes=0;
                   if(snapshot.hasData) {
                     for (var docLike in snapshot.data!.docs) {
-                      if(docLike.id==userId){liked=true;}
+                      if(docLike.id==myId){liked=true;}
                       likes++;
                     }
                     return  Column(
@@ -322,10 +322,10 @@ class FeedsScreen extends StatelessWidget {
                                             width: double.infinity,
                                             height: double.infinity,
                                             fit: BoxFit.cover,
-                                            imageUrl: userModel.image,
+                                            imageUrl: myModel.image,
                                             errorWidget: (context, url, error) =>
                                                 Image.asset(
-                                                  userModel.male
+                                                  myModel.male
                                                       ? 'assets/images/male.jpg'
                                                       : 'assets/images/female.jpg',
                                                   width: double.infinity,
