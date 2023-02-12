@@ -58,16 +58,6 @@ class UsersCubit extends Cubit<UsersStates> {
     });
   }
 
-  /*Future<UserModel> getUserData(String id)=> FirebaseFirestore.instance
-        .collection('users')
-        .doc(id)
-        .get().then((value) {
-      return  UserModel.fromJson(value.data()!);
-    }).catchError((error){
-      emit(UsersErrorUserState(error.toString()));
-    });
-*/
-
   List<UserModel> friendsWhenSearch = [];
   bool foundUser = false;
   void usersSearch(String text) {
@@ -84,7 +74,7 @@ class UsersCubit extends Cubit<UsersStates> {
       if(word.length>=4) {
         if (word.substring(word.length - 4) == ".com") {
           for (int index = 0; index < users.length; index++) {
-            if (users[index].uId != userId) {
+            if (users[index].uId != myId) {
               if (word.toLowerCase() ==
                   users[index].email
                       .substring(0,
@@ -106,7 +96,7 @@ class UsersCubit extends Cubit<UsersStates> {
       }
       else {
         for (int index = 0; index < users.length; index++) {
-          if (users[index].uId != userId) {
+          if (users[index].uId != myId) {
             if (word.toLowerCase() ==
                 users[index].name
                     .substring(0,
@@ -144,7 +134,7 @@ class UsersCubit extends Cubit<UsersStates> {
       }
       FirebaseFirestore.instance
       .collection('users')
-      .doc(userId)
+      .doc(myId)
       .collection('friends')
       .snapshots().listen((event) {
         for (var docFriend in event.docs) {
@@ -180,7 +170,7 @@ class UsersCubit extends Cubit<UsersStates> {
         .collection('users')
         .doc(friendId)
         .collection('requests')
-        .doc(userId).set({});
+        .doc(myId).set({});
       emit(UsersAddFriendState());
   }
   void removeRequest(String friendId){
@@ -188,14 +178,14 @@ class UsersCubit extends Cubit<UsersStates> {
         .collection('users')
         .doc(friendId)
         .collection('requests')
-        .doc(userId).delete();
+        .doc(myId).delete();
     emit(UsersRemoveRequestState());
   }
 
   void acceptFriend(String friendId){
     FirebaseFirestore.instance
         .collection('users')
-        .doc(userId)
+        .doc(myId)
         .collection('friends')
         .doc(friendId).set({});
     emit(UsersAddFriendState());
@@ -204,11 +194,20 @@ class UsersCubit extends Cubit<UsersStates> {
   void deleteRequest(String friendId){
     FirebaseFirestore.instance
         .collection('users')
-        .doc(userId)
+        .doc(myId)
         .collection('requests')
         .doc(friendId).delete();
     emit(UsersRemoveRequestState());
   }
+  void deleteFriend(String friendId){
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(myId)
+        .collection('friends')
+        .doc(friendId).delete();
+    emit(UsersRemoveRequestState());
+  }
+
 
 
 

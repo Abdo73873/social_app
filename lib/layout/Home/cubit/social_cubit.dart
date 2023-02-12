@@ -2,15 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:social_app/layout/Home/cubit/social_states.dart';
-import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/user_layout.dart';
-import 'package:social_app/models/postsModel.dart';
+import 'package:social_app/models/message_model.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/chats/chats_screen.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
 import 'package:social_app/modules/profile/profile_screen.dart';
-import 'package:social_app/modules/users/all_users_screen.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
 
@@ -32,7 +31,6 @@ class HomeCubit extends Cubit<HomeStates> {
     'Users',
     'Profile',
   ];
-
 
   void changeBottomScreen(int index) {
     if (index < 2) {
@@ -70,7 +68,7 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(HomeLoadingGetUserState());
     FirebaseFirestore.instance
         .collection('users')
-        .doc(userId)
+        .doc(myId)
         .get()
         .then((value) {
       myModel = UserModel.fromJson(value.data()!);
@@ -79,73 +77,6 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(HomeErrorGetUserState(error.toString()));
     });
   }
-
-/*
-  List<PostsModel> posts = [];
-  int likes =0;
-  int index=0;
-
-  void getPosts() {
-    emit(HomeLoadingGetPostsState());
-    FirebaseFirestore.instance.collection('posts')
-    .snapshots().listen((event) {
-      posts = [];
-       index=0;
-      likes =0;
-      for (var docPost in event.docs) {
-        print("----------------------\n");
-        posts.add(PostsModel.fromJson(docPost.data()));
-        docPost.reference
-            .collection('likes')
-            .get()
-            .then((value) {
-              for (var element in value.docs) {
-                print("==================\n");
-                likes++;
-                emit(HomeCounterLikesState());
-              }
-        }).catchError((error){
-          emit(HomeErrorLikeState(error.toString()));
-        });
-
-      }
-      emit(HomeSuccessGetPostsState());
-    });
-  }
-
-*/
-
-/*
-
-  void getLikes(String postId){
-
-    emit(HomeLoadingGetPostsState());
-    for(var element in posts){
-      if(element.postId==postId){
-    FirebaseFirestore.instance.
-    collection('posts')
-        .doc(postId)
-        .collection('likes')
-    .snapshots().listen((event) {
-      index = 0;
-      likes = 0;
-      for (var docLikes in event.docs) {
-        print("----------------------\n");
-
-        element.usersLiked;
-      }
-    }
-
-        }
-
-
-      }
-      emit(HomeSuccessGetPostsState());
-
-  }
-
-*/
-
 
   bool like = false;
 
@@ -156,7 +87,7 @@ class HomeCubit extends Cubit<HomeStates> {
           .collection('posts')
           .doc(postId)
           .collection('likes')
-          .doc(userId)
+          .doc(myId)
           .set({
         'like': true,
       }).then((value) {
@@ -169,7 +100,7 @@ class HomeCubit extends Cubit<HomeStates> {
           .collection('posts')
           .doc(postId)
           .collection('likes')
-          .doc(userId)
+          .doc(myId)
           .delete();
       emit(HomeSuccessUnLikeState());
     }
@@ -180,7 +111,7 @@ class HomeCubit extends Cubit<HomeStates> {
         .collection('posts')
         .doc(postId)
         .collection('comments')
-        .doc(userId)
+        .doc(myId)
         .update({
           'comments': FieldValue.arrayUnion([comment]),
         })
@@ -193,7 +124,7 @@ class HomeCubit extends Cubit<HomeStates> {
         .collection('posts')
         .doc(postId)
         .collection('comments')
-        .doc(userId)
+        .doc(myId)
         .update({
           'comments': FieldValue.arrayRemove([comment]),
         })
@@ -206,7 +137,7 @@ class HomeCubit extends Cubit<HomeStates> {
         .collection('posts')
         .doc(postId)
         .collection('comments')
-        .doc(userId)
+        .doc(myId)
         .update({
           'comments': FieldValue.delete,
         })
@@ -227,7 +158,7 @@ class HomeCubit extends Cubit<HomeStates> {
         word += text[iText];
       }
       for (int index = 0; index < users.length; index++) {
-        if(users[index].uId!=userId){
+        if(users[index].uId!=myId){
           if (word.toLowerCase() ==
               users[index].name
                   .substring(0,
@@ -252,5 +183,47 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(HomeChatTypingState());
   }
 
+    void sendMessage({
+  required String receiverId,
+  required String text ,
+      String? image,
+}){
+    MessageModel message=MessageModel(
+      senderId: myId,
+      text: text,
+      dateTime: DateFormat.yMd().add_jm().format(DateTime.now()),
+      receiverId: receiverId,
+      image: image,
+
+    );
+    //ser my chars
+FirebaseFirestore.instance
+    .collection('users')
+    .doc(myId)
+    .collection('friends')
+    .doc(receiverId)
+    .collection('chat')
+    .add(message.toMap()).then((value) {
+    emit(HomeSendMessageSuccessState());
+}).catchError((error){
+  emit(HomeSendMessageErrorState());
+});
+    //ser receiver chars
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(receiverId)
+        .collection('friends')
+        .doc(myId)
+        .collection('chat')
+        .add(message.toMap()).then((value) {
+      emit(HomeSendMessageSuccessState());
+    }).catchError((error){
+      emit(HomeSendMessageErrorState());
+    });
+
+
+
+    }
 
 }

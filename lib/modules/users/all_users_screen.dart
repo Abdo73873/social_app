@@ -53,12 +53,12 @@ class AllUsersScreen extends StatelessWidget {
                   child: ListView.separated(
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
-                      if (cubit.users[index].uId != userId) {
+                      if (cubit.users[index].uId != myId) {
                         return buildUserItem(context, cubit.users[index],index);
                       }else{return SizedBox();}
                     },
                     separatorBuilder: (context, index) {
-                      if (cubit.users[index].uId != userId) {
+                      if (cubit.users[index].uId != myId) {
                         return SizedBox(
                           height: 20.0,
                         );
@@ -146,7 +146,7 @@ class AllUsersScreen extends StatelessWidget {
                         bool isDone=false;
                         if(snapShots.hasData){
                           for (var docReq in snapShots.data!.docs) {
-                            if(docReq.id==userId){
+                            if(docReq.id==myId){
                               isDone=true;
                             }
                           }
@@ -172,7 +172,7 @@ class AllUsersScreen extends StatelessWidget {
                                 StreamBuilder(
                                     stream:FirebaseFirestore.instance
                                         .collection('users')
-                                        .doc(userId)
+                                        .doc(myId)
                                         .collection('friends')
                                         .snapshots(),
                                     builder: (context,snapShots){

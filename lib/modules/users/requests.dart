@@ -31,7 +31,7 @@ class RequestsScreen extends StatelessWidget {
             child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('users')
-                  .doc(userId)
+                  .doc(myId)
                   .collection('requests')
                   .snapshots(),
               builder: (context, snapShots) {

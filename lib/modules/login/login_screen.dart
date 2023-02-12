@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is SuccessesLoginState) {
-            CacheHelper.saveData(key: "uId", value:userId).then((value) {
+            CacheHelper.saveData(key: "uId", value:myId).then((value) {
               HomeCubit.get(context).getMyData();
               HomeCubit.get(context).changeBottomScreen(0);
               navigateAndFinish(context, HomeLayout());

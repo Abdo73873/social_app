@@ -28,7 +28,7 @@ class FiendsScreen extends StatelessWidget {
             child: StreamBuilder(
               stream: FirebaseFirestore.instance
               .collection('users')
-              .doc(userId)
+              .doc(myId)
               .collection('friends')
               .snapshots(),
                builder: (context,snapShot){
@@ -160,7 +160,9 @@ class FiendsScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             OutlinedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                UsersCubit.get(context).deleteFriend(friend.uId);
+                              },
                               style: ButtonStyle(
                                 padding:
                                     MaterialStatePropertyAll(EdgeInsets.zero),

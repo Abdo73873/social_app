@@ -26,7 +26,7 @@ class ChatsScreen extends StatelessWidget {
           child: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('users')
-                .doc(userId)
+                .doc(myId)
                 .collection('friends')
                 .snapshots(),
             builder: (context,snapShot){

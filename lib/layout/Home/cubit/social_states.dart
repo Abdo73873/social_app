@@ -46,6 +46,12 @@ class HomeCounterLikesState extends HomeStates {}
 class HomeChatSearchState extends HomeStates {}
 class HomeChatTypingState extends HomeStates {}
 
+class HomeSendMessageSuccessState extends HomeStates {}
+class HomeSendMessageErrorState extends HomeStates {}
+
+class HomeReceiveMessageSuccessState extends HomeStates {}
+class HomeReceiveMessageErrorState extends HomeStates {}
+
 
 class HomeChangeLanguageState extends HomeStates {}
 class HomeLoadingHomeState extends HomeStates {}

@@ -64,6 +64,7 @@ Widget defaultFromField({
           borderRadius: BorderRadius.circular(20.0),
           gapPadding: 20.0,
         ),
+
         prefixIcon: prefix != null
             ? Icon(
                 prefix,
@@ -81,7 +82,8 @@ Widget defaultFromField({
             borderRadius: BorderRadius.circular(30),
             borderSide: BorderSide(
               color: secondaryColor,
-            )),
+            )
+        ),
       ),
       style: Theme.of(context).textTheme.bodyMedium,
       textDirection: TextDirection.ltr,

@@ -20,6 +20,7 @@ TextEditingController messageController=TextEditingController();
       listener: (context,state){},
       builder: (context,state){
         return  Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar:AppBar(
             titleSpacing: 0.0,
             title: Row(
@@ -59,51 +60,8 @@ TextEditingController messageController=TextEditingController();
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
-                      Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 10.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadiusDirectional.only(
-                              bottomEnd: Radius.circular(15.0),
-                              topStart: Radius.circular(15.0),
-                              topEnd: Radius.circular(15.0),
-                            ),
-                          ),
-                          child: Text('hello world',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w500,
-                              )),
-                        ),
-                      ),
-                      Align(
-                        alignment: AlignmentDirectional.centerEnd,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 10.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: HomeCubit.get(context).isDark?defaultColor:defaultColor.withOpacity(0.2),
-                            borderRadius: BorderRadiusDirectional.only(
-                              bottomStart: Radius.circular(15.0),
-                              topStart: Radius.circular(15.0),
-                              topEnd: Radius.circular(15.0),
-                            ),
-                          ),
-                          child: Text('hello world',
-                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w500,
-                              )),
-                        ),
-                      ),
+                      buildMessage(),
+                      buildMyMessage(context),
                     ],
                   ),
                 ),
@@ -116,34 +74,38 @@ TextEditingController messageController=TextEditingController();
                     if(messageController.text.isEmpty)
                       Container(
                         height: 50,
-                        width: 45.0,
                         decoration: BoxDecoration(
                           color:Theme.of(context).scaffoldBackgroundColor.withOpacity(.9),
                           borderRadius: BorderRadiusDirectional.only(
                             topStart: Radius.circular(10.0),
                             bottomStart: Radius.circular(10.0),
                           ),
-                          border: Border.all(color: Colors.grey),
+                          border: Border.all(),
                         ),
-                        child: MaterialButton(
-                          padding: EdgeInsetsDirectional.all(.8),
-                          minWidth: 1,
-                          onPressed: () {
+                        child: Row(
+                          children: [
+                            MaterialButton(
+                              padding: EdgeInsetsDirectional.all(.8),
+                              minWidth: 1,
+                              onPressed: () {
 
-                          },
-                          child: Icon(IconBroken.Camera,size: 25.0,color: Theme.of(context).iconTheme.color,),
+                              },
+                              child: Icon(IconBroken.Camera,size: 25.0,color: Theme.of(context).iconTheme.color,),
+                            ),
+                            MaterialButton(
+                              padding: EdgeInsetsDirectional.all(.8),
+                              minWidth: 1,
+                              onPressed: () {
+
+                              },
+                              child: Icon(IconBroken.Image,size: 25.0,color: Theme.of(context).iconTheme.color,),
+                            ),
+                          ],
                         ),
                       ),
                     Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadiusDirectional.only(
-                            topStart: Radius.circular(10.0),
-                            topEnd: Radius.circular(10.0),
-                          ),
-                          border: Border.all(color: Colors.grey),
-                        ),
+                      child: SizedBox(
+                        height:messageController.text.isEmpty?50.0:null,
                         child: TextFormField(
                           onChanged: (value){
                           HomeCubit.get(context).typing();
@@ -156,7 +118,7 @@ TextEditingController messageController=TextEditingController();
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
-                            border: InputBorder.none,
+                            border: OutlineInputBorder(),
                             hintText: ' type your message here...',
                             hintStyle: Theme.of(context).textTheme.titleSmall,
                           ),
@@ -164,7 +126,7 @@ TextEditingController messageController=TextEditingController();
                       ),
                     ),
                     Container(
-                      height: 49,
+                      height: 50,
                       width: 45.0,
                       decoration: BoxDecoration(
                         color: defaultColor,
@@ -172,12 +134,13 @@ TextEditingController messageController=TextEditingController();
                           topEnd: Radius.circular(10.0),
                           bottomEnd: Radius.circular(10.0),
                         ),
-                        border: Border.all(color: Colors.grey),
+                        border: Border.all(),
                       ),
                       child: MaterialButton(
                         minWidth: 1,
                         padding: EdgeInsetsDirectional.all(.8),
                         onPressed: () {
+                          HomeCubit.get(context).sendMessage(receiverId: friend.uId, text: messageController.text);
                         },
                         child:  Icon(Icons.send,size: 25.0,color: Colors.white,),
 
@@ -193,4 +156,52 @@ TextEditingController messageController=TextEditingController();
       },
     );
   }
+
+Widget buildMessage()=> Align(
+  alignment: AlignmentDirectional.centerStart,
+  child: Container(
+    padding: EdgeInsets.symmetric(
+      vertical: 8.0,
+      horizontal: 10.0,
+    ),
+    decoration: BoxDecoration(
+      color: Colors.grey[300],
+      borderRadius: BorderRadiusDirectional.only(
+        bottomEnd: Radius.circular(15.0),
+        topStart: Radius.circular(15.0),
+        topEnd: Radius.circular(15.0),
+      ),
+    ),
+    child: Text('hello world',
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 16.0,
+          fontWeight: FontWeight.w500,
+        )),
+  ),
+);
+Widget buildMyMessage(context)=>  Align(
+  alignment: AlignmentDirectional.centerEnd,
+  child: Container(
+    padding: EdgeInsets.symmetric(
+      vertical: 8.0,
+      horizontal: 10.0,
+    ),
+    decoration: BoxDecoration(
+      color: HomeCubit.get(context).isDark?defaultColor:defaultColor.withOpacity(0.2),
+      borderRadius: BorderRadiusDirectional.only(
+        bottomStart: Radius.circular(15.0),
+        topStart: Radius.circular(15.0),
+        topEnd: Radius.circular(15.0),
+      ),
+    ),
+    child: Text('hello world',
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+          fontSize: 16.0,
+          fontWeight: FontWeight.w500,
+        )),
+  ),
+);
+
+
 }

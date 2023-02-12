@@ -106,7 +106,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
 
 FirebaseFirestore.instance
     .collection('users')
-    .doc(userId)
+    .doc(myId)
     .update(myModel.toMaP())
     .then((value) {
         emit(ProfileUpdateSuccessState());

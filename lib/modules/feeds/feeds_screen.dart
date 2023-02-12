@@ -270,7 +270,7 @@ class FeedsScreen extends StatelessWidget {
                   int likes=0;
                   if(snapshot.hasData) {
                     for (var docLike in snapshot.data!.docs) {
-                      if(docLike.id==userId){liked=true;}
+                      if(docLike.id==myId){liked=true;}
                       likes++;
                     }
                     return  Column(
