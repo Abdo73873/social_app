@@ -24,11 +24,12 @@ ScrollController scrollController=ScrollController();
         return BlocConsumer<HomeCubit,HomeStates>(
           listener: (context,state){},
           builder: (context,state){
-            if(HomeCubit.get(context).messages.isNotEmpty) {
+            var cubit=HomeCubit.get(context);
+
+            if(scrollController.hasClients) {
               scrollController.jumpTo(
                   scrollController.position.maxScrollExtent);
             }
-            var cubit=HomeCubit.get(context);
             return  Scaffold(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               appBar:AppBar(
@@ -73,9 +74,7 @@ ScrollController scrollController=ScrollController();
                           Expanded(
                             child: ListView.separated(
                               itemBuilder: (context, index) {
-                                if(messageController.text.isNotEmpty){
-                                  scrollController.jumpTo(scrollController.position.maxScrollExtent);
-                                }
+
                                 if(cubit.messages[index].senderId==myId){
                                   return buildMyMessage(context, cubit.messages[index]);
                                 } return    buildMessage(cubit.messages[index]);

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -161,8 +162,9 @@ class HomeCubit extends Cubit<HomeStates> {
     MessageModel message=MessageModel(
       senderId: myId!,
       text: text,
-      dateTime: DateTime.now().toString(),
+      dateTime: DateFormat.yMd().add_jms().format(DateTime.now()),
       receiverId: receiverId,
+      createdTime: Timestamp.now().toString(),
       image: image,
 
     );
@@ -204,7 +206,7 @@ FirebaseFirestore.instance
         .collection('friends')
         .doc(friedId)
         .collection('chat')
-        .orderBy('dateTime')
+        .orderBy('createdTime')
         .snapshots()
         .listen((event) {
           messages=[];
