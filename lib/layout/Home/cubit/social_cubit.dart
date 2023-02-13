@@ -159,9 +159,9 @@ class HomeCubit extends Cubit<HomeStates> {
       String? image,
 }){
     MessageModel message=MessageModel(
-      senderId: myId,
+      senderId: myId!,
       text: text,
-      dateTime: DateFormat.yMd().add_jm().format(DateTime.now()),
+      dateTime: DateTime.now().toString(),
       receiverId: receiverId,
       image: image,
 
@@ -195,5 +195,26 @@ FirebaseFirestore.instance
 
 
     }
+
+    List<MessageModel> messages=[];
+    void getMessage(String friedId){
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(myId)
+        .collection('friends')
+        .doc(friedId)
+        .collection('chat')
+        .orderBy('dateTime')
+        .snapshots()
+        .listen((event) {
+          messages=[];
+          for (var messageId in event.docs) {
+            messages.add(MessageModel.fromJson(messageId.data()));
+          }
+          emit(HomeReceiveMessageSuccessState());
+    });
+
+    }
+
 
 }

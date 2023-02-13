@@ -220,8 +220,14 @@ StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> getUserData(String id
         .doc(myId)
         .collection('friends')
         .doc(friendId).set({});
-    emit(UsersAddFriendState());
     deleteRequest(friendId);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(friendId)
+        .collection('friends')
+        .doc(myId).set({});
+    emit(UsersAddFriendState());
+
   }
   void deleteRequest(String friendId){
     FirebaseFirestore.instance
