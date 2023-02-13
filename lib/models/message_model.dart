@@ -4,13 +4,13 @@ class MessageModel{
   late String text;
     String? image;
   late String dateTime;
-    late String createdTime;
+    late int indexMessage;
   MessageModel({
     required this.senderId,
     required this.receiverId,
     required this.text,
     required this.dateTime,
-    required this.createdTime,
+    required this.indexMessage,
      this.image,
 
 });
@@ -20,7 +20,7 @@ class MessageModel{
     text=json['text'];
     dateTime=json['dateTime'];
     image=json['image'];
-    createdTime=json['createdTime'];
+    indexMessage=json['indexMessage'];
   }
 
   Map<String,dynamic> toMap(){
@@ -30,7 +30,7 @@ class MessageModel{
       'text':text,
       'dateTime':dateTime,
       'image':image,
-      'createdTime':createdTime,
+      'indexMessage':indexMessage,
     };
   }
 

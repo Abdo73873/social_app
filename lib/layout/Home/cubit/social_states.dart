@@ -58,6 +58,16 @@ class HomeLoadingGetFriendState extends HomeStates {}
 class HomeSuccessGetFriendState extends HomeStates {}
 
 
+class HomeChatGetImageSuccessState extends HomeStates {}
+class HomeChatGetImageErrorState extends HomeStates {}
+
+class HomeChatUploadImageLoadingState extends HomeStates {}
+class HomeChatUploadImageSuccessState extends HomeStates {}
+class HomeChatUploadImageErrorState extends HomeStates {}
+
+class HomeChatRemoveImageState extends HomeStates {}
+
+
 
 class HomeChangeLanguageState extends HomeStates {}
 class HomeLoadingHomeState extends HomeStates {}

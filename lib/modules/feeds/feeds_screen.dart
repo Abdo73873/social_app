@@ -67,7 +67,7 @@ class FeedsScreen extends StatelessWidget {
                 ),
                 if (UsersCubit.get(context).users.isNotEmpty)
                   StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+                    stream: FirebaseFirestore.instance.collection('posts').orderBy('dateTime').snapshots(),
                     builder: (context, snapShot) {
                       late List<PostsModel> postModel=[];
                       if (snapShot.hasData) {

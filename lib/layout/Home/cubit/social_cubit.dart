@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/layout/users/user_layout.dart';
@@ -13,6 +17,8 @@ import 'package:social_app/modules/feeds/feeds_screen.dart';
 import 'package:social_app/modules/profile/profile_screen.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 
 class HomeCubit extends Cubit<HomeStates> {
   HomeCubit() : super(HomeInitializeState());
@@ -164,7 +170,7 @@ class HomeCubit extends Cubit<HomeStates> {
       text: text,
       dateTime: DateFormat.yMd().add_jms().format(DateTime.now()),
       receiverId: receiverId,
-      createdTime: Timestamp.now().toString(),
+      indexMessage:messages.isNotEmpty?(messages[messages.length-1].indexMessage+1):0,
       image: image,
 
     );
@@ -176,6 +182,7 @@ FirebaseFirestore.instance
     .doc(receiverId)
     .collection('chat')
     .add(message.toMap()).then((value) {
+      chatImage=null;
     emit(HomeSendMessageSuccessState());
 }).catchError((error){
   emit(HomeSendMessageErrorState());
@@ -198,25 +205,86 @@ FirebaseFirestore.instance
 
     }
 
+
+
     List<MessageModel> messages=[];
-    void getMessage(String friedId){
+    void getMessage(String friedId,int limit){
     FirebaseFirestore.instance
         .collection('users')
         .doc(myId)
         .collection('friends')
         .doc(friedId)
         .collection('chat')
-        .orderBy('createdTime')
+        .orderBy('indexMessage')
+          .limitToLast(limit)
         .snapshots()
         .listen((event) {
           messages=[];
           for (var messageId in event.docs) {
             messages.add(MessageModel.fromJson(messageId.data()));
           }
+
           emit(HomeReceiveMessageSuccessState());
     });
 
     }
+
+  final picker = ImagePicker();
+  File? chatImage;
+
+  Future getImage(isGallery) async {
+    ImageSource source;
+    if (isGallery) {
+      source = ImageSource.gallery;
+    } else {
+      source = ImageSource.camera;
+    }
+    final pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+        chatImage = File(pickedFile.path);
+        emit(HomeChatGetImageSuccessState());
+    } else {
+      print('no image selected');
+      emit(HomeChatGetImageErrorState());
+    }
+  }
+
+  bool isUploadCompleted=true;
+  void uploadImage({
+    required String receiverId,
+    String? text,
+}) {
+    isUploadCompleted=false;
+    emit(HomeChatUploadImageLoadingState());
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('chats/${Uri
+        .file(chatImage!.path)
+        .pathSegments
+        .last}')
+        .putFile(chatImage!)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        sendMessage(
+            receiverId: receiverId,
+            text: text!,
+          image: value,
+        );
+        isUploadCompleted=true;
+        emit(HomeChatUploadImageSuccessState());
+      }).catchError((error) {
+        emit(HomeChatUploadImageErrorState());
+      });
+    }).catchError((error) {
+      emit(HomeChatUploadImageErrorState());
+    });
+  }
+
+  void removeImage(){
+    chatImage=null;
+    emit(HomeChatRemoveImageState());
+  }
 
 
 }
