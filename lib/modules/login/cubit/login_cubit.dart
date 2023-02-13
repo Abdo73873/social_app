@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/modules/login/cubit/login_states.dart';
 import 'package:social_app/shared/components/constants.dart';
-import 'package:social_app/shared/network/local/cache_helper.dart';
 
 
  class LoginCubit extends Cubit<LoginStates>{
@@ -24,6 +25,14 @@ import 'package:social_app/shared/network/local/cache_helper.dart';
        password: password,
      ).then((value) {
        myId=value.user!.uid;
+       FirebaseMessaging.instance.getToken().then((value) {
+         deviceToken=value;
+         myModel.deviceToken=deviceToken;
+         FirebaseFirestore.instance
+             .collection('users')
+             .doc(myId)
+             .update(myModel.toMaP());
+       });
        emit(SuccessesLoginState());
          }).catchError((error){
        emit(ErrorLoginState(error.toString()));

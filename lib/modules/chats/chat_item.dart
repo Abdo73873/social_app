@@ -93,6 +93,7 @@ class ChatItemScreen extends StatelessWidget {
                                 children: [
                                   ListView.separated(
                                     itemBuilder: (context, index) {
+
                                       if (cubit.messages[index].senderId == myId) {
                                         return buildMyMessage(
                                             context, cubit.messages[index]);

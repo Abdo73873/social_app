@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/Home/cubit/social_cubit.dart';
@@ -12,14 +13,40 @@ import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
 import 'package:social_app/modules/register/register_screen.dart';
 import 'package:social_app/shared/bloc_observer.dart';
+import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
 import 'package:social_app/shared/styles/themes.dart';
+
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  showToast(message: 'on BackGround message', state: ToastState.success);
+
+
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
     await CacheHelper.init();
   await Firebase.initializeApp();
+  deviceToken=await FirebaseMessaging.instance.getToken();
+  FirebaseMessaging.onMessage.listen((event) {
+    print(event.data.toString());
+    showToast(message: 'on message', state: ToastState.success);
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    print(event.data.toString());
+    showToast(message: 'on open App message', state: ToastState.success);
+
+  });
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.instance.onTokenRefresh.listen((event) { });
+  FirebaseMessaging.instance.subscribeToTopic('requestsNotification');
+  FirebaseMessaging.instance.unsubscribeFromTopic('requestsNotification');
+
+  print(deviceToken);
   bool? isDark= CacheHelper.getData(key: 'isDark',);
    myId =CacheHelper.getData(key: "uId");
    Widget startWidget;

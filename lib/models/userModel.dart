@@ -2,6 +2,7 @@ class UserModel {
   late String name;
   late String email;
   late String uId;
+   String? deviceToken;
   late String phone;
   late bool male;
   String? bio;
@@ -16,6 +17,7 @@ class UserModel {
     required this.uId,
     required this.phone,
     required this.male,
+     this.deviceToken,
     this.bio,
     required this.image,
     this.cover,
@@ -28,6 +30,7 @@ class UserModel {
     name = json["name"];
     email = json["email"];
     uId = json["uId"];
+    deviceToken = json["deviceToken"];
     phone = json["phone"];
     male = json["male"];
     bio = json["bio"];
@@ -43,6 +46,7 @@ class UserModel {
       "email": email,
       "phone": phone,
       "uId": uId,
+      "deviceToken": deviceToken,
       "male": male,
       "bio": bio,
       "image": image,

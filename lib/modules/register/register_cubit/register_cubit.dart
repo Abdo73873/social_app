@@ -70,6 +70,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
       name: name,
       email: email,
       uId: uId,
+      deviceToken: deviceToken,
       phone: phone,
       male: male,
       bio: bio,

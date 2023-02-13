@@ -10,5 +10,8 @@ class ErrorLoginState extends LoginStates{
   ErrorLoginState(this.error);
 
 }
+
+class SuccessesPushTokenState extends LoginStates{}
+
 class ChangeVisibilityState extends LoginStates{}
 class ChangeLanguageState extends LoginStates{}

@@ -79,7 +79,7 @@ class ProfileCubit extends Cubit<ProfileStates> {
         .file(image!.path)
         .pathSegments
         .last}')
-        .putFile(image!)
+        .putFile(image)
         .then((value) {
       value.ref.getDownloadURL().whenComplete((){
         isUploadCompleted=true;
