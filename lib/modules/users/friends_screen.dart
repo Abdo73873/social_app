@@ -9,6 +9,7 @@ import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/cubit/users_states.dart';
 import 'package:social_app/models/userModel.dart';
+import 'package:social_app/modules/users/user_profile.dart';
 import 'package:social_app/shared/components/components.dart';
 
 class FiendsScreen extends StatelessWidget {
@@ -100,7 +101,7 @@ class FiendsScreen extends StatelessWidget {
 
   Widget buildFriendItem(context, UserModel friend) => InkWell(
         onTap: () {
-          //navigateTo(context, ChatItemScreen(friend));
+          navigateTo(context, UserProfileScreen(friend));
         },
         child: BlocConsumer<HomeCubit, HomeStates>(
           listener: (context, state) {},

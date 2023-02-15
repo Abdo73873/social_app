@@ -66,7 +66,18 @@ class HomeChatUploadImageLoadingState extends HomeStates {}
 class HomeChatUploadImageSuccessState extends HomeStates {}
 class HomeChatUploadImageErrorState extends HomeStates {}
 
+
+class HomeCommentGetImageSuccessState extends HomeStates {}
+class HomeCommentGetImageErrorState extends HomeStates {}
+
+class HomeCommentUploadImageLoadingState extends HomeStates {}
+class HomeCommentUploadImageSuccessState extends HomeStates {}
+class HomeCommentUploadImageErrorState extends HomeStates {}
+
+
 class HomeChatRemoveImageState extends HomeStates {}
+class HomeCommentAddSuccessState extends HomeStates {}
+class HomeCommentAddErrorState extends HomeStates {}
 
 
 

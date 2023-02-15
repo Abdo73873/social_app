@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/layout/users/user_layout.dart';
+import 'package:social_app/models/comments_model.dart';
 import 'package:social_app/models/message_model.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
@@ -131,18 +132,82 @@ class HomeCubit extends Cubit<HomeStates> {
     }
   }
 
-  void addComment(String postId, List<Map<String, String>> comment) {
+  File? commentImage;
+
+  Future getCommentImage(isGallery) async {
+    ImageSource source;
+    if (isGallery) {
+      source = ImageSource.gallery;
+    } else {
+      source = ImageSource.camera;
+    }
+    final pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+      commentImage = File(pickedFile.path);
+      emit(HomeCommentGetImageSuccessState());
+    } else {
+      print('no image selected');
+      emit(HomeCommentGetImageErrorState());
+    }
+  }
+
+  void uploadCommentImage({
+    required String postId,
+     String? text,
+  }) {
+    emit(HomeCommentUploadImageLoadingState());
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('comments/${Uri
+        .file(chatImage!.path)
+        .pathSegments
+        .last}')
+        .putFile(chatImage!)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+       addComment(
+         postId: postId,
+       text:text ,
+       image: value
+       );
+        emit(HomeCommentUploadImageSuccessState());
+      }).catchError((error) {
+        emit(HomeCommentUploadImageErrorState());
+      });
+    }).catchError((error) {
+      emit(HomeCommentUploadImageErrorState());
+    });
+  }
+
+
+  void addComment({
+   required String postId,
+    String? text,
+    String? image,
+
+}) {
+    CommentModel model=CommentModel(
+        uId: myId!,
+        text: text,
+        image: image,
+        dateTime: DateFormat.yMd().add_jms().format(DateTime.now()),
+    );
     FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
         .collection('comments')
         .doc(myId)
-        .update({
-          'comments': FieldValue.arrayUnion([comment]),
-        })
-        .then((value) {})
-        .catchError((error) {});
+        .set(model.toMap())
+        .then((value) {
+          emit(HomeCommentAddSuccessState());
+    })
+        .catchError((error) {
+      emit(HomeCommentAddErrorState());
+
+    });
   }
+
 
   void updateComment(String postId, String comment) {
     FirebaseFirestore.instance
@@ -249,7 +314,7 @@ FirebaseFirestore.instance
   final picker = ImagePicker();
   File? chatImage;
 
-  Future getImage(isGallery) async {
+  Future getChatImage(isGallery) async {
     ImageSource source;
     if (isGallery) {
       source = ImageSource.gallery;
@@ -268,7 +333,7 @@ FirebaseFirestore.instance
   }
 
   bool isUploadCompleted=true;
-  void uploadImage({
+  void uploadChatImage({
     required String receiverId,
     String? text,
 }) {

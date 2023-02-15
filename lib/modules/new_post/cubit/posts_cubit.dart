@@ -85,15 +85,11 @@ emit(PostsLoadingState());
     );
 
     FirebaseFirestore.instance
-        .collection('users')
-        .doc(myId)
        .collection('posts')
         .add(model.toMaP())
         .then((docRef) {
           model.postId=docRef.id;
       FirebaseFirestore.instance
-          .collection('users')
-          .doc(myId)
           .collection('posts')
           .doc(docRef.id)
           .update(model.toMaP());

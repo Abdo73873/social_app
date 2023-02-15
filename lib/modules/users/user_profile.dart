@@ -12,6 +12,8 @@ import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
 import 'package:social_app/modules/profile/general_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:social_app/modules/users/all_users_screen.dart';
+import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
 
@@ -21,6 +23,9 @@ class UserProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title:Text(user.name) ,
+      ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: BlocConsumer<HomeCubit, HomeStates>(

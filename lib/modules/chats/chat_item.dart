@@ -164,7 +164,8 @@ class ChatItemScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                    if (!cubit.isUploadCompleted) CircularProgressIndicator(),
+                    if (!cubit.isUploadCompleted)
+                      CircularProgressIndicator(),
                     Padding(
                       padding: const EdgeInsetsDirectional.symmetric(
                         vertical: 20.0,
@@ -192,7 +193,7 @@ class ChatItemScreen extends StatelessWidget {
                                     padding: EdgeInsetsDirectional.all(.8),
                                     minWidth: 1,
                                     onPressed: () {
-                                      cubit.getImage(false);
+                                      cubit.getChatImage(false);
                                     },
                                     child: Icon(
                                       IconBroken.Camera,
@@ -204,7 +205,7 @@ class ChatItemScreen extends StatelessWidget {
                                     padding: EdgeInsetsDirectional.all(.8),
                                     minWidth: 1,
                                     onPressed: () {
-                                      cubit.getImage(true);
+                                      cubit.getChatImage(true);
                                     },
                                     child: Icon(
                                       IconBroken.Image,
@@ -257,7 +258,7 @@ class ChatItemScreen extends StatelessWidget {
                               padding: EdgeInsetsDirectional.all(.8),
                               onPressed: () {
                                 if (cubit.chatImage != null) {
-                                  cubit.uploadImage(
+                                  cubit.uploadChatImage(
                                     receiverId: friend.uId,
                                     text: messageController.text,
                                   );
