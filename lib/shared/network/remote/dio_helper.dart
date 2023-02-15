@@ -24,11 +24,8 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://student.valuxapps.com/api/',
+        baseUrl: 'https://fcm.googleapis.com/fcm/send',
         receiveDataWhenStatusError: true,
-        /* headers: {
-            'Content-Type': 'application/json',
-          }*/
       ),
     );
   }
@@ -51,21 +48,46 @@ class DioHelper {
   }
 
   static Future<Response> postData({
-    required String urlPath,
-    required Map<String, dynamic> data,
+    required String to,
+    required String title,
+    required String message,
+    required String userId,
     Map<String, dynamic>? query,
-    String? language,
-    String? token,
   }) async {
     dio.options.headers = {
       'Content-Type': 'application/json',
-      'lang': language,
-      'Authorization': token,
+      'Authorization': 'key=AAAAbVqX9Lw:APA91bEExzxXpBUORyIoLEy9UHApxyilpH4-MActFVfRTdZzNnoikjCfHiOomWWNHxfLXGLhigyMAGbT1s-1felfGCtulZe1SCqKUTrY8cVWHtm4B5S4XJaG97mBU28NuZBT0nG8mUlS',
     };
 
     return await dio.post(
-      '${Uri(path: urlPath)}',
-      data: data,
+      'https://fcm.googleapis.com/fcm/send',
+      data: {
+        "to":to,
+        "notification":{
+          "title":title,
+          "body":message,
+          "sound":"defualt"
+
+        },
+        "android":{
+          "priority":"HIGH",
+          "notification":{
+            "notification_priority":"priority_MAX",
+            "sound":"defualt",
+            "defualt_sound":"true",
+            "defualt_vibrate_timings":"true",
+            "defualt_ligt_settings":"true"
+
+          }
+
+        },
+        "data":{
+          "type":"order",
+          "from":userId,
+          "click_action":"FLUTTER_NOTIFICATOIN_CLICK"
+
+        }
+      },
       queryParameters: query,
     );
   }

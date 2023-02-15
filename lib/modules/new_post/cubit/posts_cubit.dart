@@ -74,7 +74,6 @@ class PostsCubit extends Cubit<PostsStates> {
 
 }) {
 emit(PostsLoadingState());
-  print(FirebaseFirestore.instance.collection('posts').id);
 
     PostsModel model=PostsModel
       (
@@ -83,25 +82,22 @@ emit(PostsLoadingState());
       text: text,
       postImage: postImageUrl,
       postId: '',
-
     );
 
     FirebaseFirestore.instance
-        .collection('posts')
+        .collection('users')
+        .doc(myId)
+       .collection('posts')
         .add(model.toMaP())
         .then((docRef) {
-       model.postId=docRef.id;
+          model.postId=docRef.id;
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(myId)
+          .collection('posts')
+          .doc(docRef.id)
+          .update(model.toMaP());
 
-       FirebaseFirestore.instance
-           .collection('posts')
-       .doc(docRef.id)
-       .update(model.toMaP())
-       .then((value) {
-         emit(PostsCreateSuccessState());
-       }).catchError((error){
-         emit(PostsCreateErrorState());
-
-       });
       emit(PostsCreateSuccessState());
     })
         .catchError((error) {

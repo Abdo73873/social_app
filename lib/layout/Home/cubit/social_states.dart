@@ -18,6 +18,7 @@ class HomeErrorGetUserState extends HomeStates {
 class HomeNewPostState extends HomeStates {}
 class HomeLoadingGetPostsState extends HomeStates {}
 class HomeSuccessGetPostsState extends HomeStates {}
+class HomeOrderPostsState extends HomeStates {}
 class HomeErrorGetPostsState extends HomeStates {
   final String error;
   HomeErrorGetPostsState(this.error);

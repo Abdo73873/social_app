@@ -9,6 +9,7 @@ import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/cubit/users_states.dart';
 import 'package:social_app/models/userModel.dart';
+import 'package:social_app/modules/users/user_profile.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 
@@ -88,7 +89,7 @@ class AllUsersScreen extends StatelessWidget {
 
   Widget buildUserItem(context, UserModel friend,index) => InkWell(
     onTap: (){
-      //navigateTo(context, ChatItemScreen(friend));
+      navigateTo(context, UserProfileScreen(friend));
     },
     child: BlocConsumer<HomeCubit,HomeStates>(
       listener: (context,state){},
@@ -160,14 +161,19 @@ class AllUsersScreen extends StatelessWidget {
                                   },
                                   style:ButtonStyle(
                                     padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                                    minimumSize: MaterialStatePropertyAll(Size(45,25)),
+                                    minimumSize: MaterialStatePropertyAll(Size(90,25)),
                                   ) ,
                                   clipBehavior: Clip.antiAliasWithSaveLayer,
-                                  child: Text('Add'),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.person_add),
+                                      SizedBox(
+                                        width: 10.0,
+                                      ),
+                                      Text('Add'),
+                                    ],
+                                  ),
                                 ),
-                              SizedBox(
-                                width: 20.0,
-                              ),
                               if(isDone)
                                 StreamBuilder(
                                     stream:FirebaseFirestore.instance

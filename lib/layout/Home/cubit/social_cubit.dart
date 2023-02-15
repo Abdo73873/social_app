@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/layout/users/user_layout.dart';
 import 'package:social_app/models/message_model.dart';
+import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/chats/chats_screen.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
@@ -84,6 +83,24 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(HomeErrorGetUserState(error.toString()));
     });
   }
+
+  late List<PostsModel> posts=[];
+
+  void getPosts(int limit){
+    FirebaseFirestore.instance
+        .collection('posts')
+    .orderBy('dateTime')
+    .limitToLast(limit)
+      .snapshots()
+    .listen((event) {
+      posts=[];
+      for (var docPost in event.docs) {
+        posts.add(PostsModel.fromJson(docPost.data()));
+        emit(HomeSuccessGetPostsState());
+      }
+        });
+
+        }
 
 
   bool like = false;

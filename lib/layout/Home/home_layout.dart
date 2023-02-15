@@ -14,7 +14,6 @@ import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
 class HomeLayout extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeCubit,HomeStates>(
@@ -35,10 +34,11 @@ class HomeLayout extends StatelessWidget {
             ),),
             actions: [
               IconButton(onPressed: (){
-                //HomeCubit.get(context).getLikes();
+
               },
                 icon: Icon(IconBroken.Notification,),),
-              IconButton(onPressed: (){}, icon: Icon(IconBroken.Search,),),
+              IconButton(onPressed: (){
+              }, icon: Icon(IconBroken.Search,),),
             ],
           ),
           drawer:NavigateDrawer(),

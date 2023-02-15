@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/Home/cubit/social_cubit.dart';
 import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/models/postsModel.dart';
+import 'package:social_app/modules/feeds/feeds_screen.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
 import 'package:social_app/modules/profile/cubit/profile_states.dart';
 import 'package:social_app/modules/profile/edit_profile.dart';
@@ -16,6 +18,8 @@ import 'package:social_app/shared/styles/colors.dart';
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SingleChildScrollView(
@@ -25,10 +29,11 @@ class ProfileScreen extends StatelessWidget {
             builder: (context, state) {
               return Column(
                 children: [
-                  if(state is HomeLoadingGetUserState)
+                  if (state is HomeLoadingGetUserState)
                     LinearProgressIndicator(
                       color: defaultColor,
-                      backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
                     ),
                   SizedBox(
                     height: 200.0,
@@ -42,19 +47,26 @@ class ProfileScreen extends StatelessWidget {
                               topLeft: Radius.circular(5.0),
                               topRight: Radius.circular(5.0),
                             ),
-                            child: CachedNetworkImage(
-                              width: double.infinity,
-                              height: 150,
-                              fit: BoxFit.cover,
-                              imageUrl: myModel.cover ?? '',
-                              errorWidget: (context, url, error) =>
-                                  Image.asset(
-                                'assets/images/cover.jpg',
-                                width: double.infinity,
-                                height: 150,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                            child: myModel.cover != null
+                                ? CachedNetworkImage(
+                                    width: double.infinity,
+                                    height: 150,
+                                    fit: BoxFit.cover,
+                                    imageUrl: myModel.cover!,
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(
+                                      'assets/images/cover.jpg',
+                                      width: double.infinity,
+                                      height: 150,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Image.asset(
+                                    'assets/images/cover.jpg',
+                                    width: double.infinity,
+                                    height: 150,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                         CircleAvatar(
@@ -69,8 +81,9 @@ class ProfileScreen extends StatelessWidget {
                                 height: double.infinity,
                                 fit: BoxFit.cover,
                                 imageUrl: myModel.image,
-                                errorWidget:(context,url,error)=> Image.asset(
-                                 myModel.male
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                  myModel.male
                                       ? 'assets/images/male.jpg'
                                       : 'assets/images/female.jpg',
                                   width: double.infinity,
@@ -110,14 +123,11 @@ class ProfileScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   '100',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium,
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 Text(
                                   'posts',
-                                  style:
-                                      Theme.of(context).textTheme.bodySmall,
+                                  style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
                             ),
@@ -130,14 +140,11 @@ class ProfileScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   '10K',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium,
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 Text(
                                   'followers',
-                                  style:
-                                      Theme.of(context).textTheme.bodySmall,
+                                  style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
                             ),
@@ -150,14 +157,11 @@ class ProfileScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   '500',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium,
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 Text(
                                   'following',
-                                  style:
-                                      Theme.of(context).textTheme.bodySmall,
+                                  style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ],
                             ),
@@ -178,27 +182,51 @@ class ProfileScreen extends StatelessWidget {
                   SizedBox(
                     height: 10.0,
                   ),
-                  BlocConsumer<ProfileCubit,ProfileStates>(
+                  BlocConsumer<ProfileCubit, ProfileStates>(
                     listener: (context, state) {
-                      if(state is ProfileUpdateSuccessState){
+                      if (state is ProfileUpdateSuccessState) {
                         HomeCubit.get(context).getMyData();
                       }
                     },
                     builder: (context, state) {
-                      return SizedBox(
-                        width: double.infinity,
-                        child: generalDetails(
-                          context: context,
-                          model: myModel.generalDetails,
-                        ),
+                      List<PostsModel> myPosts=[];
+                      for(int i=0;i< HomeCubit.get(context).posts.length;i++){
+                        if( HomeCubit.get(context).posts[i].uId==myId){
+                          myPosts.add(HomeCubit.get(context).posts[i]);
+                        }}
+                      return Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: generalDetails(
+                              context: context,
+                              model: myModel.generalDetails,
+                              forEdit: true,
+                            ),
+                          ),
+                          ListView.separated(
+                            itemBuilder: (BuildContext context, int index) {
+                              return FeedsScreen().buildPostItem(
+                                  context,
+                                  myPosts[index],
+                                  myModel);
+                            },
+                            separatorBuilder: (context, index) => SizedBox(
+                              height: 20,
+                            ),
+                            itemCount: myPosts.length,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                          ),
+                        ],
                       );
                     },
                   ),
-
                 ],
               );
             }),
       ),
     );
   }
+
 }

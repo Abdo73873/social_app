@@ -31,7 +31,7 @@ class EditProfileScreen extends StatelessWidget {
       File? coverImage = cubit.coverImage;
 
       nameController.text = myModel.name;
-      bioController.text = myModel.bio!;
+      bioController.text = myModel.bio??'';
       phoneController.text = myModel.phone;
       return Scaffold(
         appBar: defaultAppBar(
@@ -85,11 +85,12 @@ class EditProfileScreen extends StatelessWidget {
                                 topRight: Radius.circular(5.0),
                               ),
                               child: coverImage == null
-                                  ? CachedNetworkImage(
+                                  ?  myModel.cover!=null
+                                   ?CachedNetworkImage(
                                       width: double.infinity,
                                       height: 150,
                                       fit: BoxFit.cover,
-                                      imageUrl: myModel.cover ?? '',
+                                      imageUrl: myModel.cover!,
                                       errorWidget: (context, url, error) =>
                                           Image.asset(
                                         'assets/images/cover.jpg',
@@ -98,7 +99,13 @@ class EditProfileScreen extends StatelessWidget {
                                         fit: BoxFit.cover,
                                       ),
                                     )
-                                  : Image.file(
+                                    :  Image.asset(
+                                'assets/images/cover.jpg',
+                                width: double.infinity,
+                                height: 150,
+                                fit: BoxFit.cover,
+                              )
+                                 : Image.file(
                                       coverImage,
                                       width: double.infinity,
                                       height: 150,
@@ -367,7 +374,8 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                 generalDetails(
                   context: context,
-                  model: myModel.generalDetails!,
+                  model: myModel.generalDetails,
+                  forEdit: true,
                 ),
                 SizedBox(
                   height: 100.0,

@@ -10,8 +10,6 @@ import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
-import 'package:social_app/modules/feeds/comments.dart';
-import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
@@ -24,6 +22,19 @@ class FeedsScreen extends StatelessWidget {
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {},
       builder: (context, state) {
+        late final ScrollController scrollController = ScrollController();
+
+        int limit = 20;
+        scrollController.addListener(() {
+          if (scrollController.hasClients) {
+            if (scrollController.position.maxScrollExtent -
+                scrollController.position.pixels == 0) {
+              limit += 20;
+              HomeCubit.get(context).getPosts(limit);
+            }
+          }
+        });
+
         return RefreshIndicator(
           onRefresh: () async {
             UsersCubit.get(context).getUsersData();
@@ -66,35 +77,22 @@ class FeedsScreen extends StatelessWidget {
                   ),
                 ),
                 if (UsersCubit.get(context).users.isNotEmpty)
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection('posts').orderBy('dateTime').snapshots(),
-                    builder: (context, snapShot) {
-                      late List<PostsModel> postModel=[];
-                      if (snapShot.hasData) {
-                        for (var docPost in snapShot.data!.docs) {
-                          postModel.add(PostsModel.fromJson(
-                              docPost.data() as Map<String, dynamic>));
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      for (int i = 0; i <UsersCubit.get(context).users.length; i++) {
+                        if (HomeCubit.get(context).posts[index].uId == UsersCubit.get(context).users[i].uId) {
+                          return buildPostItem(
+                              context, HomeCubit.get(context).posts[index], UsersCubit.get(context).users[i]);
                         }
-                        return ListView.separated(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            for (int i = 0; i <UsersCubit.get(context).users.length; i++) {
-                              if (postModel[index].uId == UsersCubit.get(context).users[i].uId) {
-                                return buildPostItem(
-                                    context, postModel[index], UsersCubit.get(context).users[i]);
-                              }
-                            }
-                          },
-                          separatorBuilder: (context, index) =>
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                          itemCount: postModel.length,
-                        );
                       }
-                      return Text('field in get dada');
                     },
+                    separatorBuilder: (context, index) =>
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                    itemCount: HomeCubit.get(context).posts.length,
                   ),
                 SizedBox(
                   height: 20.0,
@@ -311,7 +309,6 @@ class FeedsScreen extends StatelessWidget {
                               Expanded(
                                 child: InkWell(
                                   onTap: () {
-                                    navigateTo(context, CommentsScreen(postModel));
                                   },
                                   child: Row(
                                     children: [

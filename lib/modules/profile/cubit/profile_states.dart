@@ -19,6 +19,7 @@ class ProfileUploadErrorState extends ProfileStates {}
 class ProfileUpdateSuccessState extends ProfileStates {}
 class ProfileUpdateErrorState extends ProfileStates {}
 
+class ProfileSuccessGetPostsState extends ProfileStates {}
 
 
 
@@ -41,3 +42,4 @@ class ProfileErrorState extends ProfileStates {
   final String error;
   ProfileErrorState(this.error);
 }
+

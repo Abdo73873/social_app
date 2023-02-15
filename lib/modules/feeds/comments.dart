@@ -4,18 +4,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/models/comments_model.dart';
 import 'package:social_app/models/postsModel.dart';
+import 'package:social_app/models/userModel.dart';
 
 class CommentsScreen extends StatelessWidget {
+
     late List<CommentModel> comment;
     late PostsModel postModel;
-    CommentsScreen(this.postModel);
+    late UserModel user;
+    CommentsScreen(this.user,this.postModel);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
           StreamBuilder<QuerySnapshot>(
-            stream:FirebaseFirestore.instance.collection('posts').doc(postModel.postId).collection('likes').snapshots(),
+            stream:FirebaseFirestore.instance.collection('users').doc(user.uId).collection('posts').snapshots(),
             builder: (context, snapShot) {
               if (snapShot.hasData) {
 

@@ -11,12 +11,33 @@ import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
-import 'package:social_app/modules/register/register_screen.dart';
 import 'package:social_app/shared/bloc_observer.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
 import 'package:social_app/shared/styles/themes.dart';
+
+void requestPermissions()async{
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print('User granted provisional permission');
+  } else {
+    print('User declined or has not accepted permission');
+  }
+}
 
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -33,7 +54,9 @@ void main() async {
   await Firebase.initializeApp();
   deviceToken=await FirebaseMessaging.instance.getToken();
   FirebaseMessaging.onMessage.listen((event) {
-    print(event.data.toString());
+    print(event.data['id'].toString());
+    print('=============================\n');
+    print(event.notification?.body);
     showToast(message: 'on message', state: ToastState.success);
   });
   FirebaseMessaging.onMessageOpenedApp.listen((event) {
@@ -42,6 +65,7 @@ void main() async {
 
   });
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  requestPermissions();
   FirebaseMessaging.instance.onTokenRefresh.listen((event) { });
   FirebaseMessaging.instance.subscribeToTopic('requestsNotification');
   FirebaseMessaging.instance.unsubscribeFromTopic('requestsNotification');
@@ -73,10 +97,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
         create: (context)=>HomeCubit()
           ..getMyData()
+          ..getPosts(20)
           ..changeMode(fromCache: isDark),
         ),
         BlocProvider(
-        create: (context)=>ProfileCubit(),
+        create: (context)=>ProfileCubit()
         ),
         BlocProvider(
         create: (context)=>PostsCubit(),

@@ -164,7 +164,13 @@ class FiendsScreen extends StatelessWidget {
                                 minimumSize:
                                     MaterialStatePropertyAll(Size(65, 20)),
                               ),
-                              child: Text('Delete'),
+                              child: Row(
+                                children: [
+                                  Text('Delete'),
+                                  SizedBox(width: 5,),
+                                  Icon(Icons.person_remove),
+                                ],
+                              ),
                             ),
                           ],
                         ),

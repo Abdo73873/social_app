@@ -8,6 +8,7 @@ import 'package:social_app/shared/components/constants.dart';
 
 Widget generalDetails({
   required BuildContext context,
+  bool forEdit=false,
    GeneralDetailsModel? model,
 }) {
   TextEditingController? schoolController = TextEditingController();
@@ -23,6 +24,9 @@ Widget generalDetails({
     statusController.text = model.status!;
   }
   var cubit=ProfileCubit.get(context);
+  if(!forEdit){
+  openToAdd=false;
+  }
   List<bool> readOnly=cubit.readOnly;
   double widthField=openToAdd?MediaQuery.of(context).size.width*.7:MediaQuery.of(context).size.width*.8;
   return Column(
@@ -218,7 +222,8 @@ Widget generalDetails({
         ],
       ),
     SizedBox(height: 10.0,),
-    if(model==null||(model.school!.isEmpty||model.work!.isEmpty||model.country!.isEmpty||model.live!.isEmpty||model.status!.isEmpty))
+    if(forEdit)
+      if(model==null||(model.school!.isEmpty||model.work!.isEmpty||model.country!.isEmpty||model.live!.isEmpty||model.status!.isEmpty))
       OutlinedButton(
         onPressed: (){
           if(model==null){
@@ -248,6 +253,7 @@ Widget generalDetails({
           ],),
       ),
     SizedBox(height: 10.0,),
+    if(forEdit)
     if(model!=null)
     if(model.school!.isNotEmpty&&model.work!.isNotEmpty&&model.country!.isNotEmpty&&model.live!.isNotEmpty&&model.status!.isNotEmpty)
       OutlinedButton(

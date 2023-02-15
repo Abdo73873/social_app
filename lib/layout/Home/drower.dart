@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/layout/Home/cubit/social_cubit.dart';
 import 'package:social_app/models/userModel.dart';
@@ -112,9 +113,16 @@ class NavigateDrawer extends StatelessWidget {
           Spacer(),
           ListTile(
             onTap: (){
-              CacheHelper.removeData(key: "uId").then((value){
-                navigateAndFinish(context, LoginScreen());
+              myModel.deviceToken=null;
+              FirebaseFirestore.instance
+              .collection('users')
+              .doc(myId)
+              .update(myModel.toMaP()).then((value){
+                CacheHelper.removeData(key: "uId").then((value){
+                  navigateAndFinish(context, LoginScreen());
+                });
               });
+
             },
             leading: Icon(Icons.logout),
             title: Text(
