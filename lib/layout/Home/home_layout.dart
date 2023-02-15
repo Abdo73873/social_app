@@ -10,6 +10,7 @@ import 'package:social_app/modules/new_post/cubit/posts_states.dart';
 import 'package:social_app/modules/new_post/new_post_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
@@ -34,7 +35,7 @@ class HomeLayout extends StatelessWidget {
             ),),
             actions: [
               IconButton(onPressed: (){
-
+                print(']]]]]]]]]]]] $myId =========\n');
               },
                 icon: Icon(IconBroken.Notification,),),
               IconButton(onPressed: (){

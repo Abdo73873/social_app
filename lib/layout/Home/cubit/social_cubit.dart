@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -80,6 +81,15 @@ class HomeCubit extends Cubit<HomeStates> {
         .then((value) {
       myModel = UserModel.fromJson(value.data()!);
       emit(HomeSuccessGetUserState());
+      FirebaseMessaging.instance.getToken().then((value) {
+        deviceToken=value;
+        myModel.deviceToken=deviceToken;
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(myId)
+            .update(myModel.toMaP());
+      });
+
     }).catchError((error) {
       emit(HomeErrorGetUserState(error.toString()));
     });
@@ -151,19 +161,20 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(HomeCommentGetImageErrorState());
     }
   }
-
+  bool isUploadCommentImageComplete=true;
   void uploadCommentImage({
     required String postId,
      String? text,
   }) {
+   isUploadCommentImageComplete=false;
     emit(HomeCommentUploadImageLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child('comments/${Uri
-        .file(chatImage!.path)
+        .file(commentImage!.path)
         .pathSegments
         .last}')
-        .putFile(chatImage!)
+        .putFile(commentImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
        addComment(
@@ -171,13 +182,19 @@ class HomeCubit extends Cubit<HomeStates> {
        text:text ,
        image: value
        );
-        emit(HomeCommentUploadImageSuccessState());
+       commentImage=null;
+       isUploadCommentImageComplete=true;
+       emit(HomeCommentUploadImageSuccessState());
       }).catchError((error) {
         emit(HomeCommentUploadImageErrorState());
       });
     }).catchError((error) {
       emit(HomeCommentUploadImageErrorState());
     });
+  }
+  void removeCommentImage(){
+    commentImage=null;
+    emit(HomeCommentRemoveImageState());
   }
 
 
@@ -192,13 +209,14 @@ class HomeCubit extends Cubit<HomeStates> {
         text: text,
         image: image,
         dateTime: DateFormat.yMd().add_jms().format(DateTime.now()),
+      indexComment: comments.length,
+
     );
     FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
         .collection('comments')
-        .doc(myId)
-        .set(model.toMap())
+        .add(model.toMap())
         .then((value) {
           emit(HomeCommentAddSuccessState());
     })
@@ -235,6 +253,47 @@ class HomeCubit extends Cubit<HomeStates> {
         .catchError((error) {});
   }
 
+  int likesCount=0,commentCount=0;
+  bool liked=false;
+  List<CommentModel> comments=[];
+  void streamLikesAndComments(String postId,int limit){
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('comments')
+        .snapshots()
+        .listen((event) {
+      commentCount=event.size;
+          emit(HomeStreamLikesAndCommentSuccessState());
+    });
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('likes')
+        .snapshots()
+        .listen((event) {
+      likesCount=event.size;
+      emit(HomeStreamLikesAndCommentSuccessState());
+    });
+
+
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .collection('comments')
+    .orderBy('indexComment')
+    .limitToLast(limit)
+        .snapshots()
+        .listen((event) {
+      comments=[];
+      for (var docComment in event.docs) {
+        comments.add(CommentModel.fromJson(docComment.data()));
+      }
+      emit(HomeStreamLikesAndCommentSuccessState());
+    });
+
+
+  }
 
 
 
@@ -252,7 +311,7 @@ class HomeCubit extends Cubit<HomeStates> {
       text: text,
       dateTime: DateFormat.yMd().add_jms().format(DateTime.now()),
       receiverId: receiverId,
-      indexMessage:messages.isNotEmpty?(messages[messages.length-1].indexMessage+1):0,
+      indexMessage:messages.length,
       image: image,
 
     );
@@ -264,7 +323,6 @@ FirebaseFirestore.instance
     .doc(receiverId)
     .collection('chat')
     .add(message.toMap()).then((value) {
-      chatImage=null;
     emit(HomeSendMessageSuccessState());
 }).catchError((error){
   emit(HomeSendMessageErrorState());
@@ -332,12 +390,12 @@ FirebaseFirestore.instance
     }
   }
 
-  bool isUploadCompleted=true;
+  bool isUploadChatImageCompleted=true;
   void uploadChatImage({
     required String receiverId,
     String? text,
 }) {
-    isUploadCompleted=false;
+    isUploadChatImageCompleted=false;
     emit(HomeChatUploadImageLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
@@ -353,7 +411,8 @@ FirebaseFirestore.instance
             text: text!,
           image: value,
         );
-        isUploadCompleted=true;
+        chatImage=null;
+        isUploadChatImageCompleted=true;
         emit(HomeChatUploadImageSuccessState());
       }).catchError((error) {
         emit(HomeChatUploadImageErrorState());
@@ -363,7 +422,7 @@ FirebaseFirestore.instance
     });
   }
 
-  void removeImage(){
+  void removeChatImage(){
     chatImage=null;
     emit(HomeChatRemoveImageState());
   }

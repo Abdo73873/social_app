@@ -1,19 +1,23 @@
 class CommentModel{
   late String uId;
-   String? text;
-   String? image;
   late String dateTime;
+  late int indexComment;
+  String? text;
+  String? image;
   CommentModel({
     required this.uId,
-     this.text,
     required this.dateTime,
-     this.image,
-});
+    required this.indexComment,
+    this.image,
+    this.text,
+
+  });
   CommentModel.fromJson(Map<String,dynamic> json){
     uId=json['uId'];
     text=json['text'];
     image=json['image'];
     dateTime=json['dateTime'];
+    indexComment=json['indexComment'];
   }
   Map<String,dynamic> toMap(){
     return{
@@ -21,6 +25,7 @@ class CommentModel{
       'text':text,
       'image':image,
       'dateTime':dateTime,
+      'indexComment':indexComment,
     };
   }
 }

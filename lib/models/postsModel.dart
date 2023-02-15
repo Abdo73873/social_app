@@ -5,8 +5,6 @@ class PostsModel {
   String? text;
   String? postImage;
   List<String>? usersLiked;
-   int countLikes=0;
-   int comments=0;
   PostsModel({
     required this.uId,
     required this.dateTime,

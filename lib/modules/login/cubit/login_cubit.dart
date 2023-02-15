@@ -25,14 +25,7 @@ import 'package:social_app/shared/components/constants.dart';
        password: password,
      ).then((value) {
        myId=value.user!.uid;
-       FirebaseMessaging.instance.getToken().then((value) {
-         deviceToken=value;
-         myModel.deviceToken=deviceToken;
-         FirebaseFirestore.instance
-             .collection('users')
-             .doc(myId)
-             .update(myModel.toMaP());
-       });
+
        emit(SuccessesLoginState());
          }).catchError((error){
        emit(ErrorLoginState(error.toString()));

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/Home/cubit/social_cubit.dart';
 import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
+import 'package:social_app/models/comments_model.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/feeds/comments.dart';
@@ -109,28 +110,28 @@ class FeedsScreen extends StatelessWidget {
   }
 
   Widget buildPostItem(context, PostsModel postModel, UserModel user) {
-    return InkWell(
-      onTap: (){
-        if(user.uId==myId){
-          HomeCubit.get(context).changeBottomScreen(4);
-        }
-        else{
-          navigateTo(context, UserProfileScreen(user));
+    return Card(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      elevation: 5.0,
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: (){
+                if(user.uId==myId){
+                  HomeCubit.get(context).changeBottomScreen(4);
+                }
+                else{
+                  navigateTo(context, UserProfileScreen(user));
 
-        }
+                }
 
-      },
-      child: Card(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        elevation: 5.0,
-        margin: EdgeInsets.symmetric(horizontal: 8.0),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+              },
+              child: Row(
                 children: [
                   CircleAvatar(
                     radius: 30.0,
@@ -193,204 +194,161 @@ class FeedsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Divider(
-                  height: 2.0,
-                  color: secondaryColor,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: Divider(
+                height: 2.0,
+                color: secondaryColor,
               ),
-              if (postModel.text != null)
-                Text(
-                  postModel.text!,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(
-                  top: 5.0,
-                  bottom: 10.0,
-                ),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Wrap(
-                    direction: Axis.horizontal,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                          end: 6.0,
-                        ),
-                        child: SizedBox(
-                          height: 25.0,
-                          child: MaterialButton(
-                              height: 25.0,
-                              minWidth: 1.0,
-                              padding: EdgeInsets.zero,
-                              child: Text(
-                                '#birthday',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      color: Colors.blue,
-                                    ),
-                              ),
-                              onPressed: () {}),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(
-                          end: 10.0,
-                        ),
-                        child: SizedBox(
-                          height: 25.0,
-                          child: MaterialButton(
-                              height: 25.0,
-                              minWidth: 1.0,
-                              padding: EdgeInsets.zero,
-                              child: Text(
-                                '#birthday',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      color: Colors.blue,
-                                    ),
-                              ),
-                              onPressed: () {}),
-                        ),
-                      ),
-                    ],
+            ),
+            if (postModel.text != null)
+              Text(
+                postModel.text!,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            SizedBox(height: 20.0,),
+            if (postModel.postImage!.isNotEmpty)
+              Container(
+                width: double.infinity,
+                height: 140.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  image: DecorationImage(
+                    image: NetworkImage(postModel.postImage!),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              if (postModel.postImage!.isNotEmpty)
-                Container(
-                  width: double.infinity,
-                  height: 140.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    image: DecorationImage(
-                      image: NetworkImage(postModel.postImage!),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                StreamBuilder<QuerySnapshot>(
-                  stream:FirebaseFirestore.instance.collection('posts').doc(postModel.postId).collection('likes').snapshots(),
-                  builder: (context,snapshot){
-                    bool liked=false;
-                    int likes=0;
-                    if(snapshot.hasData) {
-                      for (var docLike in snapshot.data!.docs) {
-                        if(docLike.id==myId){liked=true;}
-                        likes++;
-                      }
-                      return  Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: InkWell(
-                              onTap: () {},
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    IconBroken.Heart,
-                                    color: defaultColor,
-                                  ),
-                                  Text(
-                                    '$likes',
-                                    style: Theme.of(context).textTheme.titleSmall,
-                                  ),
-                                  Spacer(),
-                                  Text(
-                                    '${postModel.comments} comments',
-                                    textAlign: TextAlign.end,
-                                    style: Theme.of(context).textTheme.titleSmall,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Divider(
-                            height: 2.0,
-                            color: secondaryColor,
-                          ),
-                          Padding(
-                            padding:
-                            const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: () {
-                                      navigateTo(context, CommentsScreen(user, postModel));
-                                    },
-                                    child: Row(
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 20.0,
-                                          child: ClipOval(
-                                            child: CachedNetworkImage(
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                              fit: BoxFit.cover,
-                                              imageUrl: myModel.image,
-                                              errorWidget: (context, url, error) =>
-                                                  Image.asset(
-                                                    myModel.male
-                                                        ? 'assets/images/male.jpg'
-                                                        : 'assets/images/female.jpg',
-                                                    width: double.infinity,
-                                                    height: double.infinity,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                            ),
+              StreamBuilder<QuerySnapshot>(
+                stream:FirebaseFirestore.instance.collection('posts').doc(postModel.postId).collection('likes').snapshots(),
+                builder: (context,snapshot){
+                  bool liked=false;
+                  int likes=0;
+                  if(snapshot.hasData) {
+                    for (var docLike in snapshot.data!.docs) {
+                      if(docLike.id==myId){liked=true;}
+                      likes++;
+                    }
+                    return StreamBuilder<QuerySnapshot>(
+                      stream:FirebaseFirestore.instance.collection('posts').doc(postModel.postId).collection('comments').snapshots(),
+                                builder: (context,snapshot) {
+                                  int comments = 0;
+                                  if (snapshot.hasData) {
+                                    for (var docLike in snapshot.data!.docs) {
+                                      if (docLike.id == myId) {
+                                        liked = true;
+                                      }
+                                      comments++;
+                                    }
+                                  }
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                        child: InkWell(
+                                          onTap: () {},
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                IconBroken.Heart,
+                                                color: defaultColor,
+                                              ),
+                                              Text(
+                                                '$likes',
+                                                style: Theme.of(context).textTheme.titleSmall,
+                                              ),
+                                              Spacer(),
+                                              Text(
+                                                '$comments comments',
+                                                textAlign: TextAlign.end,
+                                                style: Theme.of(context).textTheme.titleSmall,
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 10.0,
-                                        ),
-                                        Text(
-                                          'write a comment ...',
-                                          textAlign: TextAlign.start,
-                                          style: Theme.of(context).textTheme.titleSmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                MaterialButton(
-                                  minWidth: 1.0,
-                                  padding: EdgeInsets.symmetric(horizontal: 3.0),
-                                  onPressed: () {
-                                    HomeCubit.get(context).likePost(postModel.postId);
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        IconBroken.Heart,
-                                        color: defaultColor,
-                                        size: 18.0,
                                       ),
-                                      Text(
-                                        liked ? ' liked' : ' Like',
-                                        style: Theme.of(context).textTheme.titleSmall,
+                                      Divider(
+                                        height: 2.0,
+                                        color: secondaryColor,
+                                      ),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  navigateTo(context, CommentsScreen( postModel.postId));
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    CircleAvatar(
+                                                      radius: 20.0,
+                                                      child: ClipOval(
+                                                        child: CachedNetworkImage(
+                                                          width: double.infinity,
+                                                          height: double.infinity,
+                                                          fit: BoxFit.cover,
+                                                          imageUrl: myModel.image,
+                                                          errorWidget: (context, url, error) =>
+                                                              Image.asset(
+                                                                myModel.male
+                                                                    ? 'assets/images/male.jpg'
+                                                                    : 'assets/images/female.jpg',
+                                                                width: double.infinity,
+                                                                height: double.infinity,
+                                                                fit: BoxFit.cover,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10.0,
+                                                    ),
+                                                    Text(
+                                                      'write a comment ...',
+                                                      textAlign: TextAlign.start,
+                                                      style: Theme.of(context).textTheme.titleSmall,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            MaterialButton(
+                                              minWidth: 1.0,
+                                              padding: EdgeInsets.symmetric(horizontal: 3.0),
+                                              onPressed: () {
+                                                HomeCubit.get(context).likePost(postModel.postId);
+                                              },
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(
+                                                    IconBroken.Heart,
+                                                    color: defaultColor,
+                                                    size: 18.0,
+                                                  ),
+                                                  Text(
+                                                    liked ? ' liked' : ' Like',
+                                                    style: Theme.of(context).textTheme.titleSmall,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    }
-                    return Text('Loading data ... please wait');
-                  },
-                ),
-            ],
-          ),
+                                  );
+                                }
+                    );
+                  }
+                  return Text('Loading data ... please wait');
+                },
+              ),
+          ],
         ),
       ),
     );

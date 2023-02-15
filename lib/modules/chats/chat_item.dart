@@ -98,7 +98,7 @@ class ChatItemScreen extends StatelessWidget {
                                         return buildMyMessage(
                                             context, cubit.messages[index]);
                                       }
-                                      return buildMessage(cubit.messages[index]);
+                                      return buildMessage(context,cubit.messages[index]);
                                     },
                                     separatorBuilder: (context, index) => SizedBox(
                                       height: 10.0,
@@ -150,7 +150,7 @@ class ChatItemScreen extends StatelessWidget {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  cubit.removeImage();
+                                  cubit.removeChatImage();
                                 },
                                 icon: CircleAvatar(
                                   radius: 14.0,
@@ -164,7 +164,7 @@ class ChatItemScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                    if (!cubit.isUploadCompleted)
+                    if (!cubit.isUploadChatImageCompleted)
                       CircularProgressIndicator(),
                     Padding(
                       padding: const EdgeInsetsDirectional.symmetric(
@@ -262,7 +262,7 @@ class ChatItemScreen extends StatelessWidget {
                                     receiverId: friend.uId,
                                     text: messageController.text,
                                   );
-                                  cubit.isUploadCompleted == false;
+                                  cubit.isUploadChatImageCompleted == false;
                                 } else {
                                   cubit.sendMessage(
                                       receiverId: friend.uId,
@@ -290,7 +290,7 @@ class ChatItemScreen extends StatelessWidget {
     );
   }
 
-  Widget buildMessage(MessageModel message) => Align(
+  Widget buildMessage(context,MessageModel message) => Align(
         alignment: AlignmentDirectional.centerStart,
         child: Container(
           padding: EdgeInsets.symmetric(
@@ -305,12 +305,37 @@ class ChatItemScreen extends StatelessWidget {
               topEnd: Radius.circular(15.0),
             ),
           ),
-          child: Text(message.text,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16.0,
-                fontWeight: FontWeight.w500,
-              )),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (message.image != null)
+                if (message.image!.isNotEmpty)
+                  CachedNetworkImage(
+                    progressIndicatorBuilder: (context, url, progress) =>
+                        CircularProgressIndicator(),
+                    imageUrl: message.image!,
+                    height: 400,
+                    width: 400,
+                    errorWidget: (context, url, error) =>
+                        Center(child: CircularProgressIndicator()),
+                  ),
+              Text(message.text,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500,
+                  )),
+              Align(
+                alignment: AlignmentDirectional.bottomEnd,
+                child: Text('${message.dateTime.split(' ')[1].substring(0,message.dateTime.split(' ')[1].length-3)} '
+                    '${message.dateTime.split(' ')[2]}',
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    fontSize: 12,
+                  ),),
+              ),
+
+            ],
+          ),
         ),
       );
 
@@ -332,6 +357,7 @@ class ChatItemScreen extends StatelessWidget {
             ),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               if (message.image != null)
                 if (message.image!.isNotEmpty)
@@ -349,6 +375,14 @@ class ChatItemScreen extends StatelessWidget {
                         fontSize: 16.0,
                         fontWeight: FontWeight.w500,
                       )),
+              Text('${message.dateTime.split(' ')[1].substring(0,message.dateTime.split(' ')[1].length-3)} '
+               '${message.dateTime.split(' ')[2]}',
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.start,
+              ),
+
             ],
           ),
         ),
