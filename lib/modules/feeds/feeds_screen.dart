@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/Home/cubit/social_cubit.dart';
 import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/Home/home_layout.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/models/comments_model.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/feeds/comments.dart';
+import 'package:social_app/modules/profile/profile_screen.dart';
 import 'package:social_app/modules/users/user_profile.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
@@ -126,6 +128,7 @@ class FeedsScreen extends StatelessWidget {
               onTap: (){
                 if(user.uId==myId){
                   HomeCubit.get(context).changeBottomScreen(4);
+                  navigateAndReplace(context, HomeLayout());
                 }
                 else{
                   navigateTo(context, UserProfileScreen(user));

@@ -4,7 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/layout/Home/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/home_layout.dart';
+import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
+import 'package:social_app/modules/feeds/feeds_screen.dart';
+import 'package:social_app/modules/search/search_in_posts.dart';
 import 'package:social_app/modules/users/user_profile.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
@@ -24,7 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
 }
 
   List<UserModel> users=[];
-      List posts=[];
+      List<PostsModel> posts=[];
 void searchFromFireStore(String text){
  FirebaseFirestore.instance
       .collection('users')
@@ -65,7 +69,7 @@ void searchFromFireStore(String text){
     posts=[];
     for (var docUser in value.docs) {
       if(docUser.data()['text'].toString().toLowerCase().contains(text.toLowerCase())){
-        posts.add(docUser.data());
+        posts.add(PostsModel.fromJson(docUser.data()));
       }
       setState(() {});
     }
@@ -81,6 +85,7 @@ void searchFromFireStore(String text){
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('posts').snapshots(),
         builder: (context, snapshot) {
+            int num=0;
           return Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(
@@ -128,15 +133,24 @@ void searchFromFireStore(String text){
                         ListView.separated(
                           shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: (context, index) => ListTile(title:Text(posts[index]['text'].toString()) ),
+                            itemBuilder: (context, index) => InkWell(
+                              onTap: (){
+                                num=index;
+                                searchController.clear();
+                                setState(() {});
+                              },
+                                child: Text('${posts[index].text}')
+                            ) ,
                             separatorBuilder: (context, index) => const SizedBox(height: 20.0,),
                             itemCount: posts.length
                         ),
-
+                      //  SearchInPosts(posts[0]),
                       ],
                     ),
                   ),
                 ),
+                if(searchController.text.isEmpty&&posts.isNotEmpty)
+                  Expanded(child: SingleChildScrollView(child: SearchInPosts(posts[num]))),
               ],
             ),
           );
