@@ -111,6 +111,7 @@ class FeedsScreen extends StatelessWidget {
 
   Widget buildPostItem(context, PostsModel postModel, UserModel user) {
     return Card(
+      key:key ,
       color: Theme.of(context).scaffoldBackgroundColor,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5.0,
