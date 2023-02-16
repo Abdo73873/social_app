@@ -306,33 +306,36 @@ class ChatItemScreen extends StatelessWidget {
             ),
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              if (message.image != null)
-                if (message.image!.isNotEmpty)
-                  CachedNetworkImage(
-                    progressIndicatorBuilder: (context, url, progress) =>
-                        CircularProgressIndicator(),
-                    imageUrl: message.image!,
-                    height: 400,
-                    width: 400,
-                    errorWidget: (context, url, error) =>
-                        Center(child: CircularProgressIndicator()),
-                  ),
-              Text(message.text,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.w500,
-                  )),
-              Align(
-                alignment: AlignmentDirectional.bottomEnd,
-                child: Text('${message.dateTime.split(' ')[1].substring(0,message.dateTime.split(' ')[1].length-3)} '
-                    '${message.dateTime.split(' ')[2]}',
-                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    fontSize: 12,
-                  ),),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (message.image != null)
+                    if (message.image!.isNotEmpty)
+                      CachedNetworkImage(
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            CircularProgressIndicator(),
+                        imageUrl: message.image!,
+                        height: 400,
+                        width: 400,
+                        errorWidget: (context, url, error) =>
+                            Center(child: CircularProgressIndicator()),
+                      ),
+                  Text(message.text,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500,
+                      )),
+                ],
               ),
+              Text('${message.dateTime.split(' ')[1].substring(0,message.dateTime.split(' ')[1].length-3)} '
+                  '${message.dateTime.split(' ')[2]}',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.black,
+                ),),
 
             ],
           ),
@@ -358,29 +361,35 @@ class ChatItemScreen extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              if (message.image != null)
-                if (message.image!.isNotEmpty)
-                  CachedNetworkImage(
-                    progressIndicatorBuilder: (context, url, progress) =>
-                        CircularProgressIndicator(),
-                    imageUrl: message.image!,
-                    height: 400,
-                    width: 400,
-                    errorWidget: (context, url, error) =>
-                        Center(child: CircularProgressIndicator()),
-                  ),
-              Text(message.text,
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w500,
-                      )),
+             Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 if (message.image != null)
+                   if (message.image!.isNotEmpty)
+                     CachedNetworkImage(
+                       progressIndicatorBuilder: (context, url, progress) =>
+                           CircularProgressIndicator(),
+                       imageUrl: message.image!,
+                       height: 450,
+                       width: 400,
+                       errorWidget: (context, url, error) =>
+                           Center(child: CircularProgressIndicator()),
+                     ),
+                 Text(message.text,
+                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                       fontSize: 16.0,
+                       fontWeight: FontWeight.w500,
+                     )),
+
+               ],
+             ),
               Text('${message.dateTime.split(' ')[1].substring(0,message.dateTime.split(' ')[1].length-3)} '
                '${message.dateTime.split(' ')[2]}',
                 style: Theme.of(context).textTheme.titleSmall!.copyWith(
                   fontSize: 12,
                 ),
-                textAlign: TextAlign.start,
               ),
 
             ],

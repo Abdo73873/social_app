@@ -175,114 +175,118 @@ class AllUsersScreen extends StatelessWidget {
                                       }
                                     }
                                   }
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      if (!requestHim&&!requestMe)
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            UsersCubit.get(context)
-                                                .sendRequest(user.uId);
-                                          },
-                                          style: ButtonStyle(
-                                            padding: MaterialStatePropertyAll(
-                                                EdgeInsets.zero),
-                                            minimumSize: MaterialStatePropertyAll(
-                                                Size(90, 25)),
-                                          ),
-                                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.person_add),
-                                              SizedBox(
-                                                width: 10.0,
-                                              ),
-                                              Text('Add'),
-                                            ],
-                                          ),
-                                        ),
-                                      if (!requestHim&&requestMe)
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text('He sent you a request'),
-                                            Row(
+                                  //if (requestHim)
+                                  return StreamBuilder(
+                                        stream: FirebaseFirestore.instance
+                                            .collection('users')
+                                            .doc(myId)
+                                            .collection('friends')
+                                            .snapshots(),
+                                        builder: (context, snapShots) {
+                                          if (snapShots.hasData) {
+                                            bool accepted = false;
+                                            for (var docFriend
+                                            in snapShots.data!.docs) {
+                                              if (docFriend.id == user.uId) {
+                                                accepted = true;
+                                              }
+                                            }
+                                            return Column(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
                                               children: [
-                                                ElevatedButton(
-                                                  onPressed: () {
-                                                    UsersCubit.get(context).acceptFriend(user.uId);
-                                                  },
-                                                  style: ButtonStyle(
-                                                    padding: MaterialStatePropertyAll(
-                                                        EdgeInsets.zero),
-                                                    minimumSize: MaterialStatePropertyAll(
-                                                        Size(65, 25)),
-                                                  ),
-                                                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                  child: Text('Accept'),
-                                                ),
-                                                SizedBox(width: 20.0,),
-                                                OutlinedButton(
-                                                  onPressed: () {
-                                                    UsersCubit.get(context).deleteRequest(user.uId);
-                                                  },
-                                                  style: ButtonStyle(
-                                                    padding: MaterialStatePropertyAll(
-                                                        EdgeInsets.zero),
-                                                    minimumSize: MaterialStatePropertyAll(
-                                                        Size(65, 20)),
-                                                  ),
-                                                  child: Text('Delete'),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      if (requestHim)
-                                        StreamBuilder(
-                                            stream: FirebaseFirestore.instance
-                                                .collection('users')
-                                                .doc(myId)
-                                                .collection('friends')
-                                                .snapshots(),
-                                            builder: (context, snapShots) {
-                                              if (snapShots.hasData) {
-                                                bool accepted = false;
-                                                for (var docFriend
-                                                in snapShots.data!.docs) {
-                                                  if (docFriend.id == user.uId) {
-                                                    accepted = true;
-                                                  }
-                                                }
-                                                return Column(
+                                                if(!accepted)
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
-                                                    if (!accepted)
-                                                      OutlinedButton(
+                                                    if (!requestHim&&!requestMe)
+                                                      ElevatedButton(
                                                         onPressed: () {
                                                           UsersCubit.get(context)
-                                                              .removeRequest(
-                                                              user.uId);
+                                                              .sendRequest(user.uId);
                                                         },
                                                         style: ButtonStyle(
-                                                          padding:
-                                                          MaterialStatePropertyAll(
+                                                          padding: MaterialStatePropertyAll(
                                                               EdgeInsets.zero),
-                                                          minimumSize:
-                                                          MaterialStatePropertyAll(
-                                                              Size(65, 20)),
+                                                          minimumSize: MaterialStatePropertyAll(
+                                                              Size(90, 25)),
                                                         ),
-                                                        child: Text('Remove'),
+                                                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                        child: Row(
+                                                          children: [
+                                                            Icon(Icons.person_add),
+                                                            SizedBox(
+                                                              width: 10.0,
+                                                            ),
+                                                            Text('Add'),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    if (accepted)
-                                                      Text('you\'re friends '),
+                                                    if (!requestHim&&requestMe)
+                                                      Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Text('He sent you a request'),
+                                                          Row(
+                                                            children: [
+                                                              ElevatedButton(
+                                                                onPressed: () {
+                                                                  UsersCubit.get(context).acceptFriend(user.uId);
+                                                                },
+                                                                style: ButtonStyle(
+                                                                  padding: MaterialStatePropertyAll(
+                                                                      EdgeInsets.zero),
+                                                                  minimumSize: MaterialStatePropertyAll(
+                                                                      Size(65, 25)),
+                                                                ),
+                                                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                                                child: Text('Accept'),
+                                                              ),
+                                                              SizedBox(width: 20.0,),
+                                                              OutlinedButton(
+                                                                onPressed: () {
+                                                                  UsersCubit.get(context).deleteRequest(user.uId);
+                                                                },
+                                                                style: ButtonStyle(
+                                                                  padding: MaterialStatePropertyAll(
+                                                                      EdgeInsets.zero),
+                                                                  minimumSize: MaterialStatePropertyAll(
+                                                                      Size(65, 20)),
+                                                                ),
+                                                                child: Text('Delete'),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+
                                                   ],
-                                                );
-                                              } else {
-                                                return Text('wait ...');
-                                              }
-                                            }),
-                                    ],
-                                  );
+                                                ),
+                                                if (!accepted&&requestHim)
+                                                  OutlinedButton(
+                                                    onPressed: () {
+                                                      UsersCubit.get(context)
+                                                          .removeRequest(
+                                                          user.uId);
+                                                    },
+                                                    style: ButtonStyle(
+                                                      padding:
+                                                      MaterialStatePropertyAll(
+                                                          EdgeInsets.zero),
+                                                      minimumSize:
+                                                      MaterialStatePropertyAll(
+                                                          Size(65, 20)),
+                                                    ),
+                                                    child: Text('Remove'),
+                                                  ),
+                                                if (accepted)
+                                                  Text('you\'re friends '),
+                                              ],
+                                            );
+                                          } else {
+                                            return Text('wait ...');
+                                          }
+                                        });
+
                                 },
                               );
                             }

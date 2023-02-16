@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/Home/cubit/social_cubit.dart';
 import 'package:social_app/layout/Home/home_layout.dart';
+import 'package:social_app/main.dart';
 import 'package:social_app/modules/login/cubit/login_cubit.dart';
 import 'package:social_app/modules/login/cubit/login_states.dart';
 import 'package:social_app/modules/register/register_screen.dart';
@@ -28,7 +29,8 @@ class LoginScreen extends StatelessWidget {
             CacheHelper.saveData(key: "uId", value:myId).then((value) {
               HomeCubit.get(context).getMyData();
               HomeCubit.get(context).changeBottomScreen(0);
-              navigateAndFinish(context, HomeLayout());
+              bool? isDark= CacheHelper.getData(key: 'isDark',);
+              navigateAndFinish(context, MyApp(HomeLayout(),isDark));
             });
           }
           if (state is ErrorLoginState) {

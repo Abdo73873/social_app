@@ -8,6 +8,7 @@ import 'package:social_app/layout/Home/drower.dart';
 import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
 import 'package:social_app/modules/new_post/cubit/posts_states.dart';
 import 'package:social_app/modules/new_post/new_post_screen.dart';
+import 'package:social_app/modules/search/search_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_app/shared/components/constants.dart';
@@ -35,10 +36,10 @@ class HomeLayout extends StatelessWidget {
             ),),
             actions: [
               IconButton(onPressed: (){
-                print(']]]]]]]]]]]] $myId =========\n');
               },
                 icon: Icon(IconBroken.Notification,),),
               IconButton(onPressed: (){
+                navigateTo(context, SearchScreen());
               }, icon: Icon(IconBroken.Search,),),
             ],
           ),
