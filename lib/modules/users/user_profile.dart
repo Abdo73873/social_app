@@ -92,122 +92,125 @@ class UserProfileScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  Text(
-                    user.name,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  if (user.bio != null)
-                    Text(
-                      user.bio!,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {},
-                            child: Column(
-                              children: [
-                                Text(
-                                  '100',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium,
-                                ),
-                                Text(
-                                  'posts',
-                                  style:
-                                  Theme.of(context).textTheme.bodySmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {},
-                            child: Column(
-                              children: [
-                                Text(
-                                  '10K',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium,
-                                ),
-                                Text(
-                                  'followers',
-                                  style:
-                                  Theme.of(context).textTheme.bodySmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () {},
-                            child: Column(
-                              children: [
-                                Text(
-                                  '500',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium,
-                                ),
-                                Text(
-                                  'following',
-                                  style:
-                                  Theme.of(context).textTheme.bodySmall,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  relation(),
-                  SizedBox(height: 20.0,),
-                  if (user.generalDetails != null)
-                    Text(
-                      'General Details',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: secondaryColor[600],
-                      ),
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: generalDetails(
-                        context: context,
-                        model: user.generalDetails,
-                      ),
-                    ),
-                  ),
-                  ListView.separated(
-                    itemBuilder: (BuildContext context, int index) {
-                      return FeedsScreen().buildPostItem(
-                          context,
-                          userPosts[index],
-                          user);
-                    },
-                    separatorBuilder: (context, index) => SizedBox(
-                      height: 20,
-                    ),
-                    itemCount: userPosts.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                  ),
+                 Padding(
+                   padding: const EdgeInsets.all(5.0),
+                   child: Column(
+                     children: [
+                       Text(
+                         user.name,
+                         style: Theme.of(context).textTheme.titleMedium,
+                       ),
+                       SizedBox(
+                         height: 15.0,
+                       ),
+                       if (user.bio != null)
+                         Text(
+                           user.bio!,
+                           style: Theme.of(context).textTheme.titleSmall,
+                         ),
+                       SizedBox(
+                         height: 15.0,
+                       ),
+                       Row(
+                         children: [
+                           Expanded(
+                             child: InkWell(
+                               onTap: () {},
+                               child: Column(
+                                 children: [
+                                   Text(
+                                     '100',
+                                     style: Theme.of(context)
+                                         .textTheme
+                                         .bodyMedium,
+                                   ),
+                                   Text(
+                                     'posts',
+                                     style:
+                                     Theme.of(context).textTheme.bodySmall,
+                                   ),
+                                 ],
+                               ),
+                             ),
+                           ),
+                           Expanded(
+                             child: InkWell(
+                               onTap: () {},
+                               child: Column(
+                                 children: [
+                                   Text(
+                                     '10K',
+                                     style: Theme.of(context)
+                                         .textTheme
+                                         .bodyMedium,
+                                   ),
+                                   Text(
+                                     'followers',
+                                     style:
+                                     Theme.of(context).textTheme.bodySmall,
+                                   ),
+                                 ],
+                               ),
+                             ),
+                           ),
+                           Expanded(
+                             child: InkWell(
+                               onTap: () {},
+                               child: Column(
+                                 children: [
+                                   Text(
+                                     '500',
+                                     style: Theme.of(context)
+                                         .textTheme
+                                         .bodyMedium,
+                                   ),
+                                   Text(
+                                     'following',
+                                     style:
+                                     Theme.of(context).textTheme.bodySmall,
+                                   ),
+                                 ],
+                               ),
+                             ),
+                           ),
+                         ],
+                       ),
+                       SizedBox(height: 10.0,),
+                       relation(),
+                       SizedBox(height: 20.0,),
+                       if (user.generalDetails != null)
+                         Text(
+                           'General Details',
+                           style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                             color: secondaryColor[600],
+                           ),
+                         ),
+                       SizedBox(
+                         width: double.infinity,
+                         child: generalDetails(
+                           context: context,
+                           model: user.generalDetails,
+                         ),
+                       ),
+                       ListView.separated(
+                         itemBuilder: (BuildContext context, int index) {
+                           return FeedsScreen().buildPostItem(
+                               context,
+                               userPosts[index],
+                               user);
+                         },
+                         separatorBuilder: (context, index) => SizedBox(
+                           height: 20,
+                         ),
+                         itemCount: userPosts.length,
+                         shrinkWrap: true,
+                         physics: NeverScrollableScrollPhysics(),
+                       ),
+                       SizedBox(height: 100.0,),
 
+                     ],
+                   ),
+                 ),
                 ],
               );
             }),
@@ -217,123 +220,155 @@ class UserProfileScreen extends StatelessWidget {
   Widget relation()=>BlocConsumer<UsersCubit,UsersStates>(
     listener: (context, state) {},
     builder:(context, state) {
-    return StreamBuilder(
-      stream:FirebaseFirestore.instance
+    return   StreamBuilder(
+      stream: FirebaseFirestore.instance
           .collection('users')
           .doc(user.uId)
           .collection('requests')
           .snapshots(),
-      builder: (context,snapShots){
-        bool isDone=false;
-        if(snapShots.hasData){
+      builder: (context, snapShots) {
+        bool requestHim = false;
+        if (snapShots.hasData) {
           for (var docReq in snapShots.data!.docs) {
-            if(docReq.id==myId){
-              isDone=true;
+            if (docReq.id == myId) {
+              requestHim = true;
             }
           }
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if(!isDone)
-              if(!isDone)
-                ElevatedButton(
-                  onPressed:(){
-                    UsersCubit.get(context).sendRequest(user.uId);
-                  },
-                  style:ButtonStyle(
-                    padding: MaterialStatePropertyAll(EdgeInsets.zero),
-                    minimumSize: MaterialStatePropertyAll(Size(80,25)),
-                  ) ,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: Row(
-                    children: [
-                      Icon(Icons.person_add),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Text('Add'),
-                    ],
-                  ),
-                ),
-              SizedBox(
-                width: 20.0,
-              ),
-              if(isDone)
-                StreamBuilder(
-                    stream:FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(myId)
-                        .collection('friends')
-                        .snapshots(),
-                    builder: (context,snapShots){
-                      if(snapShots.hasData){
-                        bool  accepted=false;
-                        for (var docFriend in snapShots.data!.docs) {
-                          if(docFriend.id==user.uId){
-                            accepted=true;
-                          }
+          return StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection('users')
+                .doc(myId)
+                .collection('requests')
+                .snapshots(),
+            builder: (context, snapShots) {
+              bool requestMe = false;
+              if (snapShots.hasData) {
+                for (var docReq
+                in snapShots.data!.docs) {
+                  if (docReq.id == user.uId) {
+                    requestMe = true;
+                  }
+                }
+              }
+              //if (requestHim)
+              return StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(myId)
+                      .collection('friends')
+                      .snapshots(),
+                  builder: (context, snapShots) {
+                    if (snapShots.hasData) {
+                      bool accepted = false;
+                      for (var docFriend
+                      in snapShots.data!.docs) {
+                        if (docFriend.id == user.uId) {
+                          accepted = true;
                         }
-
-                        return Row(
-                          children: [
-                            if(!accepted)
-                              Text('you sent a request '),
-                            if(!accepted)
-                             SizedBox(width: 20.0,),
-                            if(!accepted)
-                              OutlinedButton(
-                                onPressed: () {
-                                  UsersCubit.get(context).removeRequest(user.uId);
-                                },
-                                style: ButtonStyle(
-                                  padding:
-                                  MaterialStatePropertyAll(EdgeInsets.zero),
-                                  minimumSize:
-                                  MaterialStatePropertyAll(Size(65, 20)),
-                                ),
-                                child: Text('Remove'),
-                              ),
-                            if(accepted)
-                              Row(
-                                children: [
-                                  Text('you\'re friends '),
-                                  SizedBox(width: 20.0,),
-                                  OutlinedButton(
+                      }
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          if(!accepted)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                if (!requestHim&&!requestMe)
+                                  ElevatedButton(
                                     onPressed: () {
                                       UsersCubit.get(context)
-                                          .deleteFriend(user.uId);
+                                          .sendRequest(user.uId);
                                     },
                                     style: ButtonStyle(
-                                      padding:
-                                      MaterialStatePropertyAll(EdgeInsets.zero),
-                                      minimumSize:
-                                      MaterialStatePropertyAll(Size(65, 20)),
+                                      padding: MaterialStatePropertyAll(
+                                          EdgeInsets.zero),
+                                      minimumSize: MaterialStatePropertyAll(
+                                          Size(90, 25)),
                                     ),
+                                    clipBehavior: Clip.antiAliasWithSaveLayer,
                                     child: Row(
                                       children: [
-                                        Text('Delete'),
-                                        SizedBox(width: 5,),
-                                        Icon(Icons.person_remove),
+                                        Icon(Icons.person_add),
+                                        SizedBox(
+                                          width: 10.0,
+                                        ),
+                                        Text('Add'),
                                       ],
                                     ),
                                   ),
+                                if (!requestHim&&requestMe)
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('He sent you a request'),
+                                      Row(
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              UsersCubit.get(context).acceptFriend(user.uId);
+                                            },
+                                            style: ButtonStyle(
+                                              padding: MaterialStatePropertyAll(
+                                                  EdgeInsets.zero),
+                                              minimumSize: MaterialStatePropertyAll(
+                                                  Size(65, 25)),
+                                            ),
+                                            clipBehavior: Clip.antiAliasWithSaveLayer,
+                                            child: Text('Accept'),
+                                          ),
+                                          SizedBox(width: 20.0,),
+                                          OutlinedButton(
+                                            onPressed: () {
+                                              UsersCubit.get(context).deleteRequest(user.uId);
+                                            },
+                                            style: ButtonStyle(
+                                              padding: MaterialStatePropertyAll(
+                                                  EdgeInsets.zero),
+                                              minimumSize: MaterialStatePropertyAll(
+                                                  Size(65, 20)),
+                                            ),
+                                            child: Text('Delete'),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
 
-                                ],
+                              ],
+                            ),
+                          if (!accepted&&requestHim)
+                            OutlinedButton(
+                              onPressed: () {
+                                UsersCubit.get(context)
+                                    .removeRequest(
+                                    user.uId);
+                              },
+                              style: ButtonStyle(
+                                padding:
+                                MaterialStatePropertyAll(
+                                    EdgeInsets.zero),
+                                minimumSize:
+                                MaterialStatePropertyAll(
+                                    Size(65, 20)),
                               ),
-
-                          ],
-                        );
-                      }
-                      else{return Text('wait ...');}
+                              child: Text('Remove'),
+                            ),
+                          if (accepted)
+                            Text('you\'re friends '),
+                        ],
+                      );
+                    } else {
+                      return Text('wait ...');
                     }
-                ),
+                  });
 
-            ],
+            },
           );
         }
-        else{return Text('wait ...');}
+        else {return Text('wait ...');}
       },
     );
+
   },
   );
 }

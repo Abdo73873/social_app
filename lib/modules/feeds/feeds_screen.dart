@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,14 +19,15 @@ import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
 class FeedsScreen extends StatelessWidget {
+  double? numOfPost;
+  FeedsScreen({this.numOfPost});
   @override
   Widget build(BuildContext context) {
-    ScrollController scrollController = ScrollController();
-
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {},
       builder: (context, state) {
         late final ScrollController scrollController = ScrollController();
+
 
         int limit = 20;
         scrollController.addListener(() {
