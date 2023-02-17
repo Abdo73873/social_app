@@ -15,3 +15,5 @@ class SuccessesPushTokenState extends LoginStates{}
 
 class ChangeVisibilityState extends LoginStates{}
 class ChangeLanguageState extends LoginStates{}
+
+class JumpToState extends LoginStates{}

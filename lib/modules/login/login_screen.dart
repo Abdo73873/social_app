@@ -21,6 +21,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController scrollController=ScrollController();
     return BlocProvider(
       create: (context) => LoginCubit(),
       child: BlocConsumer<LoginCubit, LoginStates>(
@@ -34,83 +35,120 @@ class LoginScreen extends StatelessWidget {
             });
           }
           if (state is ErrorLoginState) {
-            showToast(message: state.error, state: ToastState.error);
+            showToast(message: state.error.split(']')[1], state: ToastState.error);
           }
         },
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(
-              actions: [],
-            ),
-            body: Center(
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+            body: SingleChildScrollView(
+              controller: scrollController,
+              physics: BouncingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 30.0,),
+                      if(!HomeCubit.get(context).isDark)
+                      Center(
+                        child: Image(
+                          width: 150.0,
+                          height: 150.0,
+                          image: AssetImage('assets/images/lightLogo.jpg',),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      if(HomeCubit.get(context).isDark)
                         Center(
                           child: Image(
-                            width: 90.0,
-                            height: 90.0,
-                            image: AssetImage('assets/images/logo.png',),
+                            width: 150.0,
+                            height: 150.0,
+                            image: AssetImage('assets/images/darkLogo.JPG',),
                             fit: BoxFit.cover,
                           ),
                         ),
-                        Text(
-                          'LOGIN',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        Text(
-                          'Login now to communicate with friends',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        SizedBox(
-                          height: 40.0,
-                        ),
-                        defaultFromField(
+                      SizedBox(height: 50.0,),
+                      Text(
+                        'LOGIN',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Text(
+                        'Login now to communicate with friends',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      SizedBox(
+                        height: 40.0,
+                      ),
+                      defaultFromField(
+                        context: context,
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your email address';
+                          }
+                          return null;
+                        },
+                        labelText: 'Email Address',
+                        prefix: Icons.email_outlined,
+                        action: TextInputAction.next,
+                        onTap: (){
+                            scrollController.jumpTo(scrollController.position.maxScrollExtent-100);
+                            LoginCubit.get(context).jumpTo();
+
+                        },
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      defaultFromField(
+                        context: context,
+                        controller: passwordController,
+                        keyboardType: TextInputType.visiblePassword,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Enter your Password';
+                          }
+                          return null;
+                        },
+                        onTap: (){
+                          scrollController.jumpTo(scrollController.position.maxScrollExtent-100);
+                          LoginCubit.get(context).jumpTo();
+
+                        },
+                        labelText: 'Password',
+                        prefix: Icons.email_outlined,
+                        isPassword: LoginCubit.get(context).isPassword,
+                        suffix: LoginCubit.get(context).isPassword
+                            ? Icons.visibility_outlined
+                            : Icons.visibility_off_outlined,
+                        suffixOnPressed: () {
+                          LoginCubit.get(context).changeVisibility();
+                        },
+                        onSubmit: (value) {
+                          if (formKey.currentState!.validate()) {
+                            LoginCubit.get(context).loginUser(
+                              email: emailController.text,
+                              password: passwordController.text,
+                            );
+                          }
+                        },
+                        action: TextInputAction.done,
+                      ),
+                      SizedBox(
+                        height: 40.0,
+                      ),
+                      ConditionalBuilder(
+                        condition: state is! LoadingLoginState,
+                        builder: (context) => defaultTextMatrialButton(
                           context: context,
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter your email address';
-                            }
-                            return null;
-                          },
-                          labelText: 'Email Address',
-                          prefix: Icons.email_outlined,
-                          action: TextInputAction.next,
-                        ),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        defaultFromField(
-                          context: context,
-                          controller: passwordController,
-                          keyboardType: TextInputType.visiblePassword,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Enter your Password';
-                            }
-                            return null;
-                          },
-                          labelText: 'Password',
-                          prefix: Icons.email_outlined,
-                          isPassword: LoginCubit.get(context).isPassword,
-                          suffix: LoginCubit.get(context).isPassword
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          suffixOnPressed: () {
-                            LoginCubit.get(context).changeVisibility();
-                          },
-                          onSubmit: (value) {
+                          text: 'Login',
+                          onPressed: () {
                             if (formKey.currentState!.validate()) {
                               LoginCubit.get(context).loginUser(
                                 email: emailController.text,
@@ -118,47 +156,28 @@ class LoginScreen extends StatelessWidget {
                               );
                             }
                           },
-                          action: TextInputAction.done,
                         ),
-                        SizedBox(
-                          height: 40.0,
-                        ),
-                        ConditionalBuilder(
-                          condition: state is! LoadingLoginState,
-                          builder: (context) => defaultTextMatrialButton(
-                            context: context,
-                            text: 'Login',
+                        fallback: (context) =>
+                            Center(child: CircularProgressIndicator()),
+                      ),
+                      SizedBox(
+                        height: 70.0,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Don\'t have account?',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          defaultText(
+                            text: 'REGISTER',
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                LoginCubit.get(context).loginUser(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                );
-                              }
+                              navigateAndReplace(context, RegisterScreen());
                             },
                           ),
-                          fallback: (context) =>
-                              Center(child: CircularProgressIndicator()),
-                        ),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              'Don\'t have account?',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            defaultText(
-                              text: 'REGISTER',
-                              onPressed: () {
-                                navigateAndReplace(context, RegisterScreen());
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),

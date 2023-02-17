@@ -32,7 +32,9 @@ import 'package:social_app/shared/components/constants.dart';
      });
    }
 
-
+void jumpTo(){
+     emit(JumpToState());
+}
 
 
  }

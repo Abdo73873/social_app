@@ -42,6 +42,7 @@ Widget defaultFromField({
   IconData? prefix,
   IconData? suffix,
   Function()? suffixOnPressed,
+  Function()? onTap,
   bool isPassword = false,
   TextInputAction? action,
 }) =>
@@ -51,6 +52,7 @@ Widget defaultFromField({
       onFieldSubmitted: onSubmit,
       onChanged: onChange,
       validator: validator,
+      onTap: onTap,
       obscureText: isPassword,
       decoration: InputDecoration(
         fillColor: defaultColor.withOpacity(.05),

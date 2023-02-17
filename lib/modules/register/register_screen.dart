@@ -40,237 +40,244 @@ class RegisterScreen extends StatelessWidget {
         builder: (context, state) {
           bool isMale=RegisterCubit.get(context).isMale;
           return Scaffold(
-            appBar: AppBar(
-              actions: [],
-            ),
-            body: Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if(!HomeCubit.get(context).isDark)
                         Center(
                           child: Image(
-                            width: 90.0,
-                            height: 90.0,
-                            image: AssetImage('assets/images/logo.png',),
+                            width: 150.0,
+                            height: 150.0,
+                            image: AssetImage('assets/images/lightLogo.jpg',),
                             fit: BoxFit.cover,
                           ),
                         ),
-                        Text(
-                          'REGISTER',
-                          style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                            fontSize: 20.0,
+                      if(HomeCubit.get(context).isDark)
+                        Center(
+                          child: Image(
+                            width: 150.0,
+                            height: 150.0,
+                            image: AssetImage('assets/images/darkLogo.JPG',),
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        SizedBox(
-                          height: 20.0,
+                      SizedBox(height: 20.0,),
+                      Text(
+                        'REGISTER',
+                        style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                          fontSize: 20.0,
                         ),
-                        Text(
-                          'Register now to communicate with friends',
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        SizedBox(
-                          height: 30.0,
-                        ),
-                        defaultFromField(
-                          context: context,
-                          controller: nameController,
-                          keyboardType: TextInputType.name,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter your Name';
-                            }
-                            return null;
-                          },
-                          labelText: 'User Name',
-                          prefix: Icons.person,
-                          action: TextInputAction.next,
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        defaultFromField(
-                          context: context,
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter your email address';
-                            }
-                            return null;
-                          },
-                          labelText: 'Email Address',
-                          prefix: Icons.email_outlined,
-                          action: TextInputAction.next,
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        defaultFromField(
-                          context: context,
-                          controller: phoneController,
-                          keyboardType: TextInputType.number,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter your Phone';
-                            }
-                            return null;
-                          },
-                          labelText: 'Phone',
-                          prefix: Icons.phone_android,
-                          action: TextInputAction.next,
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(width: 10.0,),
-                            Icon(Icons.accessibility,),
-                            SizedBox(width: 10.0,),
-                            Text("Gender :",
-                          style: Theme.of(context).textTheme.bodyMedium,),
-                          SizedBox(width: 30.0,),
-                          Expanded(
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: defaultColor.withOpacity(0.05),
-                                border:Border.all(
-                                  color: defaultColor,
-                                ),
-                                borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Text(
+                        'Register now to communicate with friends',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      defaultFromField(
+                        context: context,
+                        controller: nameController,
+                        keyboardType: TextInputType.name,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your Name';
+                          }
+                          return null;
+                        },
+                        labelText: 'User Name',
+                        prefix: Icons.person,
+                        action: TextInputAction.next,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      defaultFromField(
+                        context: context,
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your email address';
+                          }
+                          return null;
+                        },
+                        labelText: 'Email Address',
+                        prefix: Icons.email_outlined,
+                        action: TextInputAction.next,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      defaultFromField(
+                        context: context,
+                        controller: phoneController,
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your Phone';
+                          }
+                          return null;
+                        },
+                        labelText: 'Phone',
+                        prefix: Icons.phone_android,
+                        action: TextInputAction.next,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(width: 10.0,),
+                          Icon(Icons.accessibility,),
+                          SizedBox(width: 10.0,),
+                          Text("Gender :",
+                        style: Theme.of(context).textTheme.bodyMedium,),
+                        SizedBox(width: 30.0,),
+                        Expanded(
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: defaultColor.withOpacity(0.05),
+                              border:Border.all(
+                                color: defaultColor,
                               ),
-                              child: DropdownButton(
-                                  value: isMale,
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                  dropdownColor: Theme.of(context).scaffoldBackgroundColor,
-                                  items:[
-                                DropdownMenuItem(
-                                  value: true,
-                                  child:Row(
-                                    children: [
-                                      Icon(Icons.male,
-                                          color: isMale?defaultColor:secondaryColor,
-                                      ),
-                                      SizedBox(width: 10.0,),
-                                      Text('male',
-                                        style: TextStyle(
-                                          color: isMale?defaultColor:secondaryColor,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),),
-                                    ],
-                                  ) ,
-                                  onTap: (){
-                                    RegisterCubit.get(context).changeGender(true);
-                                  },
-                                ),
-                                DropdownMenuItem(
-                                  value: false,
-                                  child:Row(
-                                    children: [
-                                      Icon(Icons.female,
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            child: DropdownButton(
+                                value: isMale,
+                                borderRadius: BorderRadius.circular(30.0),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                                dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                                underline: SizedBox(),
+                                items:[
+                              DropdownMenuItem(
+                                value: true,
+                                child:Row(
+                                  children: [
+                                    Icon(Icons.male,
+                                        color: isMale?defaultColor:secondaryColor,
+                                    ),
+                                    SizedBox(width: 10.0,),
+                                    Text('male',
+                                      style: TextStyle(
+                                        color: isMale?defaultColor:secondaryColor,
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),),
+                                  ],
+                                ) ,
+                                onTap: (){
+                                  RegisterCubit.get(context).changeGender(true);
+                                },
+                              ),
+                              DropdownMenuItem(
+                                value: false,
+                                child:Row(
+                                  children: [
+                                    Icon(Icons.female,
+                                      color: isMale?secondaryColor:defaultColor,
+                                    ),
+                                    SizedBox(width: 10.0,),
+                                    Text('Female',
+                                      style: TextStyle(
                                         color: isMale?secondaryColor:defaultColor,
-                                      ),
-                                      SizedBox(width: 10.0,),
-                                      Text('Female',
-                                        style: TextStyle(
-                                          color: isMale?secondaryColor:defaultColor,
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),),
-                                    ],
-                                  ) ,
-                                  onTap: (){
-                                    RegisterCubit.get(context).changeGender(false);
-                                  },
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),),
+                                  ],
+                                ) ,
+                                onTap: (){
+                                  RegisterCubit.get(context).changeGender(false);
+                                },
 
-                                ),
-                              ], onChanged: (value){}),
-                            ),
+                              ),
+                            ], onChanged: (value){}),
                           ),
-                        ],),
-                        SizedBox(
-                          height: 10.0,
                         ),
-                        defaultFromField(
-                            context: context,
-                            controller: passwordController,
-                            keyboardType: TextInputType.visiblePassword,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Enter your Password';
-                              }
-                              return null;
-                            },
-                            labelText: 'Password',
-                            prefix: Icons.email_outlined,
-                            isPassword: RegisterCubit.get(context).isPassword,
-                            action: TextInputAction.done,
-                            suffix: RegisterCubit.get(context).isPassword
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            suffixOnPressed: () {
-                              RegisterCubit.get(context).changeVisibility();
-                            },
-                            onSubmit: (value) {
-                              if (formKey.currentState!.validate()) {
-                                RegisterCubit.get(context).userRegister(
-                                  name: nameController.text,
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                  phone: phoneController.text,
-                                  isMale: isMale,
-                                );
-                              }
-                            }),
-                        SizedBox(
-                          height: 30.0,
+                      ],),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      defaultFromField(
+                          context: context,
+                          controller: passwordController,
+                          keyboardType: TextInputType.visiblePassword,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Enter your Password';
+                            }
+                            return null;
+                          },
+                          labelText: 'Password',
+                          prefix: Icons.email_outlined,
+                          isPassword: RegisterCubit.get(context).isPassword,
+                          action: TextInputAction.done,
+                          suffix: RegisterCubit.get(context).isPassword
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          suffixOnPressed: () {
+                            RegisterCubit.get(context).changeVisibility();
+                          },
+                          onSubmit: (value) {
+                            if (formKey.currentState!.validate()) {
+                              RegisterCubit.get(context).userRegister(
+                                name: nameController.text,
+                                email: emailController.text,
+                                password: passwordController.text,
+                                phone: phoneController.text,
+                                isMale: isMale,
+                              );
+                            }
+                          }),
+                      SizedBox(
+                        height: 30.0,
+                      ),
+                      ConditionalBuilder(
+                        condition: state is! LoadingRegisterState,
+                        builder: (context) => defaultTextMatrialButton(
+                          context: context,
+                          text: 'Register',
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              RegisterCubit.get(context).userRegister(
+                                name: nameController.text,
+                                email: emailController.text,
+                                password: passwordController.text,
+                                phone: phoneController.text,
+                                isMale: isMale,
+                              );
+                            }
+                          },
                         ),
-                        ConditionalBuilder(
-                          condition: state is! LoadingRegisterState,
-                          builder: (context) => defaultTextMatrialButton(
-                            context: context,
-                            text: 'Register',
+                        fallback: (context) => Center(child: CircularProgressIndicator()),
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Do have account?',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          defaultText(
+                            text: 'LOGIN',
                             onPressed: () {
-                              if (formKey.currentState!.validate()) {
-                                RegisterCubit.get(context).userRegister(
-                                  name: nameController.text,
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                  phone: phoneController.text,
-                                  isMale: isMale,
-                                );
-                              }
+                              navigateAndReplace(context, LoginScreen());
                             },
                           ),
-                          fallback: (context) => Center(child: CircularProgressIndicator()),
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              'Do have account?',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            defaultText(
-                              text: 'LOGIN',
-                              onPressed: () {
-                                navigateAndReplace(context, LoginScreen());
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
