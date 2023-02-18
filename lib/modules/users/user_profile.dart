@@ -9,11 +9,14 @@ import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/cubit/users_states.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
+import 'package:social_app/modules/chats/chat_item.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
 import 'package:social_app/modules/profile/general_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
+import 'package:social_app/shared/styles/icon_broken.dart';
 
 class UserProfileScreen extends StatelessWidget {
   late UserModel user;
@@ -352,7 +355,15 @@ class UserProfileScreen extends StatelessWidget {
                               child: Text('Remove'),
                             ),
                           if (accepted)
-                            Text('you\'re friends '),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('you\'re friends '),
+                                IconButton(onPressed:(){
+                                  navigateAndReplace(context,ChatItemScreen(user));
+                                }, icon: Icon(IconBroken.Chat)),
+                              ],
+                            ),
                         ],
                       );
                     } else {

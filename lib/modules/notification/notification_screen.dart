@@ -169,6 +169,7 @@ class NotificationScreen extends StatelessWidget {
       }
 
 
+
     },
     child: Row(
           children: [
