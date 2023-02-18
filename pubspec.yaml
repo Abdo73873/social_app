@@ -49,6 +49,8 @@ dependencies:
   image_picker: ^0.8.6+1
   cached_network_image: ^3.2.3
   flutter_native_splash: ^2.2.17
+  flutter_switch: ^0.3.2
+  http: ^0.13.5
 
   #fireBase
   firebase_core: ^2.4.1
@@ -59,13 +61,13 @@ dependencies:
 
 flutter_native_splash:
   color: "#42a5f5"
-  image: assets/images/logo.png
+  image: assets/images/lightSplash.jpeg
+  image_dark: assets/images/darkSplash.jpeg
   ios: true
   android_gravity: fill
   #background_image: "assets/images/logo.png"
   #color_dark: "#042a49"
   #background_image_dark: "assets/dark-background.png"
-  #image_dark: assets/splash-invert.png
   #branding_dark: assets/dart_dark.png
   #branding: assets/dart.png
 

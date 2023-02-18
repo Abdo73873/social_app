@@ -10,11 +10,13 @@ import 'package:social_app/layout/Home/home_layout.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
+import 'package:social_app/modules/notification/notification_screen.dart';
 import 'package:social_app/modules/profile/cubit/profile_cubit.dart';
 import 'package:social_app/shared/bloc_observer.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
+import 'package:social_app/shared/network/remote/dio_helper.dart';
 import 'package:social_app/shared/styles/themes.dart';
 
 void requestPermissions()async{
@@ -40,39 +42,32 @@ void requestPermissions()async{
 }
 
 
-Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print(message.data.toString());
-  showToast(message: 'on BackGround message', state: ToastState.success);
 
-
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
     await CacheHelper.init();
   await Firebase.initializeApp();
+   DioHelper.init();
+  await DioHelper.init();
   deviceToken=await FirebaseMessaging.instance.getToken();
-  FirebaseMessaging.onMessage.listen((event) {
-    print(event.data['id'].toString());
-    print('=============================\n');
-    print(event.notification?.body);
-    showToast(message: 'on message', state: ToastState.success);
-  });
-  FirebaseMessaging.onMessageOpenedApp.listen((event) {
-    print(event.data.toString());
-    showToast(message: 'on open App message', state: ToastState.success);
 
-  });
+  FirebaseMessaging.onMessage.listen(firebaseMessaging);
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   requestPermissions();
-  FirebaseMessaging.instance.onTokenRefresh.listen((event) { });
-  FirebaseMessaging.instance.subscribeToTopic('requestsNotification');
-  FirebaseMessaging.instance.unsubscribeFromTopic('requestsNotification');
+  // FirebaseMessaging.instance.onTokenRefresh.listen((event) { });
+  // FirebaseMessaging.instance.unsubscribeFromTopic('requestsNotification');
 
   print(deviceToken);
   bool? isDark= CacheHelper.getData(key: 'isDark',);
    myId =CacheHelper.getData(key: "uId");
+  notification =CacheHelper.getData(key: "notification");
+  notification=notification??true;
+  if(notification!){
+    FirebaseMessaging.instance.subscribeToTopic('notification');
+  }
+
    Widget startWidget;
     if(myId!=null){
       startWidget=HomeLayout();
@@ -98,6 +93,7 @@ class MyApp extends StatelessWidget {
         create: (context)=>HomeCubit()
           ..getMyData()
           ..getPosts(20)
+          ..streamNotification()
           ..changeMode(fromCache: isDark),
         ),
         BlocProvider(
@@ -108,7 +104,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context)=>UsersCubit()
-            ..getUsersData()
+            ..streamGetUsersData()
             ..streamFriends(),
         ),
       ],

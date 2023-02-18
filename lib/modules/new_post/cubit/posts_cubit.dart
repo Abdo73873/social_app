@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +10,8 @@ import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/modules/new_post/cubit/posts_states.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:social_app/shared/network/remote/dio_helper.dart';
+import 'package:social_app/shared/network/remote/sen_notify.dart';
 
 class PostsCubit extends Cubit<PostsStates> {
   PostsCubit() : super(PostsInitializeState());
@@ -87,13 +90,20 @@ emit(PostsLoadingState());
     FirebaseFirestore.instance
        .collection('posts')
         .add(model.toMaP())
-        .then((docRef) {
+        .then((docRef)  {
           model.postId=docRef.id;
       FirebaseFirestore.instance
           .collection('posts')
           .doc(docRef.id)
           .update(model.toMaP());
-
+        sendNotify(
+            to:'/topics/notification',
+            title: 'Published a new Post',
+            message:model.text!=null?'${model.text?.substring(0,text!.length>10?10:text.length)}':'photo',
+            userId: myId!,
+         name: myModel.name,
+         image: myModel.image,
+        );
       emit(PostsCreateSuccessState());
     })
         .catchError((error) {

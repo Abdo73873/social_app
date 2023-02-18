@@ -11,6 +11,7 @@ import 'package:social_app/layout/Home/cubit/social_states.dart';
 import 'package:social_app/layout/users/user_layout.dart';
 import 'package:social_app/models/comments_model.dart';
 import 'package:social_app/models/message_model.dart';
+import 'package:social_app/models/notification_model.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/chats/chats_screen.dart';
@@ -30,7 +31,7 @@ class HomeCubit extends Cubit<HomeStates> {
   List<Widget> screens = [
     FeedsScreen(),
     ChatsScreen(),
-    UserLayout(),
+    UsersLayout(),
     ProfileScreen(),
   ];
   List<String> titles = [
@@ -425,6 +426,38 @@ FirebaseFirestore.instance
   void removeChatImage(){
     chatImage=null;
     emit(HomeChatRemoveImageState());
+  }
+
+  List<NotificationModel> notify=[];
+
+  void streamNotification(){
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(myId)
+        .collection('notification')
+        .snapshots()
+        .listen((event) {
+      notify=[];
+       for (var element in event.docs) {
+         notify.add(NotificationModel.fromJson(element.data()));
+       }
+       emit(HomeStreamNotificationState());
+    });
+  }
+
+  void clearNotification() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(myId)
+        .collection('notification')
+        .get()
+        .then((value){
+       for (var element in value.docs) {
+         element.reference.delete();
+       }
+    });
+
+
   }
 
 

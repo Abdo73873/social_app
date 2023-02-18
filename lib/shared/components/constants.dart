@@ -11,3 +11,4 @@ String? myId='';
 String? deviceToken='';
 bool openToAdd=false;
 late  UserModel myModel;
+bool? notification;

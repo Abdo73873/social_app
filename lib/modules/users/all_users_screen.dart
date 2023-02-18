@@ -201,8 +201,10 @@ class AllUsersScreen extends StatelessWidget {
                                                     if (!requestHim&&!requestMe)
                                                       ElevatedButton(
                                                         onPressed: () {
+                                                          print('///////////${user.deviceToken}////////////');
+
                                                           UsersCubit.get(context)
-                                                              .sendRequest(user.uId);
+                                                              .sendRequest(user.uId,user.deviceToken);
                                                         },
                                                         style: ButtonStyle(
                                                           padding: MaterialStatePropertyAll(
@@ -230,7 +232,7 @@ class AllUsersScreen extends StatelessWidget {
                                                             children: [
                                                               ElevatedButton(
                                                                 onPressed: () {
-                                                                  UsersCubit.get(context).acceptFriend(user.uId);
+                                                                  UsersCubit.get(context).acceptFriend(user.uId,user.deviceToken);
                                                                 },
                                                                 style: ButtonStyle(
                                                                   padding: MaterialStatePropertyAll(

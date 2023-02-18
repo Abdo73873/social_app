@@ -11,6 +11,7 @@ import 'package:social_app/modules/users/all_users_screen.dart';
 import 'package:social_app/modules/users/friends_screen.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
+import 'package:social_app/shared/network/remote/sen_notify.dart';
 
 class UsersCubit extends Cubit<UsersStates> {
   UsersCubit() : super(UsersInitializeState());
@@ -24,7 +25,7 @@ class UsersCubit extends Cubit<UsersStates> {
     RequestsScreen(),
   ];
 
-  void changeBottomScreen(int index) {
+  void changeUsersBottomScreen(int index) {
         currentIndex = index;
         emit(UsersChangeBottomState());
   }
@@ -47,17 +48,20 @@ class UsersCubit extends Cubit<UsersStates> {
 
   List<UserModel> users = [];
 
-  void getUsersData() {
+  void streamGetUsersData() {
     users = [];
     emit(UsersLoadingGetUsersState());
-    FirebaseFirestore.instance.collection('users').get().then((value) {
-      for (var element in value.docs) {
-        users.add(UserModel.fromJson(element.data()));
+    FirebaseFirestore.instance
+        .collection('users')
+        .snapshots()
+    .listen((event) {
+      users = [];
+      for (var docUser in event.docs) {
+        users.add(UserModel.fromJson(docUser.data()));
       }
       emit(UsersSuccessGetUsersState());
-    }).catchError((error) {
-      emit(UsersErrorGetUsersState(error.toString()));
     });
+
   }
 
 
@@ -197,14 +201,26 @@ StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> getUserData(String id
   }
 
 
-  void sendRequest(String friendId){
+  void sendRequest(String userId,String? token){
+    print('===========token$token==========\n');
     FirebaseFirestore.instance
         .collection('users')
-        .doc(friendId)
+        .doc(userId)
         .collection('requests')
         .doc(myId).set({});
       emit(UsersAddFriendState());
+      if(token!=null) {
+        print('===========token==========\n');
+        sendNotify(to: token,
+            title: 'Send you a request',
+            message:'accept ${myModel.male?'him':'her'} to be friends or delete from Requests',
+            userId: myModel.uId,
+            name: myModel.name,
+            image: myModel.image,
+        );
+      }
   }
+
   void removeRequest(String friendId){
     FirebaseFirestore.instance
         .collection('users')
@@ -214,7 +230,7 @@ StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> getUserData(String id
     emit(UsersRemoveRequestState());
   }
 
-  void acceptFriend(String friendId){
+  void acceptFriend(String friendId,String? token){
     FirebaseFirestore.instance
         .collection('users')
         .doc(myId)
@@ -227,7 +243,15 @@ StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> getUserData(String id
         .collection('friends')
         .doc(myId).set({});
     emit(UsersAddFriendState());
-
+    if(token!=null) {
+      sendNotify(to: token,
+          title: 'Accepted your request',
+          message: 'you can chat now',
+          userId: myModel.uId,
+          name: myModel.name,
+          image: myModel.image,
+      );
+    }
   }
   void deleteRequest(String friendId){
     FirebaseFirestore.instance

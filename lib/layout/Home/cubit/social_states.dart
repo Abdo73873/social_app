@@ -82,6 +82,8 @@ class HomeChatRemoveImageState extends HomeStates {}
 class HomeCommentAddSuccessState extends HomeStates {}
 class HomeCommentAddErrorState extends HomeStates {}
 
+class HomeStreamNotificationState extends HomeStates {}
+
 
 
 class HomeChangeLanguageState extends HomeStates {}

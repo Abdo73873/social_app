@@ -8,10 +8,12 @@ import 'package:social_app/layout/Home/drower.dart';
 import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
 import 'package:social_app/modules/new_post/cubit/posts_states.dart';
 import 'package:social_app/modules/new_post/new_post_screen.dart';
+import 'package:social_app/modules/notification/notification_screen.dart';
 import 'package:social_app/modules/search/search_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/shared/network/remote/sen_notify.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
@@ -35,9 +37,31 @@ class HomeLayout extends StatelessWidget {
               color: defaultColor,
             ),),
             actions: [
-              IconButton(onPressed: (){
+              IconButton(
+                onPressed: (){
+              navigateTo(context, NotificationScreen());
               },
-                icon: Icon(IconBroken.Notification,),),
+                padding: EdgeInsets.zero,
+                icon: Stack(
+                  alignment: AlignmentDirectional.topEnd,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        top: 11.0,
+                        end: 11.0,
+                      ),
+                      child: Icon(IconBroken.Notification,),
+                    ),
+                    CircleAvatar(
+                      radius: 10,
+                      child:Text(cubit.notify.length<=9?'${cubit.notify.length}':'+9',
+                        style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.0,
+                      ),) ,
+                    ),
+                  ],
+                ),),
               IconButton(onPressed: (){
                 navigateTo(context, SearchScreen());
               }, icon: Icon(IconBroken.Search,),),

@@ -127,7 +127,7 @@ class RequestsScreen extends StatelessWidget {
                           children: [
                             ElevatedButton(
                               onPressed: () {
-                                UsersCubit.get(context).acceptFriend(friend.uId);
+                                UsersCubit.get(context).acceptFriend(friend.uId,friend.deviceToken);
                               },
                               style: ButtonStyle(
                                 padding: MaterialStatePropertyAll(

@@ -39,7 +39,7 @@ class FeedsScreen extends StatelessWidget {
         });
         return RefreshIndicator(
           onRefresh: () async {
-            UsersCubit.get(context).getUsersData();
+            UsersCubit.get(context).streamGetUsersData();
           },
           child: SingleChildScrollView(
             controller: scrollController,

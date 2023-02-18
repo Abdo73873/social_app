@@ -12,8 +12,6 @@ import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/feeds/feeds_screen.dart';
 import 'package:social_app/modules/profile/general_details.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:social_app/modules/users/all_users_screen.dart';
-import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
 
@@ -277,7 +275,7 @@ class UserProfileScreen extends StatelessWidget {
                                   ElevatedButton(
                                     onPressed: () {
                                       UsersCubit.get(context)
-                                          .sendRequest(user.uId);
+                                          .sendRequest(user.uId,user.deviceToken);
                                     },
                                     style: ButtonStyle(
                                       padding: MaterialStatePropertyAll(
@@ -305,7 +303,7 @@ class UserProfileScreen extends StatelessWidget {
                                         children: [
                                           ElevatedButton(
                                             onPressed: () {
-                                              UsersCubit.get(context).acceptFriend(user.uId);
+                                              UsersCubit.get(context).acceptFriend(user.uId,user.deviceToken);
                                             },
                                             style: ButtonStyle(
                                               padding: MaterialStatePropertyAll(

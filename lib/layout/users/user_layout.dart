@@ -18,7 +18,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
-class UserLayout extends StatelessWidget {
+class UsersLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class UserLayout extends StatelessWidget {
                     tabBackgroundColor: secondaryColor.withOpacity(.1),
                     selectedIndex:cubit.currentIndex,
                     onTabChange: (index){
-                      cubit.changeBottomScreen(index);
+                      cubit.changeUsersBottomScreen(index);
                     },
                     tabs: [
                       GButton(icon: Icons.family_restroom, text: 'All',leading:Icon( Icons.family_restroom,) ,),

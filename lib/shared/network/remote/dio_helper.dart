@@ -24,8 +24,12 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://fcm.googleapis.com/fcm/send',
+        baseUrl: "https://fcm.googleapis.com/fcm/",
         receiveDataWhenStatusError: true,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "key=AAAAbVqX9Lw:APA91bEExzxXpBUORyIoLEy9UHApxyilpH4-MActFVfRTdZzNnoikjCfHiOomWWNHxfLXGLhigyMAGbT1s-1felfGCtulZe1SCqKUTrY8cVWHtm4B5S4XJaG97mBU28NuZBT0nG8mUlS ",
+        },
       ),
     );
   }
@@ -52,16 +56,11 @@ class DioHelper {
     required String title,
     required String message,
     required String userId,
-    Map<String, dynamic>? query,
   }) async {
-    dio.options.headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'key=AAAAbVqX9Lw:APA91bEExzxXpBUORyIoLEy9UHApxyilpH4-MActFVfRTdZzNnoikjCfHiOomWWNHxfLXGLhigyMAGbT1s-1felfGCtulZe1SCqKUTrY8cVWHtm4B5S4XJaG97mBU28NuZBT0nG8mUlS',
-    };
 
     return await dio.post(
-      'https://fcm.googleapis.com/fcm/send',
-      data: {
+       "send",
+      data:FormData.fromMap({
         "to":to,
         "notification":{
           "title":title,
@@ -87,8 +86,13 @@ class DioHelper {
           "click_action":"FLUTTER_NOTIFICATOIN_CLICK"
 
         }
-      },
-      queryParameters: query,
+      }),
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "key=AAAAbVqX9Lw:APA91bEExzxXpBUORyIoLEy9UHApxyilpH4-MActFVfRTdZzNnoikjCfHiOomWWNHxfLXGLhigyMAGbT1s-1felfGCtulZe1SCqKUTrY8cVWHtm4B5S4XJaG97mBU28NuZBT0nG8mUlS ",
+        },
+      ),
     );
   }
 

@@ -2,16 +2,25 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:social_app/layout/Home/cubit/social_cubit.dart';
-import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/login/login_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
 import 'package:social_app/shared/styles/colors.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
-class NavigateDrawer extends StatelessWidget {
+
+class NavigateDrawer extends StatefulWidget {
+  @override
+  State<NavigateDrawer> createState() => _NavigateDrawerState();
+}
+
+class _NavigateDrawerState extends State<NavigateDrawer> {
+
+
   @override
   Widget build(BuildContext context) {
     var cubit=HomeCubit.get(context);
@@ -96,20 +105,40 @@ class NavigateDrawer extends StatelessWidget {
 
             ],
           ),
-         /* Wrap(
-            runSpacing: 20.0,
-            children: [
-              ListTile(
-                onTap: (){},
-                leading: Icon(Icons.logout),
-                title: Text(
-                  'Logout',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
+          SizedBox(height: 20.0,),
+          ListTile(
+            title: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: [
+                  Text('Notification',
+                  style: Theme.of(context).textTheme.titleMedium,),
+                  Spacer(),
+                  FlutterSwitch(
+                    width: 70.0,
+                      height: 30.0,
+                      value: notification!,
+                      onToggle:(val){
+                        setState(() {});
+                          notification=val;
+                        CacheHelper.saveData(key: 'notification', value: notification);
+                        if(notification!){
+                            FirebaseMessaging.instance.subscribeToTopic('notification');
+                          }
+                          else{
+                            FirebaseMessaging.instance.unsubscribeFromTopic('notification');
+                          }
 
-            ],
-          ),*/
+                      },
+                    activeColor: defaultColor,
+                    inactiveColor: secondaryColor,
+                   showOnOff: true,
+
+                  ),
+                ],
+              ),
+            ),
+          ),
           Spacer(),
           ListTile(
             onTap: (){
