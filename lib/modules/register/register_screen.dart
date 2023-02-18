@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/Home/cubit/social_cubit.dart';
 import 'package:social_app/layout/Home/home_layout.dart';
 import 'package:social_app/modules/login/login_screen.dart';
+import 'package:social_app/modules/register/coplete_register_screen.dart';
 import 'package:social_app/modules/register/register_cubit/register_cubit.dart';
 import 'package:social_app/modules/register/register_cubit/register_states.dart';
 import 'package:social_app/shared/components/components.dart';
@@ -27,14 +28,13 @@ class RegisterScreen extends StatelessWidget {
       child: BlocConsumer<RegisterCubit, RegisterStates>(
         listener: (context, state) {
           if(state is SuccessesCreateUserState){
-              CacheHelper.saveData(key: "uId", value:myId).then((value) {
-                HomeCubit.get(context).getMyData();
-                HomeCubit.get(context).changeBottomScreen(0);
-                navigateAndFinish(context, HomeLayout());
+            CacheHelper.saveData(key: "uId", value:myId).then((value) {
+              navigateAndReplace(context, CompleteRegister());
               });
+
           }
           if(state is ErrorRegisterState){
-            showToast(message: state.error, state: ToastState.error);
+            showToast(message: state.error.split(']')[1], state: ToastState.error);
           }
         },
         builder: (context, state) {

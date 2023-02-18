@@ -65,6 +65,13 @@ class GeneralDetailsModel {
   String? live;
   String? status;
 
+  GeneralDetailsModel({
+  this.school,
+  this.work,
+  this.country,
+    this.live,
+    this.status,
+});
   GeneralDetailsModel.fromJson(Map<String, dynamic> json) {
     school = json["school"];
     work = json["work"];

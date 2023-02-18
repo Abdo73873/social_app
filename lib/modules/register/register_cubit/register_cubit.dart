@@ -66,7 +66,7 @@ class RegisterCubit extends Cubit<RegisterStates> {
     String? cover,
    GeneralDetailsModel? generalDetailsModel,
   }) {
-    UserModel model = UserModel(
+     myModel = UserModel(
       name: name,
       email: email,
       uId: uId,
@@ -76,13 +76,11 @@ class RegisterCubit extends Cubit<RegisterStates> {
       bio: bio,
       image: image??(male?'https://firebasestorage.googleapis.com/v0/b/social-app-644bc.appspot.com/o/users%2Fsystem%2Fmale.jpg?alt=media&token=06932e1b-eab2-4b2a-a5a2-34de8dc0d571'
       :'https://firebasestorage.googleapis.com/v0/b/social-app-644bc.appspot.com/o/users%2Fsystem%2Ffemale.jpg?alt=media&token=95901c20-b1ca-48ff-85c8-445bb65096e8'),
-
-
       cover: cover,
       isEmailVerified: false,
     generalDetails: generalDetailsModel,
     );
-    FirebaseFirestore.instance.collection("users").doc(uId).set(model.toMaP())
+    FirebaseFirestore.instance.collection("users").doc(uId).set(myModel.toMaP())
         .then((value){
       myId=uId;
       emit(SuccessesCreateUserState());
@@ -90,5 +88,34 @@ class RegisterCubit extends Cubit<RegisterStates> {
       emit(ErrorCreateUserState(error.toString()));
     });
 
+  }
+
+  void completeData({
+  String? school,
+  String? work,
+  String? country,
+  String? live,
+  String? status,
+}){
+     myModel.generalDetails=GeneralDetailsModel(
+      school: school,
+      work: work,
+      country: country,
+      live: live,
+      status: status,
+    );
+    FirebaseFirestore.instance
+    .collection('users')
+    .doc(myId)
+    .update(myModel.toMaP());
+
+  }
+
+
+  List<bool> choose=[true,false,false];
+  void chooseStatus(int index){
+    choose=[false,false,false];
+    choose[index]=true;
+    emit(ChooseStatusState());
   }
 }
