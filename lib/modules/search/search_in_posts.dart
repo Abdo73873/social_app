@@ -1,7 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:social_app/layout/Home/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/cubit/Home_cubit.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
