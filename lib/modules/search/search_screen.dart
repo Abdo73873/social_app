@@ -3,7 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:social_app/layout/Home/cubit/social_cubit.dart';
+import 'package:social_app/layout/Home/cubit/Home_cubit.dart';
 import 'package:social_app/layout/Home/home_layout.dart';
 import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/models/userModel.dart';
