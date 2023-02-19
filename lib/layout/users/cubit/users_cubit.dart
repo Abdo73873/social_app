@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -65,18 +64,6 @@ class UsersCubit extends Cubit<UsersStates> {
   }
 
 
-
-
-StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> getUserData(String id)=>
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(id)
-        .snapshots()
-        .listen((event) {
-
-});
-
-
   List<String> friendsIds=[];
   void streamFriends() {
     FirebaseFirestore.instance
@@ -92,6 +79,20 @@ StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> getUserData(String id
     });
   }
 
+  List<String> requestsUid=[];
+  void streamRequests() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(myId)
+        .collection('requests')
+        .snapshots().listen((event) {
+      requestsUid = [];
+      for (var docRequest in event.docs) {
+        requestsUid.add(docRequest.id);
+      }
+      emit(UsersStreamRequestsState());
+    });
+  }
 
   List<UserModel> friendsWhenSearch = [];
   bool foundUser = false;
@@ -253,6 +254,7 @@ StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> getUserData(String id
       );
     }
   }
+
   void deleteRequest(String friendId){
     FirebaseFirestore.instance
         .collection('users')
@@ -261,6 +263,7 @@ StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> getUserData(String id
         .doc(friendId).delete();
     emit(UsersRemoveRequestState());
   }
+
   void deleteFriend(String friendId){
     FirebaseFirestore.instance
         .collection('users')
