@@ -77,7 +77,7 @@ class HomeLayout extends StatelessWidget {
                       .of(context)
                       .scaffoldBackgroundColor,
                 ),
-              verified(),
+              verified(context),
               BlocConsumer<PostsCubit, PostsStates>(
                   listener: (context, stat) {},
                   builder: (context, stat) =>
@@ -128,38 +128,46 @@ class HomeLayout extends StatelessWidget {
     );
   }
 
-  Widget verified() => Column(
-        children: [
-          if(!FirebaseAuth.instance.currentUser!.emailVerified)
-            Container(
-              color: Colors.amber.withOpacity(.6),
-              height: 50.0,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.info_outline),
-                    SizedBox(width: 10.0,),
-                    Expanded(child: Text('please verify your Email')),
-                    defaultText(
-                      text: "Send",
-                      onPressed: () {
-                        FirebaseAuth.instance.currentUser
-                            ?.sendEmailVerification().then((value) {
-                          showToast(message: "check your mail",
-                              state: ToastState.success);
-                        }).catchError((error) {
-                          showToast(message: error.toString(),
-                              state: ToastState.error);
-                        });
-                      },
-                    ),
-                  ],
-                ),
+  bool open=true;
+  Widget verified(context){
+    Future.delayed(Duration(seconds: 60),(){
+      open=false;
+      HomeCubit.get(context).typing();
+    });
+
+    return open? Column(
+      children: [
+        if(!FirebaseAuth.instance.currentUser!.emailVerified)
+          Container(
+            color: Colors.amber.withOpacity(.6),
+            height: 50.0,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline),
+                  SizedBox(width: 10.0,),
+                  Expanded(child: Text('please verify your Email')),
+                  defaultText(
+                    text: "Send",
+                    onPressed: () {
+                      FirebaseAuth.instance.currentUser
+                          ?.sendEmailVerification().then((value) {
+                        showToast(message: "check your mail",
+                            state: ToastState.success);
+                      }).catchError((error) {
+                        showToast(message: error.toString(),
+                            state: ToastState.error);
+                      });
+                    },
+                  ),
+                ],
               ),
             ),
-        ],
-      );
+          ),
+      ],
+    ):SizedBox();
+  }
 
 
 }
