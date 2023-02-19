@@ -3,11 +3,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/Home/cubit/social_cubit.dart';
-import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/Home_cubit.dart';
+import 'package:social_app/layout/Home/cubit/Home_states.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/models/comments_model.dart';
 import 'package:social_app/models/userModel.dart';
+import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
@@ -323,6 +324,39 @@ class CommentsScreen extends StatelessWidget {
             ),
           ),
         ),
+        if(comment.uId==myId)
+          PopupMenuButton(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            icon: Icon(Icons.more_vert,color: Theme.of(context).iconTheme.color,),
+            shape: RoundedRectangleBorder(
+              side: BorderSide(color: secondaryColor),
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            padding: EdgeInsets.zero,
+
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: TextButton(
+                  onPressed: (){
+                    HomeCubit.get(context).removeComment(postId,comment.indexComment);
+                    Navigator.pop(context);
+
+                  },
+                  child: Text('Delete',
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.labelMedium?.color,
+                    ),
+                  ),
+                ),),
+
+            ],
+          ),
+        if(comment.uId!=myId)
+          IconButton(
+            icon: Icon(
+              Icons.more_horiz,
+              color: Theme.of(context).iconTheme.color,),
+            onPressed: () {  },),
       ],
     );
   }

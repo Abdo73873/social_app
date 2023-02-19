@@ -1,22 +1,11 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/Home/cubit/social_cubit.dart';
-import 'package:social_app/layout/Home/cubit/social_states.dart';
-import 'package:social_app/layout/Home/drower.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/cubit/users_states.dart';
-import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
-import 'package:social_app/modules/new_post/cubit/posts_states.dart';
-import 'package:social_app/modules/new_post/new_post_screen.dart';
-import 'package:social_app/shared/components/components.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:social_app/shared/styles/colors.dart';
-import 'package:social_app/shared/styles/icon_broken.dart';
 
 class UsersLayout extends StatelessWidget {
 
@@ -48,7 +37,24 @@ class UsersLayout extends StatelessWidget {
                     tabs: [
                       GButton(icon: Icons.family_restroom, text: 'All',leading:Icon( Icons.family_restroom,) ,),
                       GButton(icon: Icons.person, text: 'Friends',leading: Icon(Icons.person),),
-                      GButton(icon: Icons.person_add_alt_1, text: 'Request',leading:Icon( Icons.person_add_alt_1,)),
+                      GButton(icon: Icons.person_add_alt_1, text: 'Request',
+                          leading:Stack(
+                            alignment: AlignmentDirectional.topEnd,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(11.0),
+                            child: Icon( Icons.person_add,),
+                          ),
+                          CircleAvatar(
+                            radius: 10,
+                            child: Text('${cubit.requestsUid.length}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.0,
+                              ),),
+                          ),
+                        ],
+                      )),
 
                     ],
                   ),

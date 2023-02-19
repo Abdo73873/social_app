@@ -5,14 +5,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/Home/cubit/social_cubit.dart';
-import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/Home_cubit.dart';
+import 'package:social_app/layout/Home/cubit/Home_states.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/cubit/users_states.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/chats/chat_item.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
+import 'package:social_app/shared/styles/colors.dart';
 
 class ChatsScreen extends StatelessWidget {
   TextEditingController searchController=TextEditingController();
@@ -56,7 +57,7 @@ class ChatsScreen extends StatelessWidget {
                       builder: (context) {
                         for (int i=0;i<UsersCubit.get(context).users.length;i++ ) {
                           if (cubit.friendsIds[index]==UsersCubit.get(context).users[i].uId) {
-                            return buildChatItem(
+                            return streamBuildChatItem(
                                 context, UsersCubit.get(context).users[i]);
                           }
                         }
@@ -73,7 +74,7 @@ class ChatsScreen extends StatelessWidget {
                   child: ListView.separated(
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return buildChatItem(context, cubit.friendsWhenSearch[index]);
+                      return streamBuildChatItem(context, cubit.friendsWhenSearch[index]);
                     },
                     separatorBuilder: (context, index)=> SizedBox(height: 20.0,),
                     itemCount: cubit.friendsWhenSearch.length,
@@ -87,81 +88,131 @@ class ChatsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildChatItem(context, UserModel friend) => InkWell(
-    onTap: (){
-      navigateTo(context, ChatItemScreen(friend));
-    },
-    child: BlocConsumer<HomeCubit,HomeStates>(
-      listener: (context,state){},
-      builder: (context,state){
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 30.0,
-              child: ClipOval(
-                child: CachedNetworkImage(
-                  width: double.infinity,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                  imageUrl: friend.image,
-                  errorWidget: (context, url, error) => Image.asset(
-                    'assets/images/person.png',
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      friend.name,
-                      maxLines: 1,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'hi, i\'m here ',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0,
-                          ),
-                          child: Container(
-                            height: 8.0,
-                            width: 8.0,
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '10:05pm',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
+
+  Widget streamBuildChatItem(context, UserModel friend) {
+    return  InkWell(
+      onTap: (){
+        navigateTo(context, ChatItemScreen(friend));
       },
-    ),
+      child: BlocConsumer<HomeCubit,HomeStates>(
+        listener: (context,state){},
+        builder: (context,state){
+
+          return Builder(
+            builder: (context) {
+
+              return StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(myId)
+                    .collection('friends')
+                    .doc(friend.uId)
+                    .collection('chat')
+                    .where('senderId',isEqualTo: friend.uId)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  String text = '';
+                  String lastTime = '';
+                  int last=0;
+                  if(snapshot.hasData) {
+                    for (var element in snapshot.data!.docs) {
+                        if (element.data().isNotEmpty) {
+                          if (int.parse(
+                              element.data()['indexMessage'].toString()) >= last) {
+                            lastTime =
+                            element.data()['dateTime'].toString().split(' ')[1];
+                            lastTime = '$lastTime ${element.data()['dateTime']
+                                .toString()
+                                .split(' ')[2]}';
+                            text =
+                                element.data()['text'].toString().substring(0,
+                                    element.data()['text']
+                                        .toString()
+                                        .length );
+                            last = int.parse(
+                                element.data()['indexMessage'].toString());
+                          }
+                        }
+
+
+                    }
+                  }
+                  return  buildChatItem(context,friend,text,lastTime);
+                },
+              );
+              }
+          );
+        },
+      ),
+    );
+  }
+  Widget buildChatItem(context, UserModel friend,String text,String lastTime)=>Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      CircleAvatar(
+        radius: 30.0,
+        child: ClipOval(
+          child: CachedNetworkImage(
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+            imageUrl: friend.image,
+            errorWidget: (context, url, error) => Image.asset(
+              'assets/images/person.png',
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+      Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                friend.name,
+                maxLines: 1,
+                overflow:TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      text,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  if(lastTime.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                    ),
+                    child: Container(
+                      height: 8.0,
+                      width: 8.0,
+                      decoration: BoxDecoration(
+                        color: defaultColor,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    lastTime,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ],
   );
 
 }
