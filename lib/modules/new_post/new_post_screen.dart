@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:social_app/layout/Home/cubit/social_cubit.dart';
 import 'package:social_app/layout/Home/home_layout.dart';
+import 'package:social_app/models/postsModel.dart';
 import 'package:social_app/modules/new_post/cubit/posts_cubit.dart';
 import 'package:social_app/modules/new_post/cubit/posts_states.dart';
 import 'package:social_app/shared/components/components.dart';
@@ -16,10 +16,16 @@ import 'package:social_app/shared/styles/colors.dart';
 import 'package:social_app/shared/styles/icon_broken.dart';
 
 class NewPostScreen extends StatelessWidget {
-  TextEditingController textController = TextEditingController();
+   PostsModel? post;
+   TextEditingController textController = TextEditingController();
+
+   NewPostScreen({this.post});
 
   @override
   Widget build(BuildContext context) {
+    if(post!=null){
+      textController.text=post!.text!;
+    }
     return BlocConsumer<PostsCubit, PostsStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -33,22 +39,45 @@ class NewPostScreen extends StatelessWidget {
             title: Text('Create Post'),
             actions: [
               defaultText(text: "Post", onPressed: () {
-                if(textController.text.isNotEmpty||PostsCubit.get(context).postImage!=null){
-                  if(PostsCubit.get(context).postImage!=null){
-                    PostsCubit.get(context).uploadImage(
-                      text: textController.text,
-                    );
-                    navigateAndReplace(context, HomeLayout());
+                if(post!=null){
+                  if(textController.text.isNotEmpty||PostsCubit.get(context).postImage!=null){
+                    if(PostsCubit.get(context).postImage!=null){
+                      PostsCubit.get(context).uploadImage(
+                        text: textController.text,
+                      );
+                      navigateAndReplace(context, HomeLayout());
+                    }
+                    else{
+                      PostsCubit.get(context).editPost(
+                        text: textController.text,
+                        post: post!,
+                      );
+                      navigateAndReplace(context, HomeLayout());
+                    }
+                    showToast(message:"publishing now", state: ToastState.success);
                   }
-                  else{
-                    PostsCubit.get(context).createPost(
-                      text: textController.text,
-                    );
-                    navigateAndReplace(context, HomeLayout());
-                  }
-                  showToast(message:"publishing now", state: ToastState.success);
+                  else {showToast(message:"write something", state: ToastState.warning);}
+
                 }
-                else {showToast(message:"write something", state: ToastState.warning);}
+                else{
+                  if(textController.text.isNotEmpty||PostsCubit.get(context).postImage!=null){
+                    if(PostsCubit.get(context).postImage!=null){
+                      PostsCubit.get(context).uploadImage(
+                        text: textController.text,
+                      );
+                      navigateAndReplace(context, HomeLayout());
+                    }
+                    else{
+                      PostsCubit.get(context).createPost(
+                        text: textController.text,
+                      );
+                      navigateAndReplace(context, HomeLayout());
+                    }
+                    showToast(message:"publishing now", state: ToastState.success);
+                  }
+                  else {showToast(message:"write something", state: ToastState.warning);}
+
+                }
 
               }),
               SizedBox(

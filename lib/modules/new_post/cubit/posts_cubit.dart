@@ -47,7 +47,12 @@ class PostsCubit extends Cubit<PostsStates> {
   }
 
   String postImageUrl = '';
-  void uploadImage({String? text}) {
+  void uploadImage({
+    String? text,
+    bool isEdit=false,
+    PostsModel? post,
+
+  }) {
     emit(PostsLoadingState());
     firebase_storage.FirebaseStorage.instance
         .ref()
@@ -60,7 +65,12 @@ class PostsCubit extends Cubit<PostsStates> {
       value.ref.getDownloadURL().then((value) {
         postImageUrl = value;
         postImage=null;
-        createPost(text: text);
+        if(!isEdit){
+          createPost(text: text);
+        }
+        else{
+          editPost(post: post!,text: text);
+        }
         emit(PostsUploadImageSuccessState());
       }).catchError((error) {
         emit(PostsUploadErrorState());
@@ -86,7 +96,7 @@ emit(PostsLoadingState());
       postImage: postImageUrl,
       postId: '',
     );
-
+    postImageUrl='';
     FirebaseFirestore.instance
        .collection('posts')
         .add(model.toMaP())
@@ -110,6 +120,20 @@ emit(PostsLoadingState());
       emit(PostsCreateErrorState());
 
     });
+  }
+
+  void editPost({
+    required PostsModel post,
+    String? text,
+  }){
+    post.text=text;
+    if(postImageUrl.isNotEmpty){
+      post.postImage=postImageUrl;
+    }
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(post.postId)
+        .update(post.toMaP());
   }
 
 
