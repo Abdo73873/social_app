@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/Home_states.dart';
 import 'package:social_app/layout/users/user_layout.dart';
 import 'package:social_app/models/comments_model.dart';
 import 'package:social_app/models/message_model.dart';
@@ -110,16 +110,21 @@ class HomeCubit extends Cubit<HomeStates> {
         posts.add(PostsModel.fromJson(docPost.data()));
         emit(HomeSuccessGetPostsState());
       }
-        });
+      emit(HomeSuccessGetPostsState());
 
+    });
         }
 
+  void deletePost(String postId){
+    FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .delete();
+  }
 
-  bool like = false;
-
-  void likePost(String postId) {
-    like = !like;
-    if (like) {
+  void likePost(String postId,bool liked) {
+    liked = !liked;
+    if (liked) {
       FirebaseFirestore.instance
           .collection('posts')
           .doc(postId)
@@ -162,6 +167,7 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(HomeCommentGetImageErrorState());
     }
   }
+
   bool isUploadCommentImageComplete=true;
   void uploadCommentImage({
     required String postId,
@@ -193,11 +199,11 @@ class HomeCubit extends Cubit<HomeStates> {
       emit(HomeCommentUploadImageErrorState());
     });
   }
+
   void removeCommentImage(){
     commentImage=null;
     emit(HomeCommentRemoveImageState());
   }
-
 
   void addComment({
    required String postId,
@@ -227,35 +233,21 @@ class HomeCubit extends Cubit<HomeStates> {
     });
   }
 
-
-  void updateComment(String postId, String comment) {
+  void removeComment(String postId,int index) {
     FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
         .collection('comments')
-        .doc(myId)
-        .update({
-          'comments': FieldValue.arrayRemove([comment]),
-        })
-        .then((value) {})
-        .catchError((error) {});
-  }
-
-  void removeComment(String postId, String comment) {
-    FirebaseFirestore.instance
-        .collection('posts')
-        .doc(postId)
-        .collection('comments')
-        .doc(myId)
-        .update({
-          'comments': FieldValue.delete,
-        })
-        .then((value) {})
-        .catchError((error) {});
+    .where('indexComment',isEqualTo: index)
+        .get()
+    .then((value){
+      for (var element in value.docs) {
+        element.reference.delete();
+      }
+    });
   }
 
   int likesCount=0,commentCount=0;
-  bool liked=false;
   List<CommentModel> comments=[];
   void streamLikesAndComments(String postId,int limit){
     FirebaseFirestore.instance
@@ -295,7 +287,6 @@ class HomeCubit extends Cubit<HomeStates> {
 
 
   }
-
 
 
   void typing(){
