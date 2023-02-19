@@ -1,17 +1,15 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/Home/cubit/social_cubit.dart';
-import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/Home_cubit.dart';
+import 'package:social_app/layout/Home/cubit/Home_states.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/cubit/users_states.dart';
 import 'package:social_app/models/userModel.dart';
 import 'package:social_app/modules/users/user_profile.dart';
 import 'package:social_app/shared/components/components.dart';
-import 'package:social_app/shared/components/constants.dart';
 
 class RequestsScreen extends StatelessWidget {
 
@@ -19,6 +17,7 @@ class RequestsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UsersCubit.get(context).streamRequests();
     return BlocConsumer<UsersCubit, UsersStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -30,36 +29,29 @@ class RequestsScreen extends StatelessWidget {
               .withOpacity(0),
           body: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(myId)
-                  .collection('requests')
-                  .snapshots(),
-              builder: (context, snapShots) {
-                if (snapShots.hasData) {
-                  return ListView.separated(
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      for (var docRequest in snapShots.data!.docs) {
-                        if(docRequest.id==cubit.users[index].uId){
-                          return buildRequestItem(context,cubit.users[index]);
-                        }
-                      }
-
-                      return SizedBox();
-                    },
-                    separatorBuilder: (context, index) =>
-                        SizedBox(height: 20.0,),
-                    itemCount: cubit.users.length,
-                  );
+            child: Column(
+              children: [
+                if(cubit.requestsUid.isNotEmpty)
+                ListView.separated(
+                  physics: BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+                for (int i=0;i<cubit.requestsUid.length;i++) {
+                  if(cubit.requestsUid[index]==cubit.users[i].uId){
+                    return buildRequestItem(context,cubit.users[i]);
+                  }
                 }
-                else {
-                  return Text('Loading data ... please wait');
-                }
-              },
+                return SizedBox();
+          },
+          separatorBuilder: (context, index) =>
+                  SizedBox(height: 20.0,),
+          itemCount: cubit.users.length,
+        ),
+                if(cubit.requestsUid.isEmpty)
+                  Center(child: Text('you don\'n have requests yet')),
+              ],
             ),
-          ),
+
+        ),
         );
       },
     );
@@ -73,8 +65,6 @@ class RequestsScreen extends StatelessWidget {
         child: BlocConsumer<HomeCubit, HomeStates>(
           listener: (context, state) {},
           builder: (context, state) {
-            print(friend.name);
-
             return Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -163,8 +153,6 @@ class RequestsScreen extends StatelessWidget {
           },
         ),
       );
-
-  late UserModel item;
 
 
 }

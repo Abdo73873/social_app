@@ -4,8 +4,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:social_app/layout/Home/cubit/social_cubit.dart';
-import 'package:social_app/layout/Home/cubit/social_states.dart';
+import 'package:social_app/layout/Home/cubit/Home_cubit.dart';
+import 'package:social_app/layout/Home/cubit/Home_states.dart';
 import 'package:social_app/layout/users/cubit/users_cubit.dart';
 import 'package:social_app/layout/users/cubit/users_states.dart';
 import 'package:social_app/models/userModel.dart';
@@ -17,6 +17,7 @@ class FiendsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UsersCubit.get(context).streamFriends();
     return BlocConsumer<UsersCubit, UsersStates>(
       listener: (context, state) {},
       builder: (context, state) {
