@@ -55,7 +55,7 @@ class AllUsersScreen extends StatelessWidget {
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       if (cubit.users[index].uId != myId) {
-                        return buildUserItem(
+                        return streamBuildUserItem(
                             context, cubit.users[index], index);
                       } else {
                         return SizedBox();
@@ -77,7 +77,7 @@ class AllUsersScreen extends StatelessWidget {
                 Expanded(
                   child: ListView.separated(
                     physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) => buildUserItem(
+                    itemBuilder: (context, index) => streamBuildUserItem(
                         context, cubit.friendsWhenSearch[index], index),
                     separatorBuilder: (context, index) => SizedBox(
                       height: 20.0,
@@ -92,7 +92,7 @@ class AllUsersScreen extends StatelessWidget {
     );
   }
 
-  Widget buildUserItem(context, UserModel user, index) => InkWell(
+  Widget streamBuildUserItem(context, UserModel user, index) => InkWell(
         onTap: () {
           navigateTo(context, UserProfileScreen(user));
         },
@@ -190,99 +190,7 @@ class AllUsersScreen extends StatelessWidget {
                                                 accepted = true;
                                               }
                                             }
-                                            return Column(
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              children: [
-                                                if(!accepted)
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.end,
-                                                  children: [
-                                                    if (!requestHim&&!requestMe)
-                                                      ElevatedButton(
-                                                        onPressed: () {
-                                                          print('///////////${user.deviceToken}////////////');
-
-                                                          UsersCubit.get(context)
-                                                              .sendRequest(user.uId,user.deviceToken);
-                                                        },
-                                                        style: ButtonStyle(
-                                                          padding: MaterialStatePropertyAll(
-                                                              EdgeInsets.zero),
-                                                          minimumSize: MaterialStatePropertyAll(
-                                                              Size(90, 25)),
-                                                        ),
-                                                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                        child: Row(
-                                                          children: [
-                                                            Icon(Icons.person_add),
-                                                            SizedBox(
-                                                              width: 10.0,
-                                                            ),
-                                                            Text('Add'),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    if (!requestHim&&requestMe)
-                                                      Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Text('He sent you a request'),
-                                                          Row(
-                                                            children: [
-                                                              ElevatedButton(
-                                                                onPressed: () {
-                                                                  UsersCubit.get(context).acceptFriend(user.uId,user.deviceToken);
-                                                                },
-                                                                style: ButtonStyle(
-                                                                  padding: MaterialStatePropertyAll(
-                                                                      EdgeInsets.zero),
-                                                                  minimumSize: MaterialStatePropertyAll(
-                                                                      Size(65, 25)),
-                                                                ),
-                                                                clipBehavior: Clip.antiAliasWithSaveLayer,
-                                                                child: Text('Accept'),
-                                                              ),
-                                                              SizedBox(width: 20.0,),
-                                                              OutlinedButton(
-                                                                onPressed: () {
-                                                                  UsersCubit.get(context).deleteRequest(user.uId);
-                                                                },
-                                                                style: ButtonStyle(
-                                                                  padding: MaterialStatePropertyAll(
-                                                                      EdgeInsets.zero),
-                                                                  minimumSize: MaterialStatePropertyAll(
-                                                                      Size(65, 20)),
-                                                                ),
-                                                                child: Text('Delete'),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-
-                                                  ],
-                                                ),
-                                                if (!accepted&&requestHim)
-                                                  OutlinedButton(
-                                                    onPressed: () {
-                                                      UsersCubit.get(context)
-                                                          .removeRequest(
-                                                          user.uId);
-                                                    },
-                                                    style: ButtonStyle(
-                                                      padding:
-                                                      MaterialStatePropertyAll(
-                                                          EdgeInsets.zero),
-                                                      minimumSize:
-                                                      MaterialStatePropertyAll(
-                                                          Size(65, 20)),
-                                                    ),
-                                                    child: Text('Remove'),
-                                                  ),
-                                                if (accepted)
-                                                  Text('you\'re friends '),
-                                              ],
-                                            );
+                                            return  itemUser(context,accepted,requestHim,requestMe,user);
                                           } else {
                                             return Text('wait ...');
                                           }
@@ -303,4 +211,97 @@ class AllUsersScreen extends StatelessWidget {
           },
         ),
       );
+
+  Widget itemUser(context,bool accepted,bool requestHim,bool requestMe,UserModel user)=>Column(
+    crossAxisAlignment: CrossAxisAlignment.end,
+    children: [
+      if(!accepted)
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if (!requestHim&&!requestMe)
+              ElevatedButton(
+                onPressed: () {
+
+                  UsersCubit.get(context)
+                      .sendRequest(user.uId,user.deviceToken);
+                },
+                style: ButtonStyle(
+                  padding: MaterialStatePropertyAll(
+                      EdgeInsets.zero),
+                  minimumSize: MaterialStatePropertyAll(
+                      Size(90, 25)),
+                ),
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                child: Row(
+                  children: [
+                    Icon(Icons.person_add),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Text('Add'),
+                  ],
+                ),
+              ),
+            if (!requestHim&&requestMe)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('He sent you a request'),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          UsersCubit.get(context).acceptFriend(user.uId,user.deviceToken);
+                        },
+                        style: ButtonStyle(
+                          padding: MaterialStatePropertyAll(
+                              EdgeInsets.zero),
+                          minimumSize: MaterialStatePropertyAll(
+                              Size(65, 25)),
+                        ),
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: Text('Accept'),
+                      ),
+                      SizedBox(width: 20.0,),
+                      OutlinedButton(
+                        onPressed: () {
+                          UsersCubit.get(context).deleteRequest(user.uId);
+                        },
+                        style: ButtonStyle(
+                          padding: MaterialStatePropertyAll(
+                              EdgeInsets.zero),
+                          minimumSize: MaterialStatePropertyAll(
+                              Size(65, 20)),
+                        ),
+                        child: Text('Delete'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+          ],
+        ),
+      if (!accepted&&requestHim)
+        OutlinedButton(
+          onPressed: () {
+            UsersCubit.get(context)
+                .removeRequest(
+                user.uId);
+          },
+          style: ButtonStyle(
+            padding:
+            MaterialStatePropertyAll(
+                EdgeInsets.zero),
+            minimumSize:
+            MaterialStatePropertyAll(
+                Size(65, 20)),
+          ),
+          child: Text('Remove'),
+        ),
+      if (accepted)
+        Text('you\'re friends '),
+    ],
+  );
 }
