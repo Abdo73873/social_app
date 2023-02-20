@@ -39,53 +39,59 @@ class _NavigateDrawerState extends State<NavigateDrawer> {
                   top: 20+ MediaQuery.of(context).padding.top,
                   bottom: 15.0,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      radius: 40.0,
-                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                      child: CircleAvatar(
-                        radius: 38.0,
-                        child: ClipOval(
-                          child: CachedNetworkImage(
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
-                            imageUrl: myModel.image,
-                            errorWidget:(context,url,error)=> Image.asset(
-                              myModel.male
-                                  ? 'assets/images/male.jpg'
-                                  : 'assets/images/female.jpg',
+                child: InkWell(
+                  onTap: (){
+                    HomeCubit.get(context).changeBottomScreen(4);
+                    Navigator.pop(context);
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        radius: 40.0,
+                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                        child: CircleAvatar(
+                          radius: 38.0,
+                          child: ClipOval(
+                            child: CachedNetworkImage(
                               width: double.infinity,
                               height: double.infinity,
                               fit: BoxFit.cover,
+                              imageUrl: myModel.image,
+                              errorWidget:(context,url,error)=> Image.asset(
+                                myModel.male
+                                    ? 'assets/images/male.jpg'
+                                    : 'assets/images/female.jpg',
+                                width: double.infinity,
+                                height: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 10.0,),
-                    Text(
-                      myModel.name,
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "Bassant",
-                        color: Colors.white,
+                      SizedBox(height: 10.0,),
+                      Text(
+                        myModel.name,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "Bassant",
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 5.0,),
-                    Text(
-                      myModel.phone,
-                      style: TextStyle(
-                        color: secondaryColor[200],
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
+                      SizedBox(height: 5.0,),
+                      Text(
+                        myModel.phone,
+                        style: TextStyle(
+                          color: secondaryColor[200],
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
                       ),
-                    ),
 
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Padding(

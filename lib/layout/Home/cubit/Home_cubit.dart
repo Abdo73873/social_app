@@ -58,7 +58,7 @@ class HomeCubit extends Cubit<HomeStates> {
     }
   }
 
-  bool isDark = false;
+  bool isDark = true;
 
   void changeMode({
     bool? fromCache,
