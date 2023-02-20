@@ -23,10 +23,16 @@ class FeedsScreen extends StatelessWidget {
   double? numOfPost;
   FeedsScreen({this.numOfPost});
   int limit=20;
+
+  bool myDataCome=false;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeCubit, HomeStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if(state is HomeSuccessGetUserState){
+          myDataCome=true;
+        }
+      },
       builder: (context, state) {
         late final ScrollController scrollController = ScrollController();
         int limit = 20;
@@ -50,6 +56,66 @@ class FeedsScreen extends StatelessWidget {
             physics: BouncingScrollPhysics(),
             child: Column(
               children: [
+                if(myDataCome)
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20.0,
+                        child: ClipOval(
+                          child: CachedNetworkImage(
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                            imageUrl: myModel.image,
+                            errorWidget: (context, url, error) =>
+                                Image.asset(
+                                  myModel.male
+                                      ? 'assets/images/male.jpg'
+                                      : 'assets/images/female.jpg',
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  fit: BoxFit.cover,
+                                ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10.0,
+                      ),
+                      Expanded(
+                        child: OutlinedButton(
+
+                          onPressed: (){
+                            navigateTo(context, NewPostScreen());
+                          },
+                          style: ButtonStyle(
+                            alignment: AlignmentDirectional.centerStart,
+                            side: MaterialStatePropertyAll(
+                              BorderSide(color: secondaryColor),
+                            ),
+                            shape: MaterialStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'What\'s on your mind?...',
+                              textAlign: TextAlign.start,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10.0,),
+                      Icon(Icons.image,color: defaultColor,),
+                      SizedBox(width: 10.0,),
+
+                    ],
+                  ),
+                ),
                 Card(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -163,26 +229,17 @@ class FeedsScreen extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                              Expanded(
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: user.name,
-                                        style: Theme.of(context).textTheme.titleMedium,
-                                      ),
-                                      WidgetSpan(child: SizedBox(width: 5.0,)),
-                                      WidgetSpan(
-                                        child: Icon(
-                                          Icons.check_circle,
-                                          color: Colors.blue,
-                                          size: 18.0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                             Flexible(
+                               child: Text(
+                                 user.name,
+                                 style: Theme.of(context).textTheme.titleMedium,
+                             ),),
+                            SizedBox(width: 5.0,),
+                            Icon(
+                              Icons.check_circle,
+                              color: Colors.blue,
+                              size: 18.0,
+                            ),
                           ],
                         ),
                         Text(
@@ -249,18 +306,18 @@ class FeedsScreen extends StatelessWidget {
                 color: secondaryColor,
               ),
             ),
-            if (postModel.text != null)
+            if (postModel.text!.isNotEmpty)
               Text(
                 postModel.text!,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-            SizedBox(height: 20.0,),
+            if (postModel.text!.isNotEmpty)
+              SizedBox(height: 20.0,),
             if (postModel.postImage!.isNotEmpty)
                CachedNetworkImage(
                   progressIndicatorBuilder: (context, url, progress) =>
                       CircularProgressIndicator(),
                   imageUrl: postModel.postImage!,
-                  height: 350,
                   width: 400,
                   fit: BoxFit.fitWidth,
                   errorWidget: (context, url, error) =>

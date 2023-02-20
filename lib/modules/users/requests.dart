@@ -17,7 +17,6 @@ class RequestsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UsersCubit.get(context).streamRequests();
     return BlocConsumer<UsersCubit, UsersStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -32,20 +31,22 @@ class RequestsScreen extends StatelessWidget {
             child: Column(
               children: [
                 if(cubit.requestsUid.isNotEmpty)
-                ListView.separated(
-                  physics: BouncingScrollPhysics(),
-          itemBuilder: (context, index) {
-                for (int i=0;i<cubit.requestsUid.length;i++) {
-                  if(cubit.requestsUid[index]==cubit.users[i].uId){
-                    return buildRequestItem(context,cubit.users[i]);
+                Expanded(
+                  child: ListView.separated(
+                    physics: BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                  for (int i=0;i<cubit.users.length;i++) {
+                    if(cubit.requestsUid[index]==cubit.users[i].uId){
+                      return buildRequestItem(context,cubit.users[i]);
+                    }
                   }
-                }
-                return SizedBox();
+                  return SizedBox();
           },
           separatorBuilder: (context, index) =>
-                  SizedBox(height: 20.0,),
-          itemCount: cubit.users.length,
+                    SizedBox(height: 20.0,),
+          itemCount: cubit.requestsUid.length,
         ),
+                ),
                 if(cubit.requestsUid.isEmpty)
                   Center(child: Text('you don\'n have requests yet')),
               ],

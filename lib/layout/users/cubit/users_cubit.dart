@@ -97,49 +97,20 @@ class UsersCubit extends Cubit<UsersStates> {
   List<UserModel> friendsWhenSearch = [];
   bool foundUser = false;
   void usersSearch(String text) {
-    String word = '';
     if (text.isEmpty) {
       foundUser = false;
       emit(UsersFriendsSearchState());
     }
     else {
       friendsWhenSearch = [];
-      for (int iText = 0; iText < text.length; iText++) {
-        word += text[iText];
-      }
-      if(word.length>=4) {
-        if (word.substring(word.length - 4) == ".com") {
-          for (int index = 0; index < users.length; index++) {
-            if (users[index].uId != myId) {
-              if (word.toLowerCase() ==
-                  users[index].email
-                      .substring(0,
-                      word.length <= users[index].email.length
-                          ? word.length
-                          : users[index].email.length)
-                      .toLowerCase()) {
-                foundUser = true;
-                friendsWhenSearch.add(users[index]);
-                emit(UsersFriendsSearchState());
-              }
-            }
-            else {
-              foundUser = false;
-              emit(UsersFriendsSearchState());
-            }
-          }
-        }
-      }
-      else {
         for (int index = 0; index < users.length; index++) {
           if (users[index].uId != myId) {
-            if (word.toLowerCase() ==
-                users[index].name
-                    .substring(0,
-                    word.length <= users[index].name.length
-                        ? word.length
-                        : users[index].name.length)
-                    .toLowerCase()) {
+            if (users[index].email.toLowerCase().contains(text.toLowerCase())) {
+              foundUser = true;
+              friendsWhenSearch.add(users[index]);
+              emit(UsersFriendsSearchState());
+            }
+            else if (users[index].name.toLowerCase().contains(text.toLowerCase())) {
               foundUser = true;
               friendsWhenSearch.add(users[index]);
               emit(UsersFriendsSearchState());
@@ -150,7 +121,6 @@ class UsersCubit extends Cubit<UsersStates> {
             emit(UsersFriendsSearchState());
           }
         }
-      }
 
     }
   }

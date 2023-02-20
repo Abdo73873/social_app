@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,16 +74,61 @@ class HomeCubit extends Cubit<HomeStates> {
     }
   }
 
+
+  void verifyPhone(){
+    FirebaseAuth auth=FirebaseAuth.instance;
+
+        auth.verifyPhoneNumber(
+      phoneNumber: myModel.phone,
+        verificationCompleted: (PhoneAuthCredential credential)async{
+        await auth.signInWithCredential(credential);
+        },
+        verificationFailed: (FirebaseException e){
+          if (e.code == 'invalid-phone-number') {
+            print('The provided phone number is not valid.');
+          }
+          },
+        codeSent: (String verificationId,int? resendToken)async{
+
+          // Update the UI - wait for the user to enter the SMS code
+          String smsCode = 'xxxx';
+
+          // Create a PhoneAuthCredential with the code
+          PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+
+          // Sign the user in (or link) with the credential
+          await auth.signInWithCredential(credential);
+
+        },
+            timeout: const Duration(seconds: 60),
+        codeAutoRetrievalTimeout:(String verificationId){
+
+        }
+    );
+  }
+
+
+bool open=true;
+  void verified() {
+    if (open) {
+      Future.delayed(const Duration(seconds: 60), () {
+        open = false;
+        emit(HomeCloseVerifyBarState());
+      });
+    }
+  }
+
+
   void getMyData() {
     emit(HomeLoadingGetUserState());
-    FirebaseFirestore.instance
+     FirebaseFirestore.instance
         .collection('users')
         .doc(myId)
         .get()
         .then((value) {
       myModel = UserModel.fromJson(value.data()!);
       emit(HomeSuccessGetUserState());
-      FirebaseMessaging.instance.getToken().then((value) {
+       FirebaseMessaging.instance.getToken().then((value) {
         deviceToken=value;
         myModel.deviceToken=deviceToken;
         FirebaseFirestore.instance
@@ -111,8 +157,8 @@ class HomeCubit extends Cubit<HomeStates> {
         emit(HomeSuccessGetPostsState());
       }
       emit(HomeSuccessGetPostsState());
-
     });
+
         }
 
   void deletePost(String postId){
@@ -293,6 +339,10 @@ class HomeCubit extends Cubit<HomeStates> {
     emit(HomeChatTypingState());
   }
 
+
+  void typeComment(){
+    emit(HomeCommentTypingState());
+  }
     void sendMessage({
   required String receiverId,
   required String text ,

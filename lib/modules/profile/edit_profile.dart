@@ -42,8 +42,8 @@ class EditProfileScreen extends StatelessWidget {
                   if(cubit.isUploadCompleted!=null){
                     if(cubit.isUploadCompleted!){
                       cubit.updateUser();
-                      Navigator.pop(context);
                       cubit.isUploadCompleted=null;
+                      Navigator.pop(context);
                     }else{
                       showToast(message: "Wait for Uploading image", state: ToastState.warning);
                     }

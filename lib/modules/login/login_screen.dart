@@ -13,6 +13,7 @@ import 'package:social_app/modules/register/register_screen.dart';
 import 'package:social_app/shared/components/components.dart';
 import 'package:social_app/shared/components/constants.dart';
 import 'package:social_app/shared/network/local/cache_helper.dart';
+import 'package:social_app/shared/styles/colors.dart';
 
 class LoginScreen extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
@@ -37,6 +38,14 @@ class LoginScreen extends StatelessWidget {
           if (state is ErrorLoginState) {
             showToast(message: state.error.split(']')[1], state: ToastState.error);
           }
+          if (state is LoginResetPasswordSuccessState){
+            showToast(message:'check your email', state: ToastState.success);
+
+          }
+          if (state is LoginResetPasswordErrorState){
+            showToast(message:state.error, state: ToastState.error);
+
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -47,7 +56,8 @@ class LoginScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Form(
                   key: formKey,
-                  child: Column(
+                  child:!LoginCubit.get(context).forgotPassword
+                  ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 30.0,),
@@ -161,7 +171,28 @@ class LoginScreen extends StatelessWidget {
                             Center(child: CircularProgressIndicator()),
                       ),
                       SizedBox(
-                        height: 70.0,
+                        height: 10.0,
+                      ),
+                      if(state is ErrorLoginState||state is LoginChangeForgotPasswordState)
+                      Row(
+                        children: [
+                          Text('Forgot your Password?'),
+                          SizedBox(width: 10.0,),
+                          OutlinedButton(
+                            onPressed: (){
+                              LoginCubit.get(context).changeForgotPassword();
+                            },
+                            style: ButtonStyle(
+                              shape: MaterialStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25.0),),),
+                              side: MaterialStatePropertyAll(BorderSide(color: secondaryColor),),
+                            ),
+                            child: Text('Reset',style:Theme.of(context).textTheme.bodyMedium),),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 50.0,
                       ),
                       Row(
                         children: [
@@ -175,6 +206,54 @@ class LoginScreen extends StatelessWidget {
                               navigateAndReplace(context, RegisterScreen());
                             },
                           ),
+                        ],
+                      ),
+                    ],
+                  )
+                :Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      SizedBox(height: 100,),
+                    defaultFromField(
+                    context: context,
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your email address';
+                      }
+                      return null;
+                    },
+                      labelText: 'Email Address',
+                      hintText: 'Enter Your Email Address',
+                      prefix: Icons.email_outlined,
+                      action: TextInputAction.done,
+                      onTap: (){
+                      LoginCubit.get(context).resetPassword(email: emailController.text);
+                      },
+                    ),
+                      SizedBox(height: 30.0,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          OutlinedButton(
+                            onPressed: (){
+                            LoginCubit.get(context).changeForgotPassword();
+                          },
+                            style: ButtonStyle(
+                              side: MaterialStatePropertyAll(BorderSide(color: secondaryColor)),
+                            ),
+                            child: Text('back to login',style:Theme.of(context).textTheme.bodyMedium),),
+                          SizedBox(width: 10,),
+                          ElevatedButton(
+                            onPressed: (){
+                              LoginCubit.get(context).resetPassword(email: emailController.text);
+                            },
+                            child: Text('Send'),
+                          ),
+
                         ],
                       ),
                     ],

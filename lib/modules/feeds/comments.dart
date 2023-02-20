@@ -176,7 +176,7 @@ class CommentsScreen extends StatelessWidget {
                         commentController.text.isEmpty ? 50.0 : null,
                         child: TextFormField(
                           onChanged: (value) {
-                            HomeCubit.get(context).typing();
+                            HomeCubit.get(context).typeComment();
                           },
                           controller: commentController,
                           minLines: 1,
@@ -333,7 +333,6 @@ class CommentsScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(20.0),
             ),
             padding: EdgeInsets.zero,
-
             itemBuilder: (context) => [
               PopupMenuItem(
                 child: TextButton(

@@ -10,5 +10,5 @@ void printFullText(String text){
 String? myId='';
 String? deviceToken='';
 bool openToAdd=false;
-late  UserModel myModel;
+late UserModel myModel;
 bool? notification;

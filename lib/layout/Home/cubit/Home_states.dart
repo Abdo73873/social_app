@@ -31,6 +31,8 @@ class HomeSuccessUnLikeState extends HomeStates {}
 
 class HomeChatTypingState extends HomeStates {}
 
+class HomeCloseVerifyBarState extends HomeStates {}
+
 class HomeSendMessageSuccessState extends HomeStates {}
 class HomeSendMessageErrorState extends HomeStates {}
 
@@ -42,10 +44,12 @@ class HomeChatGetImageErrorState extends HomeStates {}
 class HomeChatUploadImageLoadingState extends HomeStates {}
 class HomeChatUploadImageSuccessState extends HomeStates {}
 class HomeChatUploadImageErrorState extends HomeStates {}
+class HomeChatRemoveImageState extends HomeStates {}
 
 
 class HomeCommentGetImageSuccessState extends HomeStates {}
 class HomeCommentGetImageErrorState extends HomeStates {}
+class HomeCommentTypingState extends HomeStates {}
 
 class HomeCommentUploadImageLoadingState extends HomeStates {}
 class HomeCommentUploadImageSuccessState extends HomeStates {}
@@ -54,7 +58,6 @@ class HomeCommentRemoveImageState extends HomeStates {}
 
 class HomeStreamLikesAndCommentSuccessState extends HomeStates {}
 
-class HomeChatRemoveImageState extends HomeStates {}
 class HomeCommentAddSuccessState extends HomeStates {}
 class HomeCommentAddErrorState extends HomeStates {}
 

@@ -191,7 +191,7 @@ Widget generalDetails({
       if( model!.status!.isNotEmpty||openToAdd)
       Row(
         children: [
-          Icon(Icons.workspace_premium),
+          Icon(Icons.favorite),
           SizedBox(width: 5.0,),
           SizedBox(
             width:widthField ,

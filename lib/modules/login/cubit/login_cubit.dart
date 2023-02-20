@@ -32,6 +32,25 @@ import 'package:social_app/shared/components/constants.dart';
      });
    }
 
+   bool forgotPassword=false;
+   void changeForgotPassword(){
+     forgotPassword=!forgotPassword;
+     emit(LoginChangeForgotPasswordState());
+
+   }
+
+   void resetPassword({
+   required String email,
+ }){
+     FirebaseAuth.instance.sendPasswordResetEmail(email:email).then((value){
+       emit(LoginResetPasswordSuccessState());
+
+     }).catchError((error){
+       emit(LoginResetPasswordErrorState(error.toString().split(']')[1]));
+     });
+   }
+
+
 void jumpTo(){
      emit(JumpToState());
 }

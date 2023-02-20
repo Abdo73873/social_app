@@ -14,6 +14,11 @@ class ErrorLoginState extends LoginStates{
 class SuccessesPushTokenState extends LoginStates{}
 
 class ChangeVisibilityState extends LoginStates{}
-class ChangeLanguageState extends LoginStates{}
 
 class JumpToState extends LoginStates{}
+class LoginChangeForgotPasswordState extends LoginStates{}
+class LoginResetPasswordSuccessState extends LoginStates{}
+class LoginResetPasswordErrorState extends LoginStates{
+  final String error;
+  LoginResetPasswordErrorState(this.error);
+}

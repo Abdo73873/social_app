@@ -2,7 +2,7 @@
     package="com.flutter.abdo73873.social_app">
 
     <application
-        android:label="social_app"
+        android:label="Social"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

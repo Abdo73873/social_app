@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/layout/Home/cubit/Home_cubit.dart';
@@ -19,6 +20,11 @@ import 'package:social_app/shared/styles/icon_broken.dart';
 class HomeLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      navigateAndReplace(context,  NotificationScreen());
+
+    });
+
     return BlocConsumer<HomeCubit, HomeStates>(
       listener: (context, state) {
         if (state is HomeNewPostState) {
@@ -128,14 +134,9 @@ class HomeLayout extends StatelessWidget {
     );
   }
 
-  bool open=true;
   Widget verified(context){
-    Future.delayed(Duration(seconds: 60),(){
-      open=false;
-      HomeCubit.get(context).typing();
-    });
-
-    return open? Column(
+    HomeCubit.get(context).verified();
+    return HomeCubit.get(context).open? Column(
       children: [
         if(!FirebaseAuth.instance.currentUser!.emailVerified)
           Container(
@@ -168,7 +169,6 @@ class HomeLayout extends StatelessWidget {
       ],
     ):SizedBox();
   }
-
 
 }
 
