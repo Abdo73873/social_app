@@ -52,7 +52,7 @@ class FiendsScreen extends StatelessWidget {
                 SizedBox(
                   height: 20.0,
                 ),
-                if (searchController.text.isEmpty&&!cubit.foundFriend)
+                if (searchController.text.isEmpty)
                   Expanded(
                     child: ListView.separated(
                       physics: BouncingScrollPhysics(),
@@ -78,7 +78,7 @@ class FiendsScreen extends StatelessWidget {
                       itemCount: cubit.friendsIds.length,
                     ),
                   ),
-                if (searchController.text.isNotEmpty&&cubit.foundFriend)
+                if (searchController.text.isNotEmpty)
                   Expanded(
                     child: ListView.separated(
                       physics: BouncingScrollPhysics(),

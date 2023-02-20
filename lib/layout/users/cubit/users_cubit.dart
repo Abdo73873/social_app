@@ -95,80 +95,44 @@ class UsersCubit extends Cubit<UsersStates> {
   }
 
   List<UserModel> friendsWhenSearch = [];
-  bool foundUser = false;
   void usersSearch(String text) {
-    if (text.isEmpty) {
-      foundUser = false;
-      emit(UsersFriendsSearchState());
-    }
-    else {
       friendsWhenSearch = [];
-        for (int index = 0; index < users.length; index++) {
-          if (users[index].uId != myId) {
-            if (users[index].email.toLowerCase().contains(text.toLowerCase())) {
-              foundUser = true;
-              friendsWhenSearch.add(users[index]);
+        for (int i = 0; i < users.length; i++) {
+          if (users[i].uId!=myId) {
+            if (users[i].email.toLowerCase().contains(text.toLowerCase())) {
+              friendsWhenSearch.add(users[i]);
               emit(UsersFriendsSearchState());
             }
-            else if (users[index].name.toLowerCase().contains(text.toLowerCase())) {
-              foundUser = true;
-              friendsWhenSearch.add(users[index]);
+            else if (users[i].name.toLowerCase().contains(text.toLowerCase())) {
+              friendsWhenSearch.add(users[i]);
               emit(UsersFriendsSearchState());
             }
           }
           else {
-            foundUser = false;
             emit(UsersFriendsSearchState());
           }
         }
 
-    }
+    emit(UsersFriendsSearchState());
+
   }
 
 
   bool foundFriend = false;
 
   void friendsSearch(String text) {
-    String word = '';
-    if (text.isEmpty) {
-      foundFriend = false;
-      emit(UsersFriendsSearchState());
-    }
-    else {
-      friendsWhenSearch = [];
-      for (int iText = 0; iText < text.length; iText++) {
-        word += text[iText];
-      }
-      FirebaseFirestore.instance
-      .collection('users')
-      .doc(myId)
-      .collection('friends')
-      .snapshots().listen((event) {
-        for (var docFriend in event.docs) {
-          FirebaseFirestore.instance
-              .collection('users')
-              .doc(docFriend.id)
-              .get().then((value){
-                if(word.toLowerCase()==value.data()!['name']
-                    .toString()
-                    .substring(0,word.length<=value.data()!['name']
-                    .toString().length?word.length:value.data()!['name']
-                    .toString().length)
-                    .toLowerCase()){
-                  friendsWhenSearch.add(UserModel.fromJson(value.data()!));
-                  foundFriend = true;
-                  emit(UsersFriendsSearchState());
-                }else{
-                  foundFriend = false;
-                  emit(UsersFriendsSearchState());
-                }
-          });
-
+    friendsWhenSearch = [];
+    for (int i=0;i<friendsIds.length;i++) {
+         for(int y=i;y<users.length;y++){
+           if(friendsIds[i]==users[y].uId){
+             if(users[y].name.toLowerCase().contains(text.toLowerCase())){
+               friendsWhenSearch.add(users[y]);
+             }
+           }
+         }
         }
-      });
+    emit(UsersFriendsSearchState());
 
-
-    }
   }
 
 

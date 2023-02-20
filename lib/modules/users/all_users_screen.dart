@@ -22,7 +22,6 @@ class AllUsersScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = UsersCubit.get(context);
-        bool search = cubit.foundUser;
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -74,7 +73,7 @@ class AllUsersScreen extends StatelessWidget {
                     itemCount: cubit.users.length,
                   ),
                 ),
-              if (searchController.text.isNotEmpty && search)
+              if (searchController.text.isNotEmpty)
                 Expanded(
                   child: ListView.separated(
                     physics: BouncingScrollPhysics(),
