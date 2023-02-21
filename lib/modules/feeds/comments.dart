@@ -304,8 +304,7 @@ class CommentsScreen extends StatelessWidget {
                               progressIndicatorBuilder: (context, url, progress) =>
                                   CircularProgressIndicator(),
                               imageUrl: comment.image!,
-                              height: 300,
-                              width: 250,
+                              fit: BoxFit.fitWidth,
                               errorWidget: (context, url, error) =>
                                   Center(child: CircularProgressIndicator()),
                             ),

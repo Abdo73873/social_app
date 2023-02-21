@@ -44,6 +44,8 @@ class NewPostScreen extends StatelessWidget {
                     if(PostsCubit.get(context).postImage!=null){
                       PostsCubit.get(context).uploadImage(
                         text: textController.text,
+                        post: post!,
+                        isEdit: true,
                       );
                       navigateAndReplace(context, HomeLayout());
                     }
@@ -57,7 +59,6 @@ class NewPostScreen extends StatelessWidget {
                     showToast(message:"publishing now", state: ToastState.success);
                   }
                   else {showToast(message:"write something", state: ToastState.warning);}
-
                 }
                 else{
                   if(textController.text.isNotEmpty||PostsCubit.get(context).postImage!=null){

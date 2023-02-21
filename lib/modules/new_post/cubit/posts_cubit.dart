@@ -130,6 +130,7 @@ emit(PostsLoadingState());
     if(postImageUrl.isNotEmpty){
       post.postImage=postImageUrl;
     }
+    postImageUrl='';
     FirebaseFirestore.instance
         .collection('posts')
         .doc(post.postId)
