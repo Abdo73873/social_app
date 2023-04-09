@@ -1,4 +1,4 @@
-![light mode](https://github.com/Abdo73873/social_app/blob/main/7.jpg)
+![light mode](https://raw.githubusercontent.com/Abdo73873/social_app/blob/main/7.jpg)
 
 A new Flutter project.
 
