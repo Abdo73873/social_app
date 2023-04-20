@@ -19,16 +19,16 @@ class ChatItemScreen extends StatelessWidget {
 
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
-  int limit = 20;
+  int limit = 10;
   bool refresh = false;
 
   @override
   Widget build(BuildContext context) {
-    HomeCubit.get(context).getMessage(friend.uId, 20);
+    HomeCubit.get(context).getMessage(friend.uId, 10);
 
     return RefreshIndicator(
       onRefresh: () {
-        limit += 20;
+        limit += 10;
         refresh = true;
         return Future(() {
           HomeCubit.get(context).getMessage(friend.uId, limit);
@@ -168,7 +168,6 @@ class ChatItemScreen extends StatelessWidget {
                       CircularProgressIndicator(),
                     Padding(
                       padding: const EdgeInsetsDirectional.symmetric(
-                        vertical: 20.0,
                         horizontal: 5.0,
                       ),
                       child: Row(
@@ -317,8 +316,8 @@ class ChatItemScreen extends StatelessWidget {
                         progressIndicatorBuilder: (context, url, progress) =>
                             CircularProgressIndicator(),
                         imageUrl: message.image!,
-                        height: 400,
-                        width: 400,
+                        width: 250,
+                        fit: BoxFit.fitHeight,
                         errorWidget: (context, url, error) =>
                             Center(child: CircularProgressIndicator()),
                       ),
@@ -372,8 +371,8 @@ class ChatItemScreen extends StatelessWidget {
                        progressIndicatorBuilder: (context, url, progress) =>
                            CircularProgressIndicator(),
                        imageUrl: message.image!,
-                       height: 450,
-                       width: 400,
+                       width: 250,
+                       fit: BoxFit.fitHeight,
                        errorWidget: (context, url, error) =>
                            Center(child: CircularProgressIndicator()),
                      ),

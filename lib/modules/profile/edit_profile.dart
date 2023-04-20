@@ -388,6 +388,7 @@ class EditProfileScreen extends StatelessWidget {
     });
   }
 
+
   Widget addPic({
   required BuildContext context,
     required String namePic,

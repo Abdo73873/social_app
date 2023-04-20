@@ -40,11 +40,9 @@ class LoginScreen extends StatelessWidget {
           }
           if (state is LoginResetPasswordSuccessState){
             showToast(message:'check your email', state: ToastState.success);
-
           }
           if (state is LoginResetPasswordErrorState){
             showToast(message:state.error, state: ToastState.error);
-
           }
         },
         builder: (context, state) {

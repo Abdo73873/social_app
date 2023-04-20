@@ -77,7 +77,6 @@ class HomeCubit extends Cubit<HomeStates> {
 
   void verifyPhone(){
     FirebaseAuth auth=FirebaseAuth.instance;
-
         auth.verifyPhoneNumber(
       phoneNumber: myModel.phone,
         verificationCompleted: (PhoneAuthCredential credential)async{
