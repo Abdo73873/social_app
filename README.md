@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# social_app
+![light mode](https://github.com/Abdo73873/social_app/blob/main/7.jpg)
 
 A new Flutter project.
 
