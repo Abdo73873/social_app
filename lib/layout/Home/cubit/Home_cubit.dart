@@ -279,57 +279,15 @@ bool open=true;
   }
 
   void removeComment(String postId,int index) {
-    FirebaseFirestore.instance
-        .collection('posts')
-        .doc(postId)
-        .collection('comments')
-    .where('indexComment',isEqualTo: index)
-        .get()
-    .then((value){
-      for (var element in value.docs) {
-        element.reference.delete();
-      }
-    });
+   //private code here
   }
 
   int likesCount=0,commentCount=0;
   List<CommentModel> comments=[];
   void streamLikesAndComments(String postId,int limit){
-    FirebaseFirestore.instance
-        .collection('posts')
-        .doc(postId)
-        .collection('comments')
-        .snapshots()
-        .listen((event) {
-      commentCount=event.size;
-          emit(HomeStreamLikesAndCommentSuccessState());
-    });
-    FirebaseFirestore.instance
-        .collection('posts')
-        .doc(postId)
-        .collection('likes')
-        .snapshots()
-        .listen((event) {
-      likesCount=event.size;
-      emit(HomeStreamLikesAndCommentSuccessState());
-    });
-
-
-    FirebaseFirestore.instance
-        .collection('posts')
-        .doc(postId)
-        .collection('comments')
-    .orderBy('indexComment')
-    .limitToLast(limit)
-        .snapshots()
-        .listen((event) {
-      comments=[];
-      for (var docComment in event.docs) {
-        comments.add(CommentModel.fromJson(docComment.data()));
-      }
-      emit(HomeStreamLikesAndCommentSuccessState());
-    });
-
+       //private code here
+   //private code here
+   //private code here
 
   }
 
@@ -356,33 +314,8 @@ bool open=true;
       image: image,
 
     );
-    //ser my chars
-FirebaseFirestore.instance
-    .collection('users')
-    .doc(myId)
-    .collection('friends')
-    .doc(receiverId)
-    .collection('chat')
-    .add(message.toMap()).then((value) {
-    emit(HomeSendMessageSuccessState());
-}).catchError((error){
-  emit(HomeSendMessageErrorState());
-});
-    //ser receiver chars
-
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(receiverId)
-        .collection('friends')
-        .doc(myId)
-        .collection('chat')
-        .add(message.toMap()).then((value) {
-      emit(HomeSendMessageSuccessState());
-    }).catchError((error){
-      emit(HomeSendMessageErrorState());
-    });
-
-
+      //private code here
+   //private code here
 
     }
 
